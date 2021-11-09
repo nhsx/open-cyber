@@ -1,6 +1,6 @@
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
-# Open Analytics Template
+# Open Statistics - Cyber Security
 
 {% include update.html %}
 
@@ -22,5 +22,7 @@ Template for end-to-end open source analytics: python, [plotly](https://plotly.c
 ## Summary of DSPT Compliance (2020/2021 edition)
 
 {% include crosstab_summary_FY2021.html %}
+
+{% include barchart_summary_FY2021.html %}
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">

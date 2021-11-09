@@ -14,6 +14,8 @@ library(httr)
 library(jsonlite)
 library(lubridate)
 library(xtable)
+library(plotly)
+library(htmlwidgets)
 
 ### Load list of 2020/21 CCGs
 # https://geoportal.statistics.gov.uk/datasets/ons::clinical-commissioning-groups-april-2020-names-and-codes-in-england/about
@@ -144,6 +146,16 @@ data_metric <- data_metric %>% mutate(Final.Status = ifelse(str_sub(Latest.Statu
                                                             Successor.Status,
                                                             Final.Status))
 
+s_levels <- unique(data_metric$Final.Status)
+
+mainlevels = c("20/21 Standards Exceeded","20/21 Standards Met","20/21 Approaching Standards","20/21 Standards Not Met","Not Published")
+
+other <- s_levels[!(mainlevels %in% s_levels)]
+
+order_levels = c(mainlevels,other)
+
+data_metric$Final.Status <- factor(data_metric$Final.Status,levels=order_levels)
+
 #### Cross table - no successors
 ctable(data_metric$Sector, data_metric$Latest.Status,
        prop = "r", chisq = FALSE, headings = FALSE
@@ -156,8 +168,7 @@ ct_final = ctable(data_metric$Sector, data_metric$Final.Status,
 )
 
 ct_final %>% print(method="browser")
-
-ct_final %>% print(xtable(tb), type = "html")
+ct_final %>% print(file="./_includes/crosstab_summary_FY2021.html")
 
 
 
@@ -173,3 +184,35 @@ data_metric_new2122 <- data_eccg_cut_2122newonly %>% left_join(data_dspt)
 # 1 of the new CCGs published to 21/22. 1 isn't registered. Others 'Not published'
 
 write.csv(data_metric,"./outputs/data_DSPTmetric_20211021.csv")
+
+
+
+#### Plotly barchart
+# https://plotly.com/r/bar-charts/
+
+library(plotly)
+
+auxl <-data_metric %>% group_by(Sector,Final.Status) %>% summarise(n=n())
+aux <- data_metric %>% group_by(Sector,Final.Status) %>% summarise(n=n()) %>% pivot_wider(names_from='Final.Status',values_from='n')
+org_type <-aux$Sector
+
+# x1 = aux$`Not Published`
+# x2= aux$`20/21 Standards Not Met`
+# x3 = aux$`20/21 Approaching Standards`
+# x4=aux$`20/21 Standards Met`
+# x5=aux$`20/21 Standards Exceeded`
+# 
+# fig <- plot_ly(data, x = ~org_type, y = ~x1, type = 'bar', name = 'Not Published')
+# fig <- fig %>% add_trace(y = ~x2, name = 'Standards Not Met')
+# fig <- fig %>% add_trace(y = ~x3, name = 'Approaching Standards')
+# fig <- fig %>% add_trace(y = ~x4, name = 'Standards Met')
+# fig <- fig %>% add_trace(y = ~x5, name = 'Standards Exceeded')
+# fig <- fig %>% layout(yaxis = list(title = 'Count'), barmode = 'stack')
+# 
+# fig
+
+
+fig_x <- auxl %>% plot_ly(x=~Sector,y= ~n,color=~Final.Status)
+fig_x
+
+saveWidget(fig_x, "./_includes/barchart_summary_FY2021.html", selfcontained = F, libdir = "lib")
