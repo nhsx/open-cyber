@@ -23,6 +23,6 @@ Template for end-to-end open source analytics: python, [plotly](https://plotly.c
 
 {% include barchart_summary_FY2021-ii.html %}
 
-{% include crosstab_summary_FY2021.html %}
+% include crosstab_summary_FY2021.html %
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
