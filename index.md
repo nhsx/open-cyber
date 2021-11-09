@@ -21,7 +21,9 @@ Template for end-to-end open source analytics: python, [plotly](https://plotly.c
 
 ## Summary of DSPT Compliance (2020/2021 edition)
 
-{% include barchart_summary_FY2021_fw.html %}
+<iframe src="/_includes/barchart_summary_FY2021_w.html" height="600px" width="100%" style="border:none;"></iframe>
+
+% include barchart_summary_FY2021_fw.html %
 
 % include crosstab_summary_FY2021.html %
 
