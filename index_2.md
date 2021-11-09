@@ -23,7 +23,7 @@ Template for end-to-end open source analytics: python, [plotly](https://plotly.c
 
 <iframe src="https://nhsx.github.io/open-cyber/myplotly.html" height="600px" width="100%" style="border:none;"></iframe>
 
-<iframe src="../barchart_summary_FY2021_w.html" height="600px" width="100%" style="border:none;"></iframe>
+<iframe src="./barchart_summary_FY2021_w.html" height="600px" width="100%" style="border:none;"></iframe>
 
 % include barchart_summary_FY2021_fw.html %
 
