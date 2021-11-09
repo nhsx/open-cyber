@@ -19,8 +19,8 @@
 
 Template for end-to-end open source analytics: python, [plotly](https://plotly.com/python/), [github.io](https://pages.github.com/), and [github actions](https://github.com/features/actions).
 
-## Plotly Chart
+## Summary of DSPT Compliance (2020/2021 edition)
 
-{% include plotly_obj.html %}
+{% include crosstab_summary_FY2021.html %}
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
