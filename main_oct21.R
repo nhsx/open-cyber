@@ -212,7 +212,14 @@ org_type <-aux$Sector
 # fig
 
 
-fig_x <- auxl %>% plot_ly(x=~Sector,y= ~n,color=~Final.Status)
+fig_x <- auxl %>% plot_ly(x=~Sector,y= ~n,color=~Final.Status,type='bar')
 fig_x
 
-saveWidget(fig_x, "./_includes/barchart_summary_FY2021.html", selfcontained = F, libdir = "lib")
+htmlwidgets::saveWidget(fig_x, "./_includes/barchart_summary_FY2021.html", selfcontained = T, libdir = "lib")
+
+htmlwidgets::saveWidget(as_widget(fig_x), "./_includes/barchart_summary_FY2021_w.html", selfcontained = T, libdir = "lib")
+
+htmltools::save_html(fig_x, "./_includes/barchart_summary_FY2021-ii.html")
+
+htmlwidgets::saveWidget(as_widget(fig_x %>% layout(autosize = F, width = 500, height = 500)), "./_includes/barchart_summary_FY2021_fw.html", selfcontained = T, libdir = "lib")
+
