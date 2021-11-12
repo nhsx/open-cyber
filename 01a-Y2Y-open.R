@@ -12,6 +12,7 @@ library(tidyverse)
 library(readxl)
 library(openxlsx)
 library(summarytools)
+library(igraph)
 
 
 ### Trusts ####
@@ -161,3 +162,19 @@ ggplot(activdata_atb_lodes,
 ggsave(paste0(here::here("outputs"),"/sankey_trusts_y1y2y3.svg"),width=30,height=20,dpi=300,units="cm")
 ggsave(paste0(here::here("outputs"),"/sankey_trusts_y1y2y3.png"),width=30,height=20,dpi=300,units="cm")
 
+###
+
+
+edges_aux <- dsptt_y2y3 %>% select(`Status18/19`,`Status19/20`) %>% rename(source=`Status18/19`,target=`Status19/20`) %>%
+  bind_rows(dsptt_y2y3 %>% select(`Status19/20`,`Status20/21`) %>% rename(source=`Status19/20`,target=`Status20/21`))
+
+links = edges_aux
+
+network = graph_from_data_frame(d=links,directed=F)
+
+library(d3r)
+data_json <- d3_igraph(network)
+
+write(data_json,"data.json")
+
+nodes=data.frame(name=c(links$source %>% unique(),links$target %>% unique()) %>% unique)
