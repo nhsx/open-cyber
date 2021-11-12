@@ -25,7 +25,7 @@ For more information on the Data Security and Protection Toolkit, please visit t
 
 ## Summary of DSPT Compliance (2020/2021 edition)
 
-Summary statistics from the DSPT 2020/21 toolkit are shown. Latest status was downloaded on the 10th October 2021.
+Summary statistics from the DSPT 2020/21 toolkit are shown. The latest status information was downloaded on the 10th October 2021.
 
 Note on method: organisations open 31st March 2021 are considered. However, if the organisation does not have a 20/21 DSPT status, it has been allowed to inherit one from its 21/22 successor organisation (if the successor submitted a 2020/21 return.)
 
@@ -41,10 +41,13 @@ Note on method: organisations open 31st March 2021 are considered. However, if t
 
 ## Trusts - DSPT Compliance over editions
 
-Below we consider the overall evolution of DSPT status across editions, for trusts open end-financial year 21/22.
-Note that any pre-Trust merger statuses have not been reflected with respect to their respective post-merger organisations.
-Despite showing editions side-by-side, it is important to note that the Standards - and the level of evidence withing the Standards - tends to get raised year-on-year. This means that a similar status in two editions is not directly comparable.
+Below we consider the overall evolution of DSPT status across editions, for trusts open end-financial year 2020/21.
+Note that below, for trusts resulting from mergers, we do not reflect the status of their predecessors, unless their identifying organisational code has been kept.
+
+Despite showing editions side-by-side, it is important to note that the standards - and the level of evidence required to meet those standards - tend to get raised year-on-year. This means that a similar status in two editions is not directly comparable.
 
 <iframe src="SankeyTrustDSPT.html" height="600px" width="100%" style="border:none;"></iframe>
+
+<hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
 Template for end-to-end open source analytics: python, [plotly](https://plotly.com/python/), [github.io](https://pages.github.com/), and [github actions](https://github.com/features/actions).

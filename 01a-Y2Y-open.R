@@ -58,6 +58,12 @@ dsptt_y2y3 <- dsptt_y2y3 %>% mutate(`Status19/20`=ifelse(is.na(`Status19/20`),'1
                                     `Status18/19`=ifelse(is.na(`Status18/19`),'18/19 None',`Status18/19`)) # if N/A, assign none (likely new trust, but could refine)
 
 
+levels_order_1819 = c("Standards Exceeded","Standards Met","Standards not fully met (plan agreed)","Standards Not Met","18/19 None")
+levels_order_1920 = c("19/20 Standards Exceeded","19/20 Standards Met","19/20 Standards Not Fully Met (Plan Agreed)","19/20 Standards Not Met","19/20 None")
+levels_order_2021 = c("20/21 Standards Exceeded","20/21 Standards Met","20/21 Approaching Standards","20/21 Standards Not Met","Not published")
+levels_order = c(levels_order_1819,levels_order_1920,levels_order_2021)
+
+
 ## Change factor levels
 dsptt_y2y3$`Status19/20` <- factor(dsptt_y2y3$`Status19/20`,levels=c("19/20 Standards Exceeded","19/20 Standards Met","19/20 Standards Not Fully Met (Plan Agreed)","19/20 Standards Not Met","19/20 None"))
 dsptt_y2y3$`Status20/21` <- factor(dsptt_y2y3$`Status20/21`,levels=c("20/21 Standards Exceeded","20/21 Standards Met","20/21 Approaching Standards","20/21 Standards Not Met","Not published"))
@@ -162,19 +168,57 @@ ggplot(activdata_atb_lodes,
 ggsave(paste0(here::here("outputs"),"/sankey_trusts_y1y2y3.svg"),width=30,height=20,dpi=300,units="cm")
 ggsave(paste0(here::here("outputs"),"/sankey_trusts_y1y2y3.png"),width=30,height=20,dpi=300,units="cm")
 
-###
+### Dynamic Sankey Diagram
 
+# More easily turning dataframe into edges and links file (graph based): https://stackoverflow.com/questions/50600070/get-automatically-nodes-and-links-from-table-for-sankey-diagram
+# Sankey with Networkd3 - https://www.r-graph-gallery.com/323-sankey-diagram-with-the-networkd3-library.html
 
-edges_aux <- dsptt_y2y3 %>% select(`Status18/19`,`Status19/20`) %>% rename(source=`Status18/19`,target=`Status19/20`) %>%
+# Create links (individual)
+links_ <- dsptt_y2y3 %>% select(`Status18/19`,`Status19/20`) %>% rename(source=`Status18/19`,target=`Status19/20`) %>%
   bind_rows(dsptt_y2y3 %>% select(`Status19/20`,`Status20/21`) %>% rename(source=`Status19/20`,target=`Status20/21`))
 
-links = edges_aux
+links_ <- links_ %>% mutate_at(vars(`source`,`target`),factor,levels=levels_order) %>% arrange(source,target)
 
-network = graph_from_data_frame(d=links,directed=F)
+# Create graph
+g = graph_from_data_frame(d=links_,directed=F) # graph
 
 library(d3r)
-data_json <- d3_igraph(network)
+data_json <- d3_igraph(g)
 
 write(data_json,"data.json")
 
-nodes=data.frame(name=c(links$source %>% unique(),links$target %>% unique()) %>% unique)
+#nodes=data.frame(name=c(links$source %>% unique(),links$target %>% unique()) %>% unique)
+
+# Create nodes file
+nodes <- data.frame(id = as.numeric(V(g)-1), # -1 to make it zero-indexed for Javascript
+                    name = V(g)$name)
+
+# Create links file (aggregate)
+links <- as.data.frame(get.edges(g, E(g))) %>% group_by(V1,V2) %>% mutate(V1=V1-1,V2=V2-1) %>% # -1 to make it zero-indexed
+  summarise(freq=n()) %>% data.frame()
+
+
+# Load package for Sankey
+# Load package
+library(networkD3)
+
+# Now we have 2 data frames: a 'links' data frame with 3 columns (from, to, value), and a 'nodes' data frame that gives the name of each node.
+head( Energy$links )
+head( Energy$nodes )
+
+# Thus we can plot it
+p2 <- sankeyNetwork(Links = links, Nodes = nodes, Source = "V1",
+                   Target = "V2", Value = "freq", NodeID = "name",
+                   units = "trusts", fontSize = 12, nodeWidth = 30,
+                   iterations=0) # to not alter node ordering
+p2
+
+# Add content to html object # https://stackoverflow.com/questions/50132459/how-to-add-title-to-a-networkd3-visualisation-when-saving-as-a-web-page
+library(htmlwidgets)
+p2 <- htmlwidgets::prependContent(p2, htmltools::tags$h3("DSPT status over three editions - Trusts active end-FY20/21"))
+p2 <- htmlwidgets::appendContent(p2, htmltools::tags$p("Pre-merger status not accounted for. Note also that standards are raised each year."))
+p2
+# save the widget
+
+saveWidget(p2, file=paste0( getwd(), "/SankeyTrustDSPT.html"))
+
