@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# MF
+Inputs/
+choropleth_DSPT_CCG_files/
+
 # C extensions
 *.so
 

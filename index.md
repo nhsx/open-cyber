@@ -25,9 +25,9 @@ For more information on the Data Security and Protection Toolkit, please visit t
 
 ## Summary of DSPT Compliance (2020/2021 edition)
 
-Summary statistics from the DSPT 2020/21 toolkit are shown. The latest status information was downloaded on the 10th October 2021.
+Summary statistics from the DSPT 2020/21 toolkit are shown. The latest status information was downloaded on the <b>10th October 2021</b>.
 
-Note on method: organisations open 31st March 2021 are considered. However, if the organisation does not have a 20/21 DSPT status, it has been allowed to inherit one from its 21/22 successor organisation (if the successor submitted a 2020/21 return.)
+Note on method: organisations open 31st March 2021 are considered. However, if the organisation does not have a 20/21 DSPT status, it has been allowed to inherit one from its 21/22 successor organisation (if the successor submitted a 2020/21 return). The same applies for the subsections below.
 
 <!---
 # <iframe src="https://nhsx.github.io/open-cyber/myplotly.html" height="600px" width="100%" style="border:none;"></iframe>
@@ -36,6 +36,15 @@ Note on method: organisations open 31st March 2021 are considered. However, if t
 {% include crosstab_summary_FY2021.html %}
 
 <iframe src="barchart_summary_FY2021_w.html" height="600px" width="100%" style="border:none;"></iframe>
+
+<hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
+
+
+## CCGs - Individual Compliance
+
+The compliance of individual CCGs is mapped below.
+
+<iframe src="HtmlWidget/choropleth_DSPT_CCG.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
