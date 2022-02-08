@@ -84,7 +84,7 @@ m
 
 # save the widget in a html file if needed.
 library(htmlwidgets)
-saveWidget(m, file=paste0( getwd(), "/HtmlWidget/choropleth_DSPT_CCG.html"))
+saveWidget(m, file=paste0( getwd(), "/HtmlWidget/choropleth_DSPT_CCG_",Sys.Date(),".html"))
 
 
 
