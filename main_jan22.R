@@ -66,9 +66,9 @@ ccg_hie <- read.csv("./Inputs/Clinical_Commissioning_Group_to_STPs_(April_2020)_
 # https://geoportal.statistics.gov.uk/datasets/sustainability-transformation-partnerships-and-nhs-england-region-april-2020-lookup-in-england/explore
 stp_hie <- read.csv("./Inputs/Sustainability_Transformation_Partnerships_and_NHS_England__Region___April_2020__Lookup_in_England.csv")
 
-ccg_stp_hie <- ccg_hie %>% left_join(stp_hie %>% select(-c("ï..FID")))
+ccg_stp_hie <- ccg_hie %>% left_join(stp_hie %>% select(-c("FID")))
 
-data_eccg_enrich_2021 <- data_eccg_cut_2021 %>% left_join(ccg_stp_hie %>% select(-c("ï..FID")),by=c("Code"="CCG20CDH"))
+data_eccg_enrich_2021 <- data_eccg_cut_2021 %>% left_join(ccg_stp_hie %>% select(-c("FID")),by=c("Code"="CCG20CDH"))
 
 #######
 ### List of trusts for 2020/21 ###
@@ -117,7 +117,7 @@ data_etr_cut$Sector="Trust"
 data_etr_cut <- filter(data_etr_cut,Start<"2021-04-01",(is.na(Close)|Close>="2021-03-31"))
 
 
-data_etr_enrich <- data_etr_cut %>% left_join(stp_hie %>% select(-c("ï..FID")),by=c("STPCDH"="STP20CDH"))
+data_etr_enrich <- data_etr_cut %>% left_join(stp_hie %>% select(-c("FID")),by=c("STPCDH"="STP20CDH"))
 
 library(PostcodesioR)
 
@@ -236,7 +236,7 @@ ct_final %>% print(file=paste0("./outputs/data_DSPTmetric",Sys.Date(),".html"))
 library(plotly)
 
 auxl <-data_metric %>% group_by(Sector,Short.Status) %>% summarise(n=n())
-aux <- data_metric %>% group_by(Sector,SHort.Status) %>% summarise(n=n()) %>% pivot_wider(names_from='Short.Status',values_from='n')
+aux <- data_metric %>% group_by(Sector,Short.Status) %>% summarise(n=n()) %>% pivot_wider(names_from='Short.Status',values_from='n')
 org_type <-aux$Sector
 
 

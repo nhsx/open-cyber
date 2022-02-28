@@ -5,11 +5,28 @@
 #########################################################################################
 
 library(rgdal)
-# load ggplot2
+library(dplyr)
 library(ggplot2)
 library(tidyverse)
 library(leaflet)
-
+### Load libraries
+library(tidyverse)
+library(readxl)
+library(openxlsx)
+library(gtsummary)
+library(gt)
+library(here)
+library(webshot)
+library(aod) # for wald.test
+library(summarytools) # for ctable
+library(ggpubr) # to use ggboxplot
+#install.packages(c("httr", "jsonlite"))
+library(httr)
+library(jsonlite)
+library(lubridate)
+library(xtable)
+library(plotly)
+library(htmlwidgets)
 
 #############################################
 # DSPT curated file
@@ -231,9 +248,16 @@ m03 <- m02_l %>%
                    weight=2,
                    fillOpacity = 1,
                    stroke = T,
-                   radius=6)
+                   radius= 6,
+                   clusterOptions = markerClusterOptions())
+  
+m03
 
+#adding the zoom toggle for trust level (trust layer appears between 9 and 20)
+#m03 <- m03 %>% 
+#  groupOptions("Trusts", zoomLevels = 9:20)
 
+#adding legend and layering CCG trusts and ICG boundary together
 m03 <- m03 %>% 
   addLegend( data=trust_spdf_points,pal=catpal, values=~Short.Status, opacity=0.9, title = "20/21 DSPT Status (trust)", position = "bottomright" ) %>%
   leaflet::addLayersControl(
@@ -241,13 +265,17 @@ m03 <- m03 %>%
   options = layersControlOptions(collapsed = FALSE)  # expand on hover?
 ) %>% 
   hideGroup(c("ICS boundary","Trusts"))  # turn these off by default
-
+  
 
 m03
 
+
+
 # save the widget in a html file if needed.
-library(htmlwidgets)
-saveWidget(m, file=paste0( getwd(), "/HtmlWidget/choropleth_DSPT_CCG_",Sys.Date(),".html"))
+#library(htmlwidgets)
+saveWidget(m04, file=paste0( getwd(), "choropleth_DSPT_CCG_",Sys.Date(),".html"))
+
+
 
 
 #############################################
@@ -275,10 +303,10 @@ data_metric <- data_metric %>% mutate(Status.Score=case_when(Short.Status=="Stan
                                                              Short.Status=="Not Published"~-3))
 
 
-
+NUMBER_OF_PATIENTS = gppopdata['NUMBER_OF_PATIENTS']
 data_metric <- data_metric %>% left_join(gppopdata_red,by=c("Code"="ORG_CODE"))                                                             #TRUE~NA_integer_))
 
-data_metric_ICS <- data_metric %>% group_by(STP20CD,STP20NM,Sector) %>% summarise(Simple.Score=mean(Status.Score,na.rm=T),
+data_metric_ICS <- data_metric %>% group_by(STP20CD,STP20NM,Sector,NHSER20NM) %>% summarise(Simple.Score=mean(Status.Score,na.rm=T),
                                                                                   Simple.n=n(),
                                                                                   Pop.Score=sum(NUMBER_OF_PATIENTS*Status.Score)/sum(NUMBER_OF_PATIENTS))
 
@@ -292,7 +320,10 @@ data_metric_ICS <- data_metric_ICS %>% mutate(metric_CCG_simple = Simple.Score_C
 
 
 
+
+
 stp_spdf@data <- stp_spdf@data %>% left_join(data_metric_ICS,by=c("stp20nm"="STP20NM","stp20cd"="STP20CD"))
+
 
 
 # Create a continuous palette function
@@ -307,19 +338,129 @@ mytext_ics_score <- paste(
   sep="") %>%
   lapply(htmltools::HTML)
 
-m_icscomp <- leaflet() %>% 
+
+
+region_spdf = readOGR('./Inputs/shapefile/NHS_England_Regions_(April_2020)_Boundaries_EN_BUC.shp')
+proj4string(region_spdf) <- CRS("+init=epsg:27700")  # BNG projection system
+
+region_spdf@proj4string # check system
+
+region_spdf <- region_spdf %>% sp::spTransform(CRS("+init=epsg:4326")) # reproject to latlong system
+
+region_full <- region_spdf
+
+region_s <- rgeos::gSimplify(region_full,tol=0.01, topologyPreserve=FALSE)
+
+# Create a spatial polygon data frame (includes shp attributes)
+regions_spdf = SpatialPolygonsDataFrame(region_s, data.frame(region_full))
+
+
+data_regions = data[c("STP20NM", "NHSER20NM")]
+names(data_regions)[names(data_regions) == "STP20NM"] <- "stp20nm"
+
+#merge and assign to stp_spdf data
+stp_spdfdata = stp_spdf@data
+stp_spdfdata = merge(stp_spdfdata, data_regions, by = "stp20nm", all = TRUE)
+
+mytext_new <- paste(
+  "<b>STP code (ODS): </b>", stp_spdf@data$stp20cd,"<br/>",
+  "<b>STP name (ODS): </b>", stp_spdf@data$stp20nm,"<br/>",
+  "<b>Region: </b>", stp_spdf@data$NHSER20NM.x,"<br/>",
+  "<b>ICS score (CCG+Trust simple), range [-3,3]: </b>",round(stp_spdf@data$metric_CCGTrust_simple,2),"<br/>",
+  sep="") %>%
+  lapply(htmltools::HTML)
+
+
+
+m04 = leaflet() %>%
+  addMapPane(name = "regionBorder", zIndex = 425) %>%
+  addMapPane(name = "ICS polygons", zIndex = 400) %>%
+  addMapPane(name = "ICS Labels", zIndex = 450) %>%
+  addPolygons(
+    data=regions_spdf,
+    group="Region boundary",
+    fillOpacity=0,
+    color='blue',
+    weight=5,
+    options = leafletOptions(pane = "regionBorder")
+  ) %>%
   addTiles()  %>% 
   setView( lat=53, lng=-2 , zoom=6) %>%
   addPolygons(
     data=stp_spdf,
-    group="ICS boundary",
-    fillOpacity=0.7,
+    group="ICS",
+    fillOpacity=1,
     fillColor=~pal_metric(metric_CCGTrust_simple),
     color="black",
-    weight=2,
-    label=mytext_ics_score
-  ) %>%
+    weight=1,
+    options = leafletOptions(pane = "ICS polygons")) %>%
+  addPolygons(
+    data=stp_spdf,
+    group="ICS",
+    fillOpacity=0,
+    fillColor=~pal_metric(metric_CCGTrust_simple),
+    color="black",
+    weight= 0,
+    options = leafletOptions(pane = "ICS Labels"),
+    label = mytext_new ) %>%
   addLegend("bottomright",pal=pal_metric,values=stp_spdf@data$metric_CCGTrust_simple,title="ICS score - CCG/Trust simple")
 
-m_icscomp
+m04
+
+#filter data to work out proprotion of DSPT for trusts in each CCG
+data_trusts = data %>% filter(Sector=="Trust")
+data_trusts2 = data_trusts %>% count(STP20CD, STP20NM, Short.Status, sort = TRUE)
+data_trusts4 = unique(cbind.data.frame(c(data_trusts2$STP20CD)))
+data_trusts4 <- data_trusts4 %>% rename("STP20CD" = 1)
+
+data_trust_met = data_trusts2 %>% filter(Short.Status == "Standards Met")
+data_trust_met = data_trust_met[c("STP20CD", "n")]
+data_trust_met <- data_trust_met %>% rename("Standards Met" = "n")
+
+data_trust_exceeded = data_trusts2 %>% filter(Short.Status == "Standards Exceeded")
+data_trust_exceeded = data_trust_exceeded[c("STP20CD", "n")]
+data_trust_exceeded <- data_trust_exceeded %>% rename("Standards Exceeded" = 2)
+
+data_trust_approaching = data_trusts2 %>% filter(Short.Status == "Approaching Standards")
+data_trust_approaching = data_trust_approaching[c("STP20CD", "n")]
+data_trust_approaching <- data_trust_approaching %>% rename("Approaching Standards" = 2)
+
+data_trust_notmet = data_trusts2 %>% filter(Short.Status == "Standards Not Met")
+data_trust_notmet = data_trust_notmet[c("STP20CD", "n")]
+data_trust_notmet <- data_trust_notmet %>% rename("Standards Not Met" = 2)
+
+data_trusts5 <- left_join(x = data_trusts4, y = data_trust_met)
+data_trusts6 <- left_join(x = data_trusts5, y = data_trust_exceeded)
+data_trusts7 <- left_join(x = data_trusts6, y = data_trust_approaching)
+data_trusts8 <- left_join(x = data_trusts7, y = data_trust_notmet)
+
+data_trusts8[is.na(data_trusts8)] <- 0
+data_trusts8 <- data_trusts8 %>% rename("stp20cd" = "STP20CD")
+trust_spdf_pie <- stp_spdf
+data_trust_spdf_pie <- left_join(x = data_trusts8, y = stp_spdf@data, by = "stp20cd")
+
+trust_spdf_pie@data = data_trust_spdf_pie
+stp_filter_numpatients <- gppopdata %>% filter(SEX=="ALL",AGE=="ALL",ORG_TYPE=="STP")
+library(leaflet.minicharts)
+m05 <- m02 %>%
+  addMinicharts(lng = data_trust_spdf_pie$long, 
+                lat = data_trust_spdf_pie$lat, 
+                type = "pie", 
+                chartdata = data_trust_spdf_pie[, c("Standards Met", "Standards Exceeded", "Approaching Standards", "Standards Not Met")], 
+                colorPalette = c("#104E8B", "#FF00FF", "#3093e5", "#fcba50"), 
+                width = 60 * sqrt(stp_filter_numpatients$NUMBER_OF_PATIENTS) / sqrt(max(stp_filter_numpatients$NUMBER_OF_PATIENTS)), 
+                transitionTime = 0)
+
+m05 <- m05 %>%
+  #addLegend( data=trust_spdf_points,pal=catpal, values=~Short.Status, opacity=0.9, title = "20/21 DSPT Status (trust)", position = "bottomright" ) %>%
+  leaflet::addLayersControl(
+    overlayGroups = c("ICS boundary","CCG"),  # add these layers
+    options = layersControlOptions(collapsed = FALSE)  # expand on hover?
+  ) %>% 
+  hideGroup(c("ICS boundary"))  # turn these off by default
+m05
+
+
+
+
 
