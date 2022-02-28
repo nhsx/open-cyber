@@ -32,7 +32,7 @@ For more information on the Data Security and Protection Toolkit, please visit t
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
-## Summary of DSPT Compliance (2020/2021 edition)
+## Summary of DSPT Compliance (2020/2021 edition).
 <br>
 Summary statistics from the DSPT 2020/21 toolkit are shown. The latest status information was downloaded on the <b>10th October 2021</b>.
 
