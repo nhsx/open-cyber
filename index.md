@@ -42,7 +42,7 @@ Note on method: organisations open 31st March 2021 are considered. However, if t
 <iframe src="outputs/data_DSPTmetric2022-02-08.html" height="600px" width="100%" style="border:none;"></iframe>
 
 
-<iframe src="_includes/barchart_summary_FY2021_2022-02-28.html" height="600px" width="100%" style="border:none;"></iframe>
+<iframe src="outputs/barchart_summary_FY2021_2022-02-28.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
