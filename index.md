@@ -57,6 +57,18 @@ The compliance of individual CCGs and Trusts are mapped below, with ICS boundari
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
+
+## CCGs and Proportions of Trusts Compliance
+<br>
+The compliance of individual CCGs and proportions of trusts compliance within each ICS with boundaries
+<iframe src="chloropleth_DSPT_Region_piecharts" height="600px" width="100%" style="border:none;"></iframe>
+
+<iframe src="chloropleth_DSPT_CCG_Trusts.html" height="600px" width="100%" style="border:none;"></iframe>
+
+<hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
+
+</br>
+
 ## Trusts - DSPT Compliance over editions
 <br>
 Below we consider the overall evolution of DSPT status across editions, for trusts open end-financial year 2020/21.
@@ -67,6 +79,13 @@ Despite showing editions side-by-side, it is important to note that the standard
 <iframe src="SankeyTrustDSPT.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
+
+
+
+
+
+
+
 
 Template for end-to-end open source analytics: [github.io](https://pages.github.com/), and [github actions](https://github.com/features/actions).
 
