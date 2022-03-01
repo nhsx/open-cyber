@@ -49,11 +49,11 @@ Note on method: organisations open 31st March 2021 are considered. However, if t
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
 
-## CCGs - Individual Compliance
+## CCGs and Trusts - Individual Compliance
 <br>
-The compliance of individual CCGs is mapped below.
+The compliance of individual CCGs and Trusts are mapped below, with ICS boundaries.
 
-<iframe src="choropleth_DSPT_CCG.html" height="600px" width="100%" style="border:none;"></iframe>
+<iframe src="chloropleth_DSPT_CCG_Trusts.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
