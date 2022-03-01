@@ -34,12 +34,12 @@ For more information on the Data Security and Protection Toolkit, please visit t
 
 ## Summary of DSPT Compliance (2020/2021 edition).
 <br>
-Summary statistics from the DSPT 2020/21 toolkit are shown. The latest status information was downloaded on the <b>8th February 20</b>.
+Summary statistics from the DSPT 2020/21 toolkit are shown. The latest status information was downloaded on the <b>8th February 2022</b>.
 
 Note on method: organisations open 31st March 2021 are considered. However, if the organisation does not have a 20/21 DSPT status, it has been allowed to inherit one from its 21/22 successor organisation (if the successor submitted a 2020/21 return). The same applies for the subsections below.
 
 
-<iframe src="/outputs/data_DSPTmetric2022-02-08.html" height="600px" width="100%" style="border:none;"></iframe>
+<iframe src="data_DSPTmetric2022-02-08.html" height="600px" width="100%" style="border:none;"></iframe>
 
 
 {% include crosstab_summary_FY2021.html %}
