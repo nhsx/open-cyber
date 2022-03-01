@@ -38,13 +38,13 @@ Summary statistics from the DSPT 2020/21 toolkit are shown. The latest status in
 
 Note on method: organisations open 31st March 2021 are considered. However, if the organisation does not have a 20/21 DSPT status, it has been allowed to inherit one from its 21/22 successor organisation (if the successor submitted a 2020/21 return). The same applies for the subsections below.
 
-<!---
-# <iframe src="https://nhsx.github.io/open-cyber/myplotly.html" height="600px" width="100%" style="border:none;"></iframe>
--->
+
+<iframe src="/outputs/data_DSPTmetric2022-02-08.html" height="600px" width="100%" style="border:none;"></iframe>
+
 
 {% include crosstab_summary_FY2021.html %}
 
-<iframe src="barchart_summary_FY2021_w.html" height="600px" width="100%" style="border:none;"></iframe>
+<iframe src="/_includes/barchart_summary_FY2021_2022-02-28.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
@@ -61,16 +61,21 @@ The compliance of individual CCGs and Trusts are mapped below, with ICS boundari
 ## CCGs and Proportions of Trusts Compliance
 <br>
 The compliance of individual CCGs and proportions of trusts compliance within each ICS with boundaries
-<iframe src="chloropleth_DSPT_Region_piecharts" height="600px" width="100%" style="border:none;"></iframe>
+<iframe src="chloropleth_DSPT_Region_piecharts.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
 </br>
 
-## Trusts - DSPT Compliance over editions
+## ICSs Composite Compliance - CCG and Trust Score Average Weighted For Population
 <br>
-Below we consider the overall evolution of DSPT status across editions, for trusts open end-financial year 2020/21.
-Note that below, for trusts resulting from mergers, we do not reflect the status of their predecessors, unless their identifying organisational code has been kept.
+The compliance of individual ICSs, made up of a composite score of 50% CCG scores in the ICS and 50% Trust scores, weighted for patient population size. Region boundaries are displayed in blue
+<iframe src="chloropleth_DSPT_Regions.html" height="600px" width="100%" style="border:none;"></iframe>
+
+<hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
+
+</br>
+
 
 Despite showing editions side-by-side, it is important to note that the standards - and the level of evidence required to meet those standards - tend to get raised year-on-year. This means that a similar status in two editions is not directly comparable.
 
