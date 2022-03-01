@@ -34,7 +34,7 @@ For more information on the Data Security and Protection Toolkit, please visit t
 
 ## Summary of DSPT Compliance (2020/2021 edition).
 <br>
-Summary statistics from the DSPT 2020/21 toolkit are shown. The latest status information was downloaded on the <b>10th October 2021</b>.
+Summary statistics from the DSPT 2020/21 toolkit are shown. The latest status information was downloaded on the <b>8th February 20</b>.
 
 Note on method: organisations open 31st March 2021 are considered. However, if the organisation does not have a 20/21 DSPT status, it has been allowed to inherit one from its 21/22 successor organisation (if the successor submitted a 2020/21 return). The same applies for the subsections below.
 
@@ -63,8 +63,6 @@ The compliance of individual CCGs and Trusts are mapped below, with ICS boundari
 The compliance of individual CCGs and proportions of trusts compliance within each ICS with boundaries
 <iframe src="chloropleth_DSPT_Region_piecharts" height="600px" width="100%" style="border:none;"></iframe>
 
-<iframe src="chloropleth_DSPT_CCG_Trusts.html" height="600px" width="100%" style="border:none;"></iframe>
-
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
 </br>
@@ -76,9 +74,7 @@ Note that below, for trusts resulting from mergers, we do not reflect the status
 
 Despite showing editions side-by-side, it is important to note that the standards - and the level of evidence required to meet those standards - tend to get raised year-on-year. This means that a similar status in two editions is not directly comparable.
 
-<iframe src="SankeyTrustDSPT.html" height="600px" width="100%" style="border:none;"></iframe>
 
-<hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
 
 
