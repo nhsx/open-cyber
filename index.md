@@ -59,7 +59,7 @@ The compliance of individual CCGs and Trusts are mapped below, with ICS boundari
 ## CCGs and Proportions of Trusts Compliance
 <br>
 The compliance of individual CCGs and proportions of trusts compliance within each ICS with boundaries
-<iframe src="chloropleth_DSPT_Region_piecharts.html" height="600px" width="100%" style="border:none;"></iframe>
+<iframe src="Maps choropleth_DSPT_charts.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
