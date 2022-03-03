@@ -60,7 +60,7 @@ The compliance of individual CCGs and Trusts are mapped below, with ICS boundari
 <br>
 The compliance of individual CCGs and proportions of trusts compliance within each ICS with boundaries. The width of each pie chart indicates the population level within each ICS.
 
-<iframe src="choropleth_DSPT_pie_charts 2022-03-03.html" height="600px" width="100%" style="border:none;"></iframe>
+<iframe src=" choropleth_DSPT_pie_charts 2022-03-03 .html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
@@ -70,7 +70,7 @@ The compliance of individual CCGs and proportions of trusts compliance within ea
 <br>
 The compliance of individual CCGs and proportions of trusts compliance within each ICS with boundaries. The width of each pie chart indicates the level of EPRR risk assigned as tiers (1-4) for each trust.
 
-<iframe src=" chloropleth_DSPT_pie_charts_eprr 2022-03-03.html" height="600px" width="100%" style="border:none;"></iframe>
+<iframe src=" chloropleth_DSPT_pie_charts_eprr 2022-03-03 .html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
@@ -80,7 +80,7 @@ The compliance of individual CCGs and proportions of trusts compliance within ea
 ## ICSs Composite Compliance - CCG and Trust Score Average Weighted For Population
 <br>
 The compliance of individual ICSs, made up of a composite score of 50% CCG scores in the ICS and 50% Trust scores, weighted for patient population size. Region boundaries are displayed in blue
-<iframe src="choropleth_DSPT_Regions.html" height="600px" width="100%" style="border:none;"></iframe>
+<iframe src="chlorepleth_DSPT_Regions.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
