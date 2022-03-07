@@ -27,6 +27,7 @@ library(lubridate)
 library(xtable)
 library(plotly)
 library(htmlwidgets)
+library(leaflet.minicharts)
 
 #############################################
 # DSPT curated file
@@ -272,8 +273,9 @@ m03
 
 
 # save the widget in a html file if needed.
-#library(htmlwidgets)
-saveWidget(m04, file=paste0( getwd(), "choropleth_DSPT_CCG_",Sys.Date(),".html"))
+
+library(htmlwidgets)
+saveWidget(m06, file=paste('./outputs/', "chloropleth_DSPT_pie_charts_eprr",Sys.Date(),".html"))
 
 
 
@@ -365,17 +367,17 @@ stp_spdfdata = merge(stp_spdfdata, data_regions, by = "stp20nm", all = TRUE)
 mytext_new <- paste(
   "<b>STP code (ODS): </b>", stp_spdf@data$stp20cd,"<br/>",
   "<b>STP name (ODS): </b>", stp_spdf@data$stp20nm,"<br/>",
-  "<b>Region: </b>", stp_spdf@data$NHSER20NM.x,"<br/>",
+  "<b>Region: </b>", stp_spdf@data$NHSER20NM,"<br/>",
   "<b>ICS score (CCG+Trust simple), range [-3,3]: </b>",round(stp_spdf@data$metric_CCGTrust_simple,2),"<br/>",
   sep="") %>%
   lapply(htmltools::HTML)
-
 
 
 m04 = leaflet() %>%
   addMapPane(name = "regionBorder", zIndex = 425) %>%
   addMapPane(name = "ICS polygons", zIndex = 400) %>%
   addMapPane(name = "ICS Labels", zIndex = 450) %>%
+  addMapPane(name = "Minicharts", zIndex = 435) %>%
   addPolygons(
     data=regions_spdf,
     group="Region boundary",
@@ -407,14 +409,22 @@ m04 = leaflet() %>%
 
 m04
 
+
+
+
+#PLOTTING PIE CHART MAP
+
+
 #filter data to work out proprotion of DSPT for trusts in each CCG
 data_trusts = data %>% filter(Sector=="Trust")
-data_trusts2 = data_trusts %>% count(STP20CD, STP20NM, Short.Status, sort = TRUE)
+
+data_trusts2 = eprr_data_merged %>% count(STP20CD, Short.Status, sort = TRUE)
+data_trusts2 = eprr_data_merged %>% count(Code, Tier_rank, STP20CD, STP20NM, Short.Status, sort = TRUE)
 data_trusts4 = unique(cbind.data.frame(c(data_trusts2$STP20CD)))
 data_trusts4 <- data_trusts4 %>% rename("STP20CD" = 1)
 
 data_trust_met = data_trusts2 %>% filter(Short.Status == "Standards Met")
-data_trust_met = data_trust_met[c("STP20CD", "n")]
+data_trust_met = data_trust_met[c("STP20CD", "n", "")]
 data_trust_met <- data_trust_met %>% rename("Standards Met" = "n")
 
 data_trust_exceeded = data_trusts2 %>% filter(Short.Status == "Standards Exceeded")
@@ -437,30 +447,94 @@ data_trusts8 <- left_join(x = data_trusts7, y = data_trust_notmet)
 data_trusts8[is.na(data_trusts8)] <- 0
 data_trusts8 <- data_trusts8 %>% rename("stp20cd" = "STP20CD")
 trust_spdf_pie <- stp_spdf
-data_trust_spdf_pie <- left_join(x = data_trusts8, y = stp_spdf@data, by = "stp20cd")
+data_trusts<- data_trusts %>% mutate(Standards_Met = case_when(Short.Status == "Standards Met"~1,
+                                                               TRUE ~ 0))
 
-trust_spdf_pie@data = data_trust_spdf_pie
+
+
+
+
+
+
+#read in the eprr data for setting the width of the pie charts as the EPRR risk tier
+#csv has been edited to take out first row of headings in matrix sheet
+
+eprr_data = read.xlsx('./Inputs/eprr_rankings_data.xlsx', sheet = 2)
+eprr_data <- eprr_data[ ,1:5]
+eprr_data <- eprr_data %>% rename("Name"= 3)
+eprr_data$Name = toupper(eprr_data$Name)
+
+eprr_data <- eprr_data %>% rename("Code" = 1)
+
+eprr_data_merged <-merge(eprr_data, data_trusts, by = "Code")
+
+eprr_data_merged[, "Tier_rank"] <- NA
+
+
+eprr_data_merged<- eprr_data_merged %>% mutate(Tier_rank = case_when(Tier == "Tier 1"~"4",
+                                                        Tier == "Tier 2"~"3",
+                                                        Tier == "Tier 3"~"2",
+                                                        Tier == "Tier 4"~"1",
+                                                  TRUE ~ "Not Applicable"))
+
+eprr_data_merged <- transform(eprr_data_merged, Tier_rank = as.numeric(Tier_rank))
+eprr_data_merged <- eprr_data_merged[c("Code", "Tier_rank")]
+
+data_trusts = data %>% filter(Sector=="Trust")
+data_trusts <- data_trusts[c("Code", "Name", "STP20CD", "Short.Status")]
+
+data_trusts<- data_trusts %>% mutate(Standards_Met = case_when(Short.Status == "Standards Met"~1,
+                                                              TRUE ~ 0))
+data_trusts<- data_trusts %>% mutate(Standards_Exceeded = case_when(Short.Status == "Standards Exceeded"~1,
+                                                               TRUE ~ 0))
+data_trusts<- data_trusts %>% mutate(Standards_Not_Met = case_when(Short.Status == "Standards Not Met"~1,
+                                                               TRUE ~ 0))
+data_trusts<- data_trusts %>% mutate(Approaching_Standards = case_when(Short.Status == "Approaching Standards"~1,
+                                                               TRUE ~ 0))
+
+#merge together the eprr risk tier as well for m06 map
+data_trusts = merge(data_trusts, eprr_data_merged, by = "Code")
+data_trusts = data_trusts[,c("STP20CD", "Standards_Met", "Standards_Exceeded", "Standards_Not_Met", "Approaching_Standards", "Tier_rank")]
+
+data_trusts_aggregate = data_trusts %>% group_by(STP20CD) %>% summarise_each(funs(sum))
+data_trusts_aggregate = data_trusts_aggregate %>% rename("stp20cd" = 1)
+
+data_trust_spdf_pie = left_join(x = data_trusts_aggregate, y = stp_spdf@data, by = "stp20cd")
+
 stp_filter_numpatients <- gppopdata %>% filter(SEX=="ALL",AGE=="ALL",ORG_TYPE=="STP")
-library(leaflet.minicharts)
-m05 <- m02 %>%
+m05 <- leaflet() %>%
+  addTiles %>%
+  addPolygons(
+    data=stp_spdf,
+    group="ICS boundary",
+    fillOpacity=0,
+    color='black',
+    weight=5,
+    label=mytext_ics) %>%
   addMinicharts(lng = data_trust_spdf_pie$long, 
                 lat = data_trust_spdf_pie$lat, 
                 type = "pie", 
-                chartdata = data_trust_spdf_pie[, c("Standards Met", "Standards Exceeded", "Approaching Standards", "Standards Not Met")], 
+                chartdata = data_trust_spdf_pie[, c("Standards_Met", "Standards_Exceeded", "Standards_Not_Met", "Approaching_Standards")], 
                 colorPalette = c("#104E8B", "#FF00FF", "#3093e5", "#fcba50"), 
                 width = 60 * sqrt(stp_filter_numpatients$NUMBER_OF_PATIENTS) / sqrt(max(stp_filter_numpatients$NUMBER_OF_PATIENTS)), 
                 transitionTime = 0)
-
-m05 <- m05 %>%
-  #addLegend( data=trust_spdf_points,pal=catpal, values=~Short.Status, opacity=0.9, title = "20/21 DSPT Status (trust)", position = "bottomright" ) %>%
-  leaflet::addLayersControl(
-    overlayGroups = c("ICS boundary","CCG"),  # add these layers
-    options = layersControlOptions(collapsed = FALSE)  # expand on hover?
-  ) %>% 
-  hideGroup(c("ICS boundary"))  # turn these off by default
 m05
 
-
-
-
-
+m06 <- leaflet() %>%
+  addTiles %>%
+  addPolygons(
+    data=stp_spdf,
+    group="ICS boundary",
+    fillOpacity=0,
+    color='black',
+    weight=5,
+    label=mytext_ics) %>%
+  addMinicharts(lng = data_trust_spdf_pie$long, 
+                lat = data_trust_spdf_pie$lat, 
+                type = "pie", 
+                chartdata = data_trust_spdf_pie[, c("Standards_Met", "Standards_Exceeded", "Standards_Not_Met", "Approaching_Standards")], 
+                colorPalette = c("#104E8B", "#FF00FF", "#3093e5", "#fcba50"), 
+                width = (data_trust_spdf_pie$Tier_rank - min(data_trust_spdf_pie$Tier_rank)/(max(data_trust_spdf_pie$Tier_rank) - min(data_trust_spdf_pie$Tier_rank))), 
+                transitionTime = 0)
+m06
+                                                            
