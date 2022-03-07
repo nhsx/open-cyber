@@ -20,7 +20,7 @@
   <h3 class="nhsuk-warning-callout__label">
     Important<span class="nhsuk-u-visually-hidden">:</span>
   </h3>
-  <p>This project is currently in development. For more information please contact <a href="mailto:analytics-unit@nhsx.nhs.uk">manalytics-unit@nhsx.nhs.uk</a>. <br>This is an exploratory piece leveraging open source data and widget tooling in R - it has not received formal QA. <br>Opinions expressed in this page are not representative of the views of NHSX and any content here should not be regarded as official output in any form. For more information about NHSX please visit our <a href="https://www.nhsx.nhs.uk/">official website.</a>.
+  <p>This project is currently in development. For more information please contact <a href="mailto:analytics-unit@nhsx.nhs.uk">analytics-unit@nhsx.nhs.uk</a>. <br>This is an exploratory piece leveraging open source data and widget tooling in R - it has not received formal QA. <br>Opinions expressed in this page are not representative of the views of NHSX and any content here should not be regarded as official output in any form. For more information about NHSX please visit our <a href="https://www.nhsx.nhs.uk/">official website.</a>.
    </p>
 </div>
 
