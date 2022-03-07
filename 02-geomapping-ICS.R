@@ -532,8 +532,8 @@ m06 <- leaflet() %>%
   addMinicharts(lng = data_trust_spdf_pie$long, 
                 lat = data_trust_spdf_pie$lat, 
                 type = "pie", 
-                chartdata = data_trust_spdf_pie[, c("Standards_Met", "Standards_Exceeded", "Standards_Not_Met", "Approaching_Standards")], 
-                colorPalette = c("#104E8B", "#FF00FF", "#3093e5", "#fcba50"), 
+                chartdata = data_trust_spdf_pie[, c("Standards_Exceeded", "Standards_Met", "Approaching_Standards", "Standards_Not_Met")], 
+                colorPalette = ~catpal(c("Standards_Exceeded", "Standards_Met", "Approaching_Standards", "Standards_Not_Met")), 
                 width = (data_trust_spdf_pie$Tier_rank - min(data_trust_spdf_pie$Tier_rank)/(max(data_trust_spdf_pie$Tier_rank) - min(data_trust_spdf_pie$Tier_rank))), 
                 transitionTime = 0)
 m06
