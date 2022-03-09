@@ -68,11 +68,16 @@ The compliance of individual CCGs and proportions of trusts compliance within ea
 ## ICSs Composite Compliance - CCG and Trust Score Average Weighted For Population
 <br>
 The compliance of individual ICSs, made up of a composite score of 50% CCG scores which have been weighted for population and 50% of a simple average of Trust scores. Region boundaries are displayed in blue.
-<iframe src="chlorepleth_DSPT_Regions.html" height="600px" width="100%" style="border:none;"></iframe>
+<iframe src="chloropleth_DSPT_regions_newscale1 2022-03-09.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
+## ICSs Composite Compliance - CCG and Trust Score Average Weighted For Population and EPRR
+<br>
+The compliance of individual ICSs, made up of a composite score of 50% CCG scores which have been weighted for population and 50% of average Trusts scores weighted for EPRR risk rating. Region boundaries are displayed in blue.
+<iframe src="chloropleth_DSPT_regions_EPRR 2022-03-09.html" height="600px" width="100%" style="border:none;"></iframe>
 
+<hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
 
 Despite showing editions side-by-side, it is important to note that the standards - and the level of evidence required to meet those standards - tend to get raised year-on-year. This means that a similar status in two editions is not directly comparable.
