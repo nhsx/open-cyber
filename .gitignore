@@ -5,7 +5,8 @@ __pycache__/
 
 # MF
 Inputs/
-choropleth_DSPT_CCG_files/
+HtmlWidget/choropleth_DSPT_CCG_files/*/
+Map Archive/
 
 # C extensions
 *.so

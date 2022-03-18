@@ -1,7 +1,7 @@
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
 # Open Statistics - Cyber Security
-<!---
+
 {% include update.html %}
 
 <div class="nhsuk-warning-callout">
@@ -14,7 +14,6 @@
                 >{{ site.github.owner_name }}</a>
    </p>
 </div>
--->
 
 <div class="nhsuk-warning-callout">
   <h3 class="nhsuk-warning-callout__label">

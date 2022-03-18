@@ -249,8 +249,8 @@ m03 <- m02_l %>%
                    weight=2,
                    fillOpacity = 1,
                    stroke = T,
-                   radius= 6,
-                   clusterOptions = markerClusterOptions())
+                   radius= 6)
+                   #clusterOptions = markerClusterOptions())
   
 m03
 
@@ -263,7 +263,7 @@ m03 <- m03 %>%
   addLegend( data=trust_spdf_points,pal=catpal, values=~Short.Status, opacity=0.9, title = "20/21 DSPT Status (trust)", position = "bottomright" ) %>%
   leaflet::addLayersControl(
   overlayGroups = c("ICS boundary","CCG","Trusts"),  # add these layers
-  options = layersControlOptions(collapsed = FALSE)  # expand on hover?
+  options = layersControlOptions(collapsed = FALSEca)  # expand on hover?
 ) %>% 
   hideGroup(c("ICS boundary","Trusts"))  # turn these off by default
   
@@ -275,7 +275,7 @@ m03
 # save the widget in a html file if needed.
 
 library(htmlwidgets)
-saveWidget(m06, file=paste('./outputs/', "chloropleth_DSPT_pie_charts_eprr",Sys.Date(),".html"))
+saveWidget(m06, file=paste('./outputs/',"chloropleth_DSPT_CCGp_Trusts_EPRR",".html"))
 
 
 
@@ -331,12 +331,12 @@ stp_spdf@data <- stp_spdf@data %>% left_join(data_metric_ICS,by=c("stp20nm"="STP
 # Create a continuous palette function
 pal_metric <- colorNumeric(
   palette = "RdYlBu",
-  domain = stp_spdf@data$metric_CCGTrust_simple)
+  domain = range(-3:3))
 
 mytext_ics_score <- paste(
   "<b>STP code (ODS): </b>", stp_spdf@data$stp20cd,"<br/>",
   "<b>STP name (ODS): </b>", stp_spdf@data$stp20nm,"<br/>",
-  "<b>ICS score (CCG+Trust simple), range [-3,3]: </b>",round(stp_spdf@data$metric_CCGTrust_simple,2),"<br/>",
+  "<b>ICS score (CCG+Trust simple), range [-3,3]: </b>",round(stp_spdf@data$metric_CCGp_Trusts,2),"<br/>",
   sep="") %>%
   lapply(htmltools::HTML)
 
@@ -368,10 +368,12 @@ mytext_new <- paste(
   "<b>STP code (ODS): </b>", stp_spdf@data$stp20cd,"<br/>",
   "<b>STP name (ODS): </b>", stp_spdf@data$stp20nm,"<br/>",
   "<b>Region: </b>", stp_spdf@data$NHSER20NM,"<br/>",
-  "<b>ICS score (CCG+Trust simple), range [-3,3]: </b>",round(stp_spdf@data$metric_CCGTrust_simple,2),"<br/>",
+  "<b>ICS score (CCG population + Trust simple), range [-3,3]: </b>",round(stp_spdf@data$metric_CCGp_Trusts,2),"<br/>",
   sep="") %>%
   lapply(htmltools::HTML)
 
+
+#colorpal <- colorBin(my_palette, dsptlevels, bins = c(0.0, 1.0, 1.5, 2.0, 2.5), reverse=F) 
 
 m04 = leaflet() %>%
   addMapPane(name = "regionBorder", zIndex = 425) %>%
@@ -392,7 +394,7 @@ m04 = leaflet() %>%
     data=stp_spdf,
     group="ICS",
     fillOpacity=1,
-    fillColor=~pal_metric(metric_CCGTrust_simple),
+    fillColor=~pal_metric(metric_CCGp_Trusts),
     color="black",
     weight=1,
     options = leafletOptions(pane = "ICS polygons")) %>%
@@ -400,12 +402,12 @@ m04 = leaflet() %>%
     data=stp_spdf,
     group="ICS",
     fillOpacity=0,
-    fillColor=~pal_metric(metric_CCGTrust_simple),
+    fillColor=~pal_metric(metric_CCGp_Trusts),
     color="black",
     weight= 0,
     options = leafletOptions(pane = "ICS Labels"),
     label = mytext_new ) %>%
-  addLegend("bottomright",pal=pal_metric,values=stp_spdf@data$metric_CCGTrust_simple,title="ICS score - CCG/Trust simple")
+  addLegend("bottomright",pal=pal_metric,values=-3:3,title="ICS score - CCG population/Trust simple")
 
 m04
 
@@ -414,71 +416,9 @@ m04
 
 #PLOTTING PIE CHART MAP
 
-
-#filter data to work out proprotion of DSPT for trusts in each CCG
-data_trusts = data %>% filter(Sector=="Trust")
-
-data_trusts2 = eprr_data_merged %>% count(STP20CD, Short.Status, sort = TRUE)
-data_trusts2 = eprr_data_merged %>% count(Code, Tier_rank, STP20CD, STP20NM, Short.Status, sort = TRUE)
-data_trusts4 = unique(cbind.data.frame(c(data_trusts2$STP20CD)))
-data_trusts4 <- data_trusts4 %>% rename("STP20CD" = 1)
-
-data_trust_met = data_trusts2 %>% filter(Short.Status == "Standards Met")
-data_trust_met = data_trust_met[c("STP20CD", "n", "")]
-data_trust_met <- data_trust_met %>% rename("Standards Met" = "n")
-
-data_trust_exceeded = data_trusts2 %>% filter(Short.Status == "Standards Exceeded")
-data_trust_exceeded = data_trust_exceeded[c("STP20CD", "n")]
-data_trust_exceeded <- data_trust_exceeded %>% rename("Standards Exceeded" = 2)
-
-data_trust_approaching = data_trusts2 %>% filter(Short.Status == "Approaching Standards")
-data_trust_approaching = data_trust_approaching[c("STP20CD", "n")]
-data_trust_approaching <- data_trust_approaching %>% rename("Approaching Standards" = 2)
-
-data_trust_notmet = data_trusts2 %>% filter(Short.Status == "Standards Not Met")
-data_trust_notmet = data_trust_notmet[c("STP20CD", "n")]
-data_trust_notmet <- data_trust_notmet %>% rename("Standards Not Met" = 2)
-
-data_trusts5 <- left_join(x = data_trusts4, y = data_trust_met)
-data_trusts6 <- left_join(x = data_trusts5, y = data_trust_exceeded)
-data_trusts7 <- left_join(x = data_trusts6, y = data_trust_approaching)
-data_trusts8 <- left_join(x = data_trusts7, y = data_trust_notmet)
-
-data_trusts8[is.na(data_trusts8)] <- 0
-data_trusts8 <- data_trusts8 %>% rename("stp20cd" = "STP20CD")
-trust_spdf_pie <- stp_spdf
-data_trusts<- data_trusts %>% mutate(Standards_Met = case_when(Short.Status == "Standards Met"~1,
-                                                               TRUE ~ 0))
-
-
-
-
-
-
-
-#read in the eprr data for setting the width of the pie charts as the EPRR risk tier
-#csv has been edited to take out first row of headings in matrix sheet
-
-eprr_data = read.xlsx('./Inputs/eprr_rankings_data.xlsx', sheet = 2)
-eprr_data <- eprr_data[ ,1:5]
-eprr_data <- eprr_data %>% rename("Name"= 3)
-eprr_data$Name = toupper(eprr_data$Name)
-
-eprr_data <- eprr_data %>% rename("Code" = 1)
-
-eprr_data_merged <-merge(eprr_data, data_trusts, by = "Code")
-
-eprr_data_merged[, "Tier_rank"] <- NA
-
-
-eprr_data_merged<- eprr_data_merged %>% mutate(Tier_rank = case_when(Tier == "Tier 1"~"4",
-                                                        Tier == "Tier 2"~"3",
-                                                        Tier == "Tier 3"~"2",
-                                                        Tier == "Tier 4"~"1",
-                                                  TRUE ~ "Not Applicable"))
-
-eprr_data_merged <- transform(eprr_data_merged, Tier_rank = as.numeric(Tier_rank))
-eprr_data_merged <- eprr_data_merged[c("Code", "Tier_rank")]
+#load in the data and filter for trusts changing the statuses to numerical values
+#the statuses will be seperated out into individual columns and the values will be summed grouped by 
+#the STP code so we get the proportion of trusts that met each status for each STP
 
 data_trusts = data %>% filter(Sector=="Trust")
 data_trusts <- data_trusts[c("Code", "Name", "STP20CD", "Short.Status")]
@@ -492,11 +432,9 @@ data_trusts<- data_trusts %>% mutate(Standards_Not_Met = case_when(Short.Status 
 data_trusts<- data_trusts %>% mutate(Approaching_Standards = case_when(Short.Status == "Approaching Standards"~1,
                                                                TRUE ~ 0))
 
-#merge together the eprr risk tier as well for m06 map
-data_trusts = merge(data_trusts, eprr_data_merged, by = "Code")
-data_trusts = data_trusts[,c("STP20CD", "Standards_Met", "Standards_Exceeded", "Standards_Not_Met", "Approaching_Standards", "Tier_rank")]
+data_trusts = data_trusts[,c("Name", "STP20CD", "Standards_Met", "Standards_Exceeded", "Standards_Not_Met", "Approaching_Standards")]
 
-data_trusts_aggregate = data_trusts %>% group_by(STP20CD) %>% summarise_each(funs(sum))
+data_trusts_aggregate = data_trusts %>% group_by(Name) %>% summarise(funs(sum))
 data_trusts_aggregate = data_trusts_aggregate %>% rename("stp20cd" = 1)
 
 data_trust_spdf_pie = left_join(x = data_trusts_aggregate, y = stp_spdf@data, by = "stp20cd")
@@ -506,22 +444,11 @@ m05 <- leaflet() %>%
   addTiles %>%
   addPolygons(
     data=stp_spdf,
-    group="ICS boundary",
-    fillOpacity=0,
-    color='black',
-    weight=5,
+    group="ICS Tiles",
+    fillOpacity=0.8,
+    color='gray',
+    weight=0,
     label=mytext_ics) %>%
-  addMinicharts(lng = data_trust_spdf_pie$long, 
-                lat = data_trust_spdf_pie$lat, 
-                type = "pie", 
-                chartdata = data_trust_spdf_pie[, c("Standards_Met", "Standards_Exceeded", "Standards_Not_Met", "Approaching_Standards")], 
-                colorPalette = c("#104E8B", "#FF00FF", "#3093e5", "#fcba50"), 
-                width = 60 * sqrt(stp_filter_numpatients$NUMBER_OF_PATIENTS) / sqrt(max(stp_filter_numpatients$NUMBER_OF_PATIENTS)), 
-                transitionTime = 0)
-m05
-
-m06 <- leaflet() %>%
-  addTiles %>%
   addPolygons(
     data=stp_spdf,
     group="ICS boundary",
@@ -533,8 +460,127 @@ m06 <- leaflet() %>%
                 lat = data_trust_spdf_pie$lat, 
                 type = "pie", 
                 chartdata = data_trust_spdf_pie[, c("Standards_Exceeded", "Standards_Met", "Approaching_Standards", "Standards_Not_Met")], 
-                colorPalette = ~catpal(c("Standards_Exceeded", "Standards_Met", "Approaching_Standards", "Standards_Not_Met")), 
-                width = (data_trust_spdf_pie$Tier_rank - min(data_trust_spdf_pie$Tier_rank)/(max(data_trust_spdf_pie$Tier_rank) - min(data_trust_spdf_pie$Tier_rank))), 
+                colorPalette = c("#129F8C", '#9FD0BA', "#F5FFBF", "#FF4227"), 
+                width = 35 * sqrt(stp_filter_numpatients$NUMBER_OF_PATIENTS) / sqrt(max(stp_filter_numpatients$NUMBER_OF_PATIENTS)), 
                 transitionTime = 0)
+m05
+
+
+#Plotting region map with summary metric weighted for EPRR
+
+#read in the eprr data 
+#csv has been edited to take out first row of headings in matrix sheet
+
+eprr_data = read.xlsx('./Inputs/eprr_rankings_data.xlsx', sheet = 2)
+eprr_data <- eprr_data[ ,1:5]
+eprr_data <- eprr_data %>% rename("Name"= 3)
+eprr_data$Name = toupper(eprr_data$Name)
+
+eprr_data <- eprr_data %>% rename("Code" = 1)
+data_trusts = data %>% filter(Sector=="Trust")
+eprr_data_merged <-merge(eprr_data, data_trusts[c("Code", "STP20CD")], by = "Code")
+
+
+eprr_data_merged<- eprr_data_merged %>% mutate(Tier_rank = case_when(Tier == "Tier 1"~"4",
+                                                                     Tier == "Tier 2"~"3",
+                                                                     Tier == "Tier 3"~"2",
+                                                                     Tier == "Tier 4"~"1",
+                                                                     TRUE ~ "Not Applicable"))
+
+eprr_data_merged <- transform(eprr_data_merged, Tier_rank = as.numeric(Tier_rank))
+eprr_data_merged <- eprr_data_merged[c("STP20CD", "Tier_rank")]
+
+eprr_data_aggregate = eprr_data_merged %>% group_by(STP20CD) %>% summarise_at(c("Tier_rank"), mean, na.rm = TRUE)
+
+
+#merge the eprr data with the trusts data to work out the summary metric
+data_metric_ICS <- merge(data_metric_ICS, eprr_data_aggregate, by = "STP20CD")
+
+data_metric_ICS <- data_metric_ICS %>% mutate(metric_CCG_simple = Simple.Score_CCG,
+                                              metric_CCG_pop = Pop.Score_CCG,
+                                              metric_CCGTrust_simple = 0.5*Simple.Score_CCG+0.5*Simple.Score_Trust,
+                                              metric_CCGp_Trusts =0.5*Pop.Score_CCG+0.5*Simple.Score_Trust,
+                                              metric_CCGp_TrustsEprr = 0.5*Pop.Score_CCG + 0.5*Simple.Score_Trust*Tier_rank)
+stp_spdf@data <- stp_spdf@data %>% left_join(data_metric_ICS,by=c("stp20nm"="STP20NM","stp20cd"="STP20CD"))
+
+
+
+# Create a continuous palette function
+pal_metric <- colorNumeric(
+  palette = "RdYlBu",
+  domain = range(-4:4))
+
+mytext_ics_score <- paste(
+  "<b>STP code (ODS): </b>", stp_spdf@data$stp20cd,"<br/>",
+  "<b>STP name (ODS): </b>", stp_spdf@data$stp20nm,"<br/>",
+  "<b>ICS score (CCG Population+Trust EPRR), range [-3,3]: </b>",round(stp_spdf@data$metric_CCGp_TrustsEprr,2),"<br/>",
+  sep="") %>%
+  lapply(htmltools::HTML)
+
+
+
+region_spdf = readOGR('./Inputs/shapefile/NHS_England_Regions_(April_2020)_Boundaries_EN_BUC.shp')
+proj4string(region_spdf) <- CRS("+init=epsg:27700")  # BNG projection system
+
+region_spdf@proj4string # check system
+
+region_spdf <- region_spdf %>% sp::spTransform(CRS("+init=epsg:4326")) # reproject to latlong system
+
+region_full <- region_spdf
+
+region_s <- rgeos::gSimplify(region_full,tol=0.01, topologyPreserve=FALSE)
+
+# Create a spatial polygon data frame (includes shp attributes)
+regions_spdf = SpatialPolygonsDataFrame(region_s, data.frame(region_full))
+
+
+data_regions = data[c("STP20NM", "NHSER20NM")]
+names(data_regions)[names(data_regions) == "STP20NM"] <- "stp20nm"
+
+#merge and assign to stp_spdf data
+stp_spdfdata = stp_spdf@data
+stp_spdfdata = merge(stp_spdfdata, data_regions, by = "stp20nm", all = TRUE)
+
+mytext_new <- paste(
+  "<b>STP code (ODS): </b>", stp_spdf@data$stp20cd,"<br/>",
+  "<b>STP name (ODS): </b>", stp_spdf@data$stp20nm,"<br/>",
+  "<b>Region: </b>", stp_spdf@data$NHSER20NM.y,"<br/>",
+  "<b>ICS score (CCG+Trust simple), range [-3,3]: </b>",round(stp_spdf@data$metric_CCGp_TrustsEprr,2),"<br/>",
+  sep="") %>%
+  lapply(htmltools::HTML)
+
+m06 = leaflet() %>%
+  addMapPane(name = "regionBorder", zIndex = 425) %>%
+  addMapPane(name = "ICS polygons", zIndex = 400) %>%
+  addMapPane(name = "ICS Labels", zIndex = 450) %>%
+  addMapPane(name = "Minicharts", zIndex = 435) %>%
+  addPolygons(
+    data=regions_spdf,
+    group="Region boundary",
+    fillOpacity=0,
+    color='blue',
+    weight=5,
+    options = leafletOptions(pane = "regionBorder")
+  ) %>%
+  addTiles()  %>% 
+  setView( lat=53, lng=-2 , zoom=6) %>%
+  addPolygons(
+    data=stp_spdf,
+    group="ICS",
+    fillOpacity=1,
+    fillColor=~pal_metric(metric_CCGp_TrustsEprr),
+    color="black",
+    weight=1,
+    options = leafletOptions(pane = "ICS polygons")) %>%
+  addPolygons(
+    data=stp_spdf,
+    group="ICS",
+    fillOpacity=0,
+    fillColor=~pal_metric(metric_CCGp_TrustsEprr),
+    color="black",
+    weight= 0,
+    options = leafletOptions(pane = "ICS Labels"),
+    label = mytext_new ) %>%
+  addLegend("bottomright",pal=pal_metric,values=-4:4,title="ICS score - CCG Population/Trust EPRR")
+
 m06
-                                                            
