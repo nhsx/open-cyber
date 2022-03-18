@@ -275,7 +275,7 @@ m03
 # save the widget in a html file if needed.
 
 library(htmlwidgets)
-saveWidget(m06, file=paste('./outputs/',"chloropleth_DSPT_CCGp_Trusts_EPRR",".html"))
+saveWidget(m05, file=paste('./outputs/',"chloropleth_DSPT_PieCharts",".html"))
 
 
 
@@ -432,14 +432,18 @@ data_trusts<- data_trusts %>% mutate(Standards_Not_Met = case_when(Short.Status 
 data_trusts<- data_trusts %>% mutate(Approaching_Standards = case_when(Short.Status == "Approaching Standards"~1,
                                                                TRUE ~ 0))
 
-data_trusts = data_trusts[,c("Name", "STP20CD", "Standards_Met", "Standards_Exceeded", "Standards_Not_Met", "Approaching_Standards")]
+data_trusts = data_trusts[,c("STP20CD", "Standards_Met", "Standards_Exceeded", "Standards_Not_Met", "Approaching_Standards")]
 
-data_trusts_aggregate = data_trusts %>% group_by(Name) %>% summarise(funs(sum))
+data_trusts_aggregate = data_trusts %>% group_by(STP20CD) %>% summarise_each(funs(sum))
 data_trusts_aggregate = data_trusts_aggregate %>% rename("stp20cd" = 1)
 
-data_trust_spdf_pie = left_join(x = data_trusts_aggregate, y = stp_spdf@data, by = "stp20cd")
-
 stp_filter_numpatients <- gppopdata %>% filter(SEX=="ALL",AGE=="ALL",ORG_TYPE=="STP")
+stp_filter_numpatients <- stp_filter_numpatients %>% rename("stp20cd" = 5)
+stp_filter_numpatients <- stp_filter_numpatients[c("stp20cd", "NUMBER_OF_PATIENTS")]
+data_trust_spdf_pie = left_join(x = data_trusts_aggregate, y = stp_spdf@data, by = "stp20cd")
+data_trust_spdf_pie = merge(x = data_trust_spdf_pie, y = stp_filter_numpatients, by = "stp20cd")
+
+
 m05 <- leaflet() %>%
   addTiles %>%
   addPolygons(
@@ -461,7 +465,7 @@ m05 <- leaflet() %>%
                 type = "pie", 
                 chartdata = data_trust_spdf_pie[, c("Standards_Exceeded", "Standards_Met", "Approaching_Standards", "Standards_Not_Met")], 
                 colorPalette = c("#129F8C", '#9FD0BA', "#F5FFBF", "#FF4227"), 
-                width = 35 * sqrt(stp_filter_numpatients$NUMBER_OF_PATIENTS) / sqrt(max(stp_filter_numpatients$NUMBER_OF_PATIENTS)), 
+                width = 0.00001 * data_trust_spdf_pie$NUMBER_OF_PATIENTS , 
                 transitionTime = 0)
 m05
 
@@ -477,30 +481,58 @@ eprr_data <- eprr_data %>% rename("Name"= 3)
 eprr_data$Name = toupper(eprr_data$Name)
 
 eprr_data <- eprr_data %>% rename("Code" = 1)
-data_trusts = data %>% filter(Sector=="Trust")
-eprr_data_merged <-merge(eprr_data, data_trusts[c("Code", "STP20CD")], by = "Code")
+
+eprr_data<- eprr_data %>% mutate(Tier_rank = case_when(Tier == "Tier 1"~"4",
+                                                       Tier == "Tier 2"~"3",
+                                                       Tier == "Tier 3"~"2",
+                                                       Tier == "Tier 4"~"1",
+                                                       TRUE ~ "Not Applicable"))
+
+eprr_data <- transform(eprr_data, Tier_rank = as.numeric(Tier_rank))
+eprr_data <- eprr_data[c("Code", "Tier_rank")]
 
 
-eprr_data_merged<- eprr_data_merged %>% mutate(Tier_rank = case_when(Tier == "Tier 1"~"4",
-                                                                     Tier == "Tier 2"~"3",
-                                                                     Tier == "Tier 3"~"2",
-                                                                     Tier == "Tier 4"~"1",
-                                                                     TRUE ~ "Not Applicable"))
 
-eprr_data_merged <- transform(eprr_data_merged, Tier_rank = as.numeric(Tier_rank))
-eprr_data_merged <- eprr_data_merged[c("STP20CD", "Tier_rank")]
-
-eprr_data_aggregate = eprr_data_merged %>% group_by(STP20CD) %>% summarise_at(c("Tier_rank"), mean, na.rm = TRUE)
+#recode the data metrics to add in the prr metric
 
 
-#merge the eprr data with the trusts data to work out the summary metric
-data_metric_ICS <- merge(data_metric_ICS, eprr_data_aggregate, by = "STP20CD")
+data_metric <- data %>% filter(Sector %in% c("Trust", "CCG"))
+
+
+# GP practice population
+# https://digital.nhs.uk/data-and-information/publications/statistical/patients-registered-at-a-gp-practice/march-2021
+gppopdata <- read_csv("https://files.digital.nhs.uk/59/D3AD40/gp-reg-pat-prac-sing-age-regions.csv")
+
+gppopdata_red <- gppopdata %>% filter(SEX=="ALL",AGE=="ALL",ORG_TYPE=="CCG") %>% select(c("ORG_CODE","NUMBER_OF_PATIENTS"))
+
+
+
+# score mapping
+
+data_metric <- left_join(x = data_metric, y = eprr_data, by = "Code")
+
+data_metric <- data_metric %>% mutate(Status.Score=case_when(Short.Status=="Standards Exceeded"~3,
+                                                             Short.Status=="Standards Met"~1,
+                                                             Short.Status=="Approaching Standards"~-1,
+                                                             Short.Status=="Standards Not Met"~-3,
+                                                             Short.Status=="Not Published"~-3))
+NUMBER_OF_PATIENTS = gppopdata['NUMBER_OF_PATIENTS']
+data_metric <- data_metric %>% left_join(gppopdata_red,by=c("Code"="ORG_CODE"))                                                             #TRUE~NA_integer_))
+
+data_metric_ICS <- data_metric %>% group_by(STP20CD,STP20NM,Sector,NHSER20NM) %>% summarise(Simple.Score=mean(Status.Score,na.rm=T),
+                                                                                            Simple.n=n(),
+                                                                                            Pop.Score=sum(NUMBER_OF_PATIENTS*Status.Score)/sum(NUMBER_OF_PATIENTS),
+                                                                                            EPRR.Score = sum(Tier_rank*Status.Score)/sum(Tier_rank))
+
+data_metric_ICS <- data_metric_ICS %>% pivot_wider(names_from=Sector,values_from=c("Simple.Score","Simple.n","Pop.Score", "EPRR.Score"))
 
 data_metric_ICS <- data_metric_ICS %>% mutate(metric_CCG_simple = Simple.Score_CCG,
                                               metric_CCG_pop = Pop.Score_CCG,
                                               metric_CCGTrust_simple = 0.5*Simple.Score_CCG+0.5*Simple.Score_Trust,
                                               metric_CCGp_Trusts =0.5*Pop.Score_CCG+0.5*Simple.Score_Trust,
-                                              metric_CCGp_TrustsEprr = 0.5*Pop.Score_CCG + 0.5*Simple.Score_Trust*Tier_rank)
+                                              metric_CCGp_Trusts_EPRR =0.5*Pop.Score_CCG+0.5*EPRR.Score_Trust)
+
+
 stp_spdf@data <- stp_spdf@data %>% left_join(data_metric_ICS,by=c("stp20nm"="STP20NM","stp20cd"="STP20CD"))
 
 
@@ -508,12 +540,12 @@ stp_spdf@data <- stp_spdf@data %>% left_join(data_metric_ICS,by=c("stp20nm"="STP
 # Create a continuous palette function
 pal_metric <- colorNumeric(
   palette = "RdYlBu",
-  domain = range(-4:4))
+  domain = range(-3:3))
 
 mytext_ics_score <- paste(
   "<b>STP code (ODS): </b>", stp_spdf@data$stp20cd,"<br/>",
   "<b>STP name (ODS): </b>", stp_spdf@data$stp20nm,"<br/>",
-  "<b>ICS score (CCG Population+Trust EPRR), range [-3,3]: </b>",round(stp_spdf@data$metric_CCGp_TrustsEprr,2),"<br/>",
+  "<b>ICS score (CCG Population+Trust EPRR), range [-3,3]: </b>",round(stp_spdf@data$metric_CCGp_Trusts_EPRR,2),"<br/>",
   sep="") %>%
   lapply(htmltools::HTML)
 
@@ -545,7 +577,7 @@ mytext_new <- paste(
   "<b>STP code (ODS): </b>", stp_spdf@data$stp20cd,"<br/>",
   "<b>STP name (ODS): </b>", stp_spdf@data$stp20nm,"<br/>",
   "<b>Region: </b>", stp_spdf@data$NHSER20NM.y,"<br/>",
-  "<b>ICS score (CCG+Trust simple), range [-3,3]: </b>",round(stp_spdf@data$metric_CCGp_TrustsEprr,2),"<br/>",
+  "<b>ICS score (CCG+Trust simple), range [-3,3]: </b>",round(stp_spdf@data$metric_CCGp_Trusts_EPRR,2),"<br/>",
   sep="") %>%
   lapply(htmltools::HTML)
 
@@ -568,7 +600,7 @@ m06 = leaflet() %>%
     data=stp_spdf,
     group="ICS",
     fillOpacity=1,
-    fillColor=~pal_metric(metric_CCGp_TrustsEprr),
+    fillColor=~pal_metric(metric_CCGp_Trusts_EPRR),
     color="black",
     weight=1,
     options = leafletOptions(pane = "ICS polygons")) %>%
@@ -576,11 +608,12 @@ m06 = leaflet() %>%
     data=stp_spdf,
     group="ICS",
     fillOpacity=0,
-    fillColor=~pal_metric(metric_CCGp_TrustsEprr),
+    fillColor=~pal_metric(metric_CCGp_Trusts_EPRR),
     color="black",
     weight= 0,
     options = leafletOptions(pane = "ICS Labels"),
     label = mytext_new ) %>%
-  addLegend("bottomright",pal=pal_metric,values=-4:4,title="ICS score - CCG Population/Trust EPRR")
+  addLegend("bottomright",pal=pal_metric,values=-3:3,title="ICS score - CCG Population/Trust EPRR")
 
 m06
+
