@@ -33,10 +33,11 @@ The following information displays data taken from a specific snapshot of the DS
 For more information on the Data Security and Protection Toolkit, please visit the <a href="https://www.dsptoolkit.nhs.uk/">DSPT portal</a>.
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
-<br>
+
 ## Notes on Methodology
 
 <b>Composite Metrics for ICS</b>
+
 The DSPT status for CCGs and Trusts are coded as follows to accurately represent the represent the ICS summary metric:
 <ul>
 <li>Status Exceeded = 3</li>
@@ -47,6 +48,7 @@ The DSPT status for CCGs and Trusts are coded as follows to accurately represent
 The scaling for each of the summary metrics displayed below will have an upper bound of 3 and a lower bound of -3.
 
 <b>Emergency Preparedness, Resilience and Response (EPRR) Score</b>
+
 Organisations are ranked in a 4 tier system, to measure their impact of risk. This is used to calculate one of our summary metrics below. The Tier ranks are mapped as follows:<ul>
 <li>Tier 1 - Major Trauma Centres/ Ambulance Trusts/ NHS Blood & Transplant = 4</li>
 <li>Tier 2 - Trauma Units/ Specialist Hospitals = 3</li>
@@ -55,16 +57,18 @@ Organisations are ranked in a 4 tier system, to measure their impact of risk. Th
 </ul>
 
 <b>Successor Organisations</b>
+
 Organisations without a published DSPT status as a result of a merger, inherit their DSPT status from it's successor organisation if publushed. Otherwise, the DSPT status will be mapped as 'Not Published'
 
 ## Summary of DSPT Compliance (2020/2021 edition).
 <br>
 Summary statistics from the DSPT 2020/21 toolkit are shown.
 
-<iframe src="outputs/data_DSPTmetric2022-02-08.html" height="600px" width="100%" style="border:none;"></iframe>
+{% include data_DSPTmetric2022-02-08.html %}
 
+<hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
-<iframe src="outputs/barchart_summary_FY2021_2022-02-28.html" height="600px" width="100%" style="border:none;"></iframe>
+{% include barchart_summary_FY2021_2022-02-28.html %}
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
