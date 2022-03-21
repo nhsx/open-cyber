@@ -66,11 +66,9 @@ Summary statistics from the DSPT 2020/21 toolkit are shown.
 
 {% include data_DSPTmetric2022-02-08.html %}
 
-<hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
-
 {% include barchart_summary_FY2021_2022-02-28.html %}
 
-<hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
+
 
 
 ## CCGs and Trusts - Individual Compliance
