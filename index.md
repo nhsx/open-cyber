@@ -28,16 +28,38 @@ The <b>Data Security and Protection Toolkit</b> is an online self-assessment too
 
 All organisations that have access to NHS patient data and systems must use this toolkit to provide assurance that they are practising good data security and that personal information is handled correctly. This includes trusts, commissioners and CSUs.
 
+The following information displays data taken from a specific snapshot of the DSPT data. The latest status information was downloaded on the <b>8th February 2022</b>.
+
 For more information on the Data Security and Protection Toolkit, please visit the <a href="https://www.dsptoolkit.nhs.uk/">DSPT portal</a>.
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
+<br>
+## Notes on Methodology
+
+<b>Composite Metrics for ICS</b>
+The DSPT status for CCGs and Trusts are coded as follows to accurately represent the represent the ICS summary metric:
+<ul>
+<li>Status Exceeded = 3</li>
+<li>Status Met = 1</li>
+<li>Approaching Standards = -1</li>
+<li>Not Published/Not Met = -3</li>
+</ul>
+The scaling for each of the summary metrics displayed below will have an upper bound of 3 and a lower bound of -3.
+
+<b>Emergency Preparedness, Resilience and Response (EPRR) Score</b>
+Organisations are ranked in a 4 tier system, to measure their impact of risk. This is used to calculate one of our summary metrics below. The Tier ranks are mapped as follows:<ul>
+<li>Tier 1 - Major Trauma Centres/ Ambulance Trusts/ NHS Blood & Transplant = 4</li>
+<li>Tier 2 - Trauma Units/ Specialist Hospitals = 3</li>
+<li>Tier 3 - Geographically remote / High secure Mental Health = 2</li>
+<li>Tier 4 - Community Hospitals = 1</li>
+</ul>
+
+<b>Successor Organisations</b>
+Organisations without a published DSPT status as a result of a merger, inherit their DSPT status from it's successor organisation if publushed. Otherwise, the DSPT status will be mapped as 'Not Published'
 
 ## Summary of DSPT Compliance (2020/2021 edition).
 <br>
-Summary statistics from the DSPT 2020/21 toolkit are shown. The latest status information was downloaded on the <b>8th February 2022</b>.
-
-Note on method: organisations open 31st March 2021 are considered. However, if the organisation does not have a 20/21 DSPT status, it has been allowed to inherit one from its 21/22 successor organisation (if the successor submitted a 2020/21 return). The same applies for the subsections below.
-
+Summary statistics from the DSPT 2020/21 toolkit are shown.
 
 <iframe src="outputs/data_DSPTmetric2022-02-08.html" height="600px" width="100%" style="border:none;"></iframe>
 
