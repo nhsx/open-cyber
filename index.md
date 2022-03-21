@@ -66,7 +66,7 @@ Summary statistics from the DSPT 2020/21 toolkit are shown.
 
 {% include data_DSPTmetric2022-02-08.html %}
 
-{% include barchart_summary_FY2021_2022-02-28.html %}
+
 
 
 
