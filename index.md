@@ -20,7 +20,7 @@
   <h3 class="nhsuk-warning-callout__label">
     Important<span class="nhsuk-u-visually-hidden">:</span>
   </h3>
-  <p>This project is currently in development. For more information please contact <a href="mailto:analytics-unit@nhsx.nhs.uk">analytics-unit@nhsx.nhs.uk</a>. <br>This is an exploratory piece leveraging open source data and widget tooling in R - it has not received formal QA. <br>Opinions expressed in this page are not representative of the views of NHSX and any content here should not be regarded as official output in any form. For more information about NHSX please visit our <a href="https://www.nhsx.nhs.uk/">official website.</a>.
+  <p>This project is currently in development. An overview of methodology and caveats are given below. For more information please contact <a href="mailto:analytics-unit@nhsx.nhs.uk">analytics-unit@nhsx.nhs.uk</a>. <br>Opinions expressed in this page are not representative of the views of NHS England and any content here should not be regarded as official output in any form. For more information about the NHS England Transformation Directorate please visit our <a href="https://www.nhsx.nhs.uk/">official website.</a>.
    </p>
 </div>
 
@@ -38,26 +38,33 @@ For more information on the Data Security and Protection Toolkit, please visit t
 
 <b>Composite Metrics for ICS</b>
 
-The DSPT status for CCGs and Trusts are coded as follows to accurately represent the represent the ICS summary metric:
-<ul>
+The DSPT status for Clinical Commissioning Groups (CCGs) and Trusts are coded (scored) as follows to create the proxy for Integrated Care System (ICS) summary metrics:
+
 <li>Status Exceeded = 3</li>
 <li>Status Met = 1</li>
 <li>Approaching Standards = -1</li>
 <li>Not Published/Not Met = -3</li>
-</ul>
-The scaling for each of the summary metrics displayed below will have an upper bound of 3 and a lower bound of -3.
+
+CCG scores within an ICS are then weighted based on the resident population.
+
+Trust scores within an ICS are weighted either a) as simple average or b) based on their EPRR score.
+
+Finally, for each ICS, the CCG and Trust scores are weighted equally to arrive at the ICS composite score.
+
+The final scaling for each of the summary metrics displayed will have an upper bound of 3 and a lower bound of -3.
 
 <b>Emergency Preparedness, Resilience and Response (EPRR) Score</b>
 
 Organisations are ranked in a 4 tier system, to measure their impact of risk. This is used to calculate one of our summary metrics below. The Tier ranks are mapped as follows:
-<ul>
+
 <li>Tier 1 - Major Trauma Centres/ Ambulance Trusts/ NHS Blood & Transplant = 4</li>
 <li>Tier 2 - Trauma Units/ Specialist Hospitals = 3</li>
 <li>Tier 3 - Geographically remote / High secure Mental Health = 2</li>
 <li>Tier 4 - Community Hospitals = 1</li>
-</ul>
+
 
 <b>Successor Organisations</b>
+Organisations open 31st March 2021 are considered (the end of 20/21, the financial year of the last DSPT edition that closed).
 
 Organisations without a published DSPT status as a result of a merger, inherit their DSPT status from it's successor organisation if published. Otherwise, the DSPT status will be mapped as 'Not Published'
 
@@ -65,7 +72,7 @@ Organisations without a published DSPT status as a result of a merger, inherit t
 <br>
 Summary statistics from the DSPT 2020/21 toolkit are shown.
 
-{%include data_DSPTmetric2022-02-08.html%}
+{% include data_DSPTmetric2022-02-08.html %}
 
 <iframe src="./outputs/barchart_summary_FY2021_2022-02-28.html" height="600px" width="100%" style="border:none;"></iframe>
 
@@ -74,7 +81,7 @@ Summary statistics from the DSPT 2020/21 toolkit are shown.
 
 ## CCGs and Trusts - Individual Compliance
 <br>
-The compliance of individual CCGs and Trusts are mapped below, with ICS boundaries.
+The compliance of individual CCGs and Trusts are mapped below, with ICS boundaries. Toggle the boxes on the top right-hand side to add layers.
 
 <iframe src="chloropleth_DSPT_CCG_Trusts.html" height="600px" width="100%" style="border:none;"></iframe>
 
@@ -83,7 +90,7 @@ The compliance of individual CCGs and Trusts are mapped below, with ICS boundari
 
 ## CCGs and Proportions of Trusts Compliance - Population
 <br>
-The compliance of individual CCGs and proportions of trusts compliance within each ICS with boundaries. The width of each pie chart indicates the population level within each ICS.
+The proportions of trust compliance within each ICS with boundaries are shown. The diameter of each pie chart relates to the population level within each ICS.
 
 <iframe src="chloropleth_DSPT_PieCharts.html" height="600px" width="100%" style="border:none;"></iframe>
 
@@ -104,18 +111,7 @@ The compliance of individual ICSs, made up of a composite score of 50% CCG score
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
-
-Despite showing editions side-by-side, it is important to note that the standards - and the level of evidence required to meet those standards - tend to get raised year-on-year. This means that a similar status in two editions is not directly comparable.
-
-
-
-
-
-
-
-
-
-
+<br>
 Template for end-to-end open source analytics: [github.io](https://pages.github.com/), and [github actions](https://github.com/features/actions).
 
 Analytics leverages open source data and R libraries such as [leaflet](https://cran.r-project.org/web/packages/leaflet/index.html) for interactive maps, [plotly](https://plotly.com/r/) for other interactive visualisations and [summarytools](https://cran.r-project.org/web/packages/summarytools/vignettes/introduction.html) for descriptive statistics.

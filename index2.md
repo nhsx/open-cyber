@@ -52,7 +52,7 @@ Note on method: organisations open 31st March 2021 are considered. However, if t
 <br>
 The compliance of individual CCGs is mapped below.
 
-<iframe src="choropleth_DSPT_CCG.html" height="600px" width="100%" style="border:none;"></iframe>
+<iframe src="chloropleth_DSPT_CCG.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
