@@ -49,7 +49,8 @@ The scaling for each of the summary metrics displayed below will have an upper b
 
 <b>Emergency Preparedness, Resilience and Response (EPRR) Score</b>
 
-Organisations are ranked in a 4 tier system, to measure their impact of risk. This is used to calculate one of our summary metrics below. The Tier ranks are mapped as follows:<ul>
+Organisations are ranked in a 4 tier system, to measure their impact of risk. This is used to calculate one of our summary metrics below. The Tier ranks are mapped as follows:
+<ul>
 <li>Tier 1 - Major Trauma Centres/ Ambulance Trusts/ NHS Blood & Transplant = 4</li>
 <li>Tier 2 - Trauma Units/ Specialist Hospitals = 3</li>
 <li>Tier 3 - Geographically remote / High secure Mental Health = 2</li>
@@ -58,13 +59,13 @@ Organisations are ranked in a 4 tier system, to measure their impact of risk. Th
 
 <b>Successor Organisations</b>
 
-Organisations without a published DSPT status as a result of a merger, inherit their DSPT status from it's successor organisation if publushed. Otherwise, the DSPT status will be mapped as 'Not Published'
+Organisations without a published DSPT status as a result of a merger, inherit their DSPT status from it's successor organisation if published. Otherwise, the DSPT status will be mapped as 'Not Published'
 
 ## Summary of DSPT Compliance (2020/2021 edition).
 <br>
 Summary statistics from the DSPT 2020/21 toolkit are shown.
 
-{% include data_DSPTmetric2022-02-08.html %}
+{%include data_DSPTmetric2022-02-08.html%}
 
 <iframe src="./outputs/barchart_summary_FY2021_2022-02-28.html" height="600px" width="100%" style="border:none;"></iframe>
 
