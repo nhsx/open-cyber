@@ -44,7 +44,7 @@ The DSPT status for Clinical Commissioning Groups (CCGs) and Trusts are coded (s
 <li>Status Met = 1</li>
 <li>Approaching Standards = -1</li>
 <li>Not Published/Not Met = -3</li>
-
+<br>
 CCG scores within an ICS are then weighted based on the resident population.
 
 Trust scores within an ICS are weighted either a) as simple average or b) based on their EPRR score.
@@ -63,9 +63,10 @@ Organisations are ranked in a 4 tier system, to measure their impact of risk. Th
 <li>Tier 4 - Community Hospitals = 1</li>
 <br>
 <b>Successor Organisations</b>
+<br>
 Organisations open 31st March 2021 are considered (the end of 20/21, the financial year of the last DSPT edition that closed).
 
-Organisations without a published DSPT status as a result of a merger, inherit their DSPT status from it's successor organisation if published. Otherwise, the DSPT status will be mapped as 'Not Published'
+Organisations without a published DSPT status as a result of a merger, inherit their DSPT status from it's successor organisation if published. Otherwise, the DSPT status will be mapped as 'Not Published'.
 
 ## Summary of DSPT Compliance (2020/2021 edition).
 <br>
