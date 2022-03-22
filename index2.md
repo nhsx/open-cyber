@@ -38,6 +38,7 @@ Summary statistics from the DSPT 2020/21 toolkit are shown. The latest status in
 Note on method: organisations open 31st March 2021 are considered. However, if the organisation does not have a 20/21 DSPT status, it has been allowed to inherit one from its 21/22 successor organisation (if the successor submitted a 2020/21 return). The same applies for the subsections below.
 
 <!---
+
 # <iframe src="https://nhsx.github.io/open-cyber/myplotly.html" height="600px" width="100%" style="border:none;"></iframe>
 -->
 
