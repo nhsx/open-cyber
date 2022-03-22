@@ -20,7 +20,7 @@
   <h3 class="nhsuk-warning-callout__label">
     Important<span class="nhsuk-u-visually-hidden">:</span>
   </h3>
-  <p>This project is currently in development. An overview of methodology and caveats are given below. For more information please contact <a href="mailto:analytics-unit@nhsx.nhs.uk">analytics-unit@nhsx.nhs.uk</a>. <br>Opinions expressed in this page are not representative of the views of NHS England and any content here should not be regarded as official output in any form. For more information about the NHS England Transformation Directorate please visit our <a href="https://www.nhsx.nhs.uk/">official website.</a>.
+  <p>This project is currently in development. An overview of methodology and caveats are given below. For more information please contact <a href="mailto:analytics-unit@nhsx.nhs.uk">analytics-unit@nhsx.nhs.uk</a>. <br>Opinions expressed in this page are not representative of the views of NHS England and any content here should not be regarded as official output in any form. For more information about the NHS England Transformation Directorate please visit our <a href="https://www.nhsx.nhs.uk/">official website</a>.
    </p>
 </div>
 
@@ -61,8 +61,7 @@ Organisations are ranked in a 4 tier system, to measure their impact of risk. Th
 <li>Tier 2 - Trauma Units/ Specialist Hospitals = 3</li>
 <li>Tier 3 - Geographically remote / High secure Mental Health = 2</li>
 <li>Tier 4 - Community Hospitals = 1</li>
-
-
+<br>
 <b>Successor Organisations</b>
 Organisations open 31st March 2021 are considered (the end of 20/21, the financial year of the last DSPT edition that closed).
 
