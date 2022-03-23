@@ -88,11 +88,19 @@ The compliance of individual CCGs and Trusts are mapped below, with ICS boundari
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
 
-## CCGs and Proportions of Trusts Compliance - Population
+## CCGs and Proportions of Trusts Compliance - Pie Charts Diameter by Population
 <br>
-The proportions of trust compliance within each ICS with boundaries are shown. The diameter of each pie chart relates to the population level within each ICS.
+The proportions of trust compliance within each ICS with boundaries (in black) are shown. The diameter of each pie chart relates to the population level within each ICS.
 
 <iframe src="chloropleth_DSPT_PieCharts.html" height="600px" width="100%" style="border:none;"></iframe>
+
+<hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
+
+## CCGs and Proportions of Trusts Compliance - Colour Coded Population
+<br>
+The proportions of trust compliance within each ICS with boundaries (in blue) are shown. The ICSs are colored to represent the patient population level. The darker the shade of grey the higher the patient population level. 
+
+<iframe src="chloropleth_DSPT_PieCharts_pop.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
@@ -115,3 +123,4 @@ The compliance of individual ICSs, made up of a composite score of 50% CCG score
 Template for end-to-end open source analytics: [github.io](https://pages.github.com/), and [github actions](https://github.com/features/actions).
 
 Analytics leverages open source data and R libraries such as [leaflet](https://cran.r-project.org/web/packages/leaflet/index.html) for interactive maps, [plotly](https://plotly.com/r/) for other interactive visualisations and [summarytools](https://cran.r-project.org/web/packages/summarytools/vignettes/introduction.html) for descriptive statistics.
+

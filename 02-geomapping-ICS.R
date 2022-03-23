@@ -67,14 +67,6 @@ regions_spdf = SpatialPolygonsDataFrame(region_s, data.frame(region_full))
 
 ## Load STP shapefile
 # Source: https://geoportal.statistics.gov.uk/datasets/clinical-commissioning-groups-april-2020-full-clipped-boundaries-en/explore?location=52.950000%2C-2.000000%2C7.02
-stp_spdf <- readOGR("./Inputs/shapefile/Sustainability_and_Transformation_Partnerships_(April_2020)_Boundaries_EN_BUC.shp")
-
-proj4string(stp_spdf) <- CRS("+init=epsg:27700")  # BNG projection system
-
-stp_spdf@proj4string # check system
-
-stp_spdf <- stp_spdf %>% sp::spTransform(CRS("+init=epsg:4326")) # reproject to latlong system
-
 
 #############################################
 # CCG shapefile
@@ -289,7 +281,7 @@ m03
 ###########################################
 # save the widget in a html file if needed.
 ###########################################
-#saveWidget(m05, file=paste('./outputs/',"chloropleth_DSPT_PieCharts",".html"))
+#saveWidget(m07, file=paste('./outputs/',"chloropleth_DSPT_PieCharts",".html"))
 
 
 
@@ -503,10 +495,9 @@ m05
 
 
 
-############################################################################
-# Mapping the proportion of Trusts dspt scores using minicharts (piecharts)
-###########################################################################
-
+###############################################################################################################################################
+# Mapping the proportion of Trusts dspt scores using minicharts (piecharts) with the width of pie charts indicating patient population level
+###############################################################################################################################################
 #the statuses will be seperated out into individual columns and the values will be summed grouped by 
 #the STP code so we get the proportion of trusts that met each status for each STP
 
@@ -566,4 +557,54 @@ m06 <- leaflet() %>%
                 transitionTime = 0)
 m06
 
+###############################################################################################################################################
+# Mapping the proportion of Trusts dspt scores using minicharts (piecharts) with patient population level color coded in ICS polygons
+###############################################################################################################################################
+
+gppopdata_blue <- gppopdata %>% filter(SEX=="ALL",AGE=="ALL",ORG_TYPE=="STP") %>% select(c("ONS_CODE","NUMBER_OF_PATIENTS"))
+gppopdata_blue <- gppopdata_red %>% rename("stp20cd" = 1)
+
+stp_spdfdata <- data.frame(stp_spdf)
+
+stp_spdfdata1 = merge(stp_spdfdata, gppopdata_blue, by = "stp20cd")
+stp_spdfdata1 <- stp_spdfdata1 %>% rename("numpatients" = 10)
+#stp_spdf$data <- stp_spdfdata1
+
+num_patients_stp <- gppopdata_blue[c("NUMBER_OF_PATIENTS")]
+
+minpatients <- min(num_patients_stp)
+
+maxpatients <- max(num_patients_stp)
+
+
+patients_stps <- stp_spdfdata$data.NUMBER_OF_PATIENTS
+pal_metric2 <- colorNumeric(
+  palette = "Greys",
+  domain = range(minpatients:maxpatients))
+m07 <- leaflet() %>%
+  addTiles %>%
+  addPolygons(
+    data=stp_spdf,
+    group="ICS Tiles",
+    fillOpacity=1,
+    fillColor=~pal_metric2(stp_spdfdata1$numpatients), #grey out the ICS tiles so there is less unnecessary detail
+    weight=0,
+    label=mytext_ics) %>%
+  addPolygons(
+    data=stp_spdf,
+    group="ICS boundary",
+    fillOpacity=0,
+    color='blue',
+    weight=5,
+    label=mytext_ics) %>%
+  addMinicharts(lng = data_trust_spdf_pie$long, 
+                lat = data_trust_spdf_pie$lat, 
+                type = "pie", 
+                chartdata = data_trust_spdf_pie[, c("Standards_Exceeded", "Standards_Met", "Approaching_Standards", "Standards_Not_Met")], 
+                colorPalette = c("#129F8C", '#9FD0BA', "#F5FFBF", "#FF4227"), 
+                width = 25, 
+                transitionTime = 0) %>%
+  addLegend("bottomright",pal=pal_metric2, minpatients:maxpatients, title="ICS Patient Population Level")
+
+m07
 
