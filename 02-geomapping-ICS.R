@@ -68,6 +68,17 @@ regions_spdf = SpatialPolygonsDataFrame(region_s, data.frame(region_full))
 ## Load STP shapefile
 # Source: https://geoportal.statistics.gov.uk/datasets/clinical-commissioning-groups-april-2020-full-clipped-boundaries-en/explore?location=52.950000%2C-2.000000%2C7.02
 
+## Load STP shapefile
+# Source: https://geoportal.statistics.gov.uk/datasets/clinical-commissioning-groups-april-2020-full-clipped-boundaries-en/explore?location=52.950000%2C-2.000000%2C7.02
+stp_spdf <- readOGR("/Users/muhammad-faaiz.shanawas/Documents/Live Projects/Cyber Map/Shapefiles/Sustainability_and_Transformation_Partnerships_(April_2020)_Boundaries_EN_BUC/Sustainability_and_Transformation_Partnerships_(April_2020)_Boundaries_EN_BUC.shp")
+
+proj4string(stp_spdf) <- CRS("+init=epsg:27700")  # BNG projection system
+
+stp_spdf@proj4string # check system
+
+stp_spdf <- stp_spdf %>% sp::spTransform(CRS("+init=epsg:4326")) # reproject to latlong system
+
+
 #############################################
 # CCG shapefile
 #############################################
@@ -281,7 +292,7 @@ m03
 ###########################################
 # save the widget in a html file if needed.
 ###########################################
-#saveWidget(m07, file=paste('./outputs/',"chloropleth_DSPT_PieCharts",".html"))
+saveWidget(m07, file=paste('./outputs/',"chloropleth_DSPT_PieCharts_population",".html"))
 
 
 
@@ -562,12 +573,12 @@ m06
 ###############################################################################################################################################
 
 gppopdata_blue <- gppopdata %>% filter(SEX=="ALL",AGE=="ALL",ORG_TYPE=="STP") %>% select(c("ONS_CODE","NUMBER_OF_PATIENTS"))
-gppopdata_blue <- gppopdata_red %>% rename("stp20cd" = 1)
+gppopdata_blue <- gppopdata_blue %>% rename("stp20cd" = 1)
 
-stp_spdfdata <- data.frame(stp_spdf)
+stp_spdfdata <- stp_spdf@data
 
 stp_spdfdata1 = merge(stp_spdfdata, gppopdata_blue, by = "stp20cd")
-stp_spdfdata1 <- stp_spdfdata1 %>% rename("numpatients" = 10)
+
 #stp_spdf$data <- stp_spdfdata1
 
 num_patients_stp <- gppopdata_blue[c("NUMBER_OF_PATIENTS")]
@@ -579,7 +590,7 @@ maxpatients <- max(num_patients_stp)
 
 patients_stps <- stp_spdfdata$data.NUMBER_OF_PATIENTS
 pal_metric2 <- colorNumeric(
-  palette = "Greys",
+  palette = "Blues",
   domain = range(minpatients:maxpatients))
 m07 <- leaflet() %>%
   addTiles %>%
@@ -587,14 +598,14 @@ m07 <- leaflet() %>%
     data=stp_spdf,
     group="ICS Tiles",
     fillOpacity=1,
-    fillColor=~pal_metric2(stp_spdfdata1$numpatients), #grey out the ICS tiles so there is less unnecessary detail
+    fillColor=~pal_metric2(stp_spdfdata1$NUMBER_OF_PATIENTS), #grey out the ICS tiles so there is less unnecessary detail
     weight=0,
     label=mytext_ics) %>%
   addPolygons(
     data=stp_spdf,
     group="ICS boundary",
     fillOpacity=0,
-    color='blue',
+    color='black',
     weight=5,
     label=mytext_ics) %>%
   addMinicharts(lng = data_trust_spdf_pie$long, 
