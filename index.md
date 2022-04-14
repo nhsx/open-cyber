@@ -52,6 +52,7 @@ Trust scores within an ICS are weighted either a) as simple average or b) based 
 Finally, for each ICS, the CCG and Trust scores are weighted equally to arrive at the ICS composite score.
 
 The final scaling for each of the summary metrics displayed will have an upper bound of 3 and a lower bound of -3.
+
 <!---
 <b>Emergency Preparedness, Resilience and Response (EPRR) Score</b>
 
