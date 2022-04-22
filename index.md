@@ -88,7 +88,7 @@ The compliance of individual CCGs and Trusts are mapped below, with ICS boundari
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
-
+<!---
 ## CCGs and Proportions of Trusts Compliance - Pie Charts Diameter by Population
 <br>
 The proportions of trust compliance within each ICS with boundaries (in black) are shown. The diameter of each pie chart relates to the population level within each ICS.
@@ -96,6 +96,7 @@ The proportions of trust compliance within each ICS with boundaries (in black) a
 <iframe src="chloropleth_DSPT_PieCharts.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
+-->
 
 ## CCGs and Proportions of Trusts Compliance - Colour Coded Population
 <br>
