@@ -138,7 +138,7 @@ trust_spdf_points <- sp::SpatialPointsDataFrame(
 ccg_spdf@data <- left_join(ccg_spdf@data %>% select(-c("ccg20nm")),data,by=c("ccg20cd"="CCG20CD"))
 
 
-#dsptlevels=c("Standards Exceeded","Standards Met","Approaching Standards","Standards Not Met","Not Published")
+dsptlevels=c("Standards Exceeded","Standards Met","Approaching Standards","Standards Not Met","Not Published")
 
 # Make Status a categorical
 #ccg_spdf@data$Short.Status = factor(ccg_spdf@data$Short.Status,dsptlevels)
@@ -228,7 +228,7 @@ m02 <- leaflet() %>%
   ) %>%
   #addLegend( data=stp_spdf,pal=catpal, values=~Short.Status, opacity=0.9, title = "20/21 DSPT Status (CCG)", position = "bottomleft" ) %>%
   leaflet::addLayersControl(
-    overlayGroups = c("CCG","ICS boundary"),  # add these layers
+    overlayGroups = c("CCG","ICS boundary", "Trusts"),  # add these layers
     options = layersControlOptions(collapsed = FALSE)  # expand on hover?
   ) %>% 
   hideGroup(c("ICS boundary"))  # turn these off by default
@@ -277,22 +277,22 @@ m03
 #  groupOptions("Trusts", zoomLevels = 9:20)
 
 #adding legend and layering CCG trusts and ICG boundary together
-m03 <- m03 %>% 
-  addLegend( data=trust_spdf_points,pal=catpal, values=~Short.Status, opacity=0.9, title = "20/21 DSPT Status (trust)", position = "bottomright" ) %>%
+m03_l <- m03 %>% 
+  addLegend(data=trust_spdf_points,pal=catpal, values=~Short.Status, opacity=0.9, title = "20/21 DSPT Status (Trusts)", position = "bottomright") %>%
   leaflet::addLayersControl(
-  overlayGroups = c("ICS boundary","CCG","Trusts"),  # add these layers
-  options = layersControlOptions(collapsed = FALSEca)  # expand on hover?
+  overlayGroups = c("ICS boundary","CCG", "Trusts"),  # add these layers
+  options = layersControlOptions(collapsed = FALSE)  # expand on hover?
 ) %>% 
   hideGroup(c("ICS boundary","Trusts"))  # turn these off by default
   
 
-m03
+m03_l
 
 
 ###########################################
 # save the widget in a html file if needed.
 ###########################################
-saveWidget(m07, file=paste('./outputs/',"chloropleth_DSPT_CCGp_Trusts_EPRR",".html"))
+saveWidget(m03_l, file=paste('./outputs/',"chloropleth_DSPT_CCG_Trusts",".html"))
 
 
 
