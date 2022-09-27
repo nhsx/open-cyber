@@ -84,19 +84,10 @@ Summary statistics from the DSPT 2020/21 toolkit are shown.
 <br>
 The compliance of individual CCGs and Trusts are mapped below, with ICS boundaries. Toggle the boxes on the top right-hand side to add layers.
 
-<iframe src="chloropleth_DSPT_CCG_Trusts.html" height="600px" width="100%" style="border:none;"></iframe>
+<iframe src="ccg_trust_map1_21_22.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
-<!---
-## CCGs and Proportions of Trusts Compliance - Pie Charts Diameter by Population
-<br>
-The proportions of trust compliance within each ICS with boundaries (in black) are shown. The diameter of each pie chart relates to the population level within each ICS.
-
-<iframe src="ccg_trust_map21_22.html" height="600px" width="100%" style="border:none;"></iframe>
-
-<hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
--->
 
 ## CCGs and Proportions of Trusts Compliance - Colour Coded Population
 <br>
