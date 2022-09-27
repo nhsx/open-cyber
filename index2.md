@@ -1,7 +1,7 @@
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
 # Open Statistics - Cyber Security
-
+<!---
 {% include update.html %}
 
 <div class="nhsuk-warning-callout">
@@ -14,12 +14,13 @@
                 >{{ site.github.owner_name }}</a>
    </p>
 </div>
+-->
 
 <div class="nhsuk-warning-callout">
   <h3 class="nhsuk-warning-callout__label">
     Important<span class="nhsuk-u-visually-hidden">:</span>
   </h3>
-  <p>This project is currently in development. For more information please contact <a href="mailto:martina.fonseca@nhsx.nhs.uk">martina.fonseca@nhsx.nhs.uk</a>. <br>This is an exploratory piece leveraging open source data and widget tooling in R - it has not received formal QA. <br>Opinions expressed in this page are not representative of the views of NHSX and any content here should not be regarded as official output in any form. For more information about NHSX please visit our <a href="https://www.nhsx.nhs.uk/">official website.</a>.
+  <p>This project is currently in development. An overview of methodology and caveats are given below. For more information please contact <a href="mailto:analytics-unit@nhsx.nhs.uk">analytics-unit@nhsx.nhs.uk</a>. <br>Opinions expressed in this page are not representative of the views of NHS England and any content here should not be regarded as official output in any form. For more information about the NHS England Transformation Directorate please visit our <a href="https://www.nhsx.nhs.uk/">official website</a>.
    </p>
 </div>
 
@@ -27,47 +28,101 @@ The <b>Data Security and Protection Toolkit</b> is an online self-assessment too
 
 All organisations that have access to NHS patient data and systems must use this toolkit to provide assurance that they are practising good data security and that personal information is handled correctly. This includes trusts, commissioners and CSUs.
 
+The following information displays data taken from a specific snapshot of the DSPT data. The latest status information was downloaded on the <b>8th February 2022</b>.
+
 For more information on the Data Security and Protection Toolkit, please visit the <a href="https://www.dsptoolkit.nhs.uk/">DSPT portal</a>.
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
-## Summary of DSPT Compliance (2020/2021 edition).
-<br>
-Summary statistics from the DSPT 2020/21 toolkit are shown. The latest status information was downloaded on the <b>10th October 2021</b>.
+## Notes on Methodology
 
-Note on method: organisations open 31st March 2021 are considered. However, if the organisation does not have a 20/21 DSPT status, it has been allowed to inherit one from its 21/22 successor organisation (if the successor submitted a 2020/21 return). The same applies for the subsections below.
+<b>Composite Metrics for ICS</b>
+
+The DSPT status for Clinical Commissioning Groups (CCGs) and Trusts are coded (scored) as follows to create the proxy for Integrated Care System (ICS) summary metrics:
+
+<li>Status Exceeded = 3</li>
+<li>Status Met = 1</li>
+<li>Approaching Standards = -1</li>
+<li>Not Published/Not Met = -3</li>
+<br>
+CCG scores within an ICS are then weighted based on the resident population.
+
+Trust scores within an ICS are weighted either a) as simple average or b) based on their EPRR score.
+
+Finally, for each ICS, the CCG and Trust scores are weighted equally to arrive at the ICS composite score.
+
+The final scaling for each of the summary metrics displayed will have an upper bound of 3 and a lower bound of -3.
 
 <!---
+<b>Emergency Preparedness, Resilience and Response (EPRR) Score</b>
 
-# <iframe src="https://nhsx.github.io/open-cyber/myplotly.html" height="600px" width="100%" style="border:none;"></iframe>
+Organisations are ranked in a 4 tier system, to measure their impact of risk. This is used to calculate one of our summary metrics below. The Tier ranks are mapped as follows:
+
+<li>Tier 1 - Major Trauma Centres/ Ambulance Trusts/ NHS Blood & Transplant = 4</li>
+<li>Tier 2 - Trauma Units/ Specialist Hospitals = 3</li>
+<li>Tier 3 - Geographically remote / High secure Mental Health = 2</li>
+<li>Tier 4 - Community Hospitals = 1</li>
+<br>
+<b>Successor Organisations</b>
+<br>
+Organisations open 31st March 2021 are considered (the end of 20/21, the financial year of the last DSPT edition that closed).
+
+Organisations without a published DSPT status as a result of a merger, inherit their DSPT status from it's successor organisation if published. Otherwise, the DSPT status will be mapped as 'Not Published'.
 -->
+## Summary of DSPT Compliance (2020/2021 edition).
+<br>
+Summary statistics from the DSPT 2020/21 toolkit are shown.
 
-{% include crosstab_summary_FY2021.html %}
+{% include data_DSPTmetric2022-02-08.html %}
 
-<iframe src="barchart_summary_FY2021_w.html" height="600px" width="100%" style="border:none;"></iframe>
+<iframe src="./outputs/barchart_summary_FY2021_2022-02-28.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
 
-## CCGs - Individual Compliance
+## CCGs and Trusts - Individual Compliance
 <br>
-The compliance of individual CCGs is mapped below.
+The compliance of individual CCGs and Trusts are mapped below, with ICS boundaries. Toggle the boxes on the top right-hand side to add layers.
 
 <iframe src="chloropleth_DSPT_CCG_Trusts.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
-## Trusts - DSPT Compliance over editions
+<!---
+## CCGs and Proportions of Trusts Compliance - Pie Charts Diameter by Population
 <br>
-Below we consider the overall evolution of DSPT status across editions, for trusts open end-financial year 2020/21.
-Note that below, for trusts resulting from mergers, we do not reflect the status of their predecessors, unless their identifying organisational code has been kept.
+The proportions of trust compliance within each ICS with boundaries (in black) are shown. The diameter of each pie chart relates to the population level within each ICS.
 
-Despite showing editions side-by-side, it is important to note that the standards - and the level of evidence required to meet those standards - tend to get raised year-on-year. This means that a similar status in two editions is not directly comparable.
+<iframe src="ccg_trust_map21_22.html" height="600px" width="100%" style="border:none;"></iframe>
 
-<iframe src="SankeyTrustDSPT.html" height="600px" width="100%" style="border:none;"></iframe>
+<hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
+-->
+
+## CCGs and Proportions of Trusts Compliance - Colour Coded Population
+<br>
+The proportions of trust compliance within each ICS with boundaries (in black) are shown. The ICSs are colored to represent the patient population level. The darker the shade of blue the higher the patient population level. 
+
+<iframe src="chloropleth_DSPT_PieCharts_population.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
+
+## ICSs Composite Compliance - CCG and Trust Score Average Weighted For Population
+<br>
+The compliance of individual ICSs, made up of a composite score of 50% CCG scores which have been weighted for population and 50% of a simple average of Trust scores. Region boundaries are displayed in blue.
+<iframe src="chloropleth_DSPT_CCGp_Trusts.html" height="600px" width="100%" style="border:none;"></iframe>
+
+<hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
+<!---
+## ICSs Composite Compliance - CCG and Trust Score Average Weighted For Population and EPRR
+<br>
+The compliance of individual ICSs, made up of a composite score of 50% CCG scores which have been weighted for population and 50% of average Trusts scores weighted for EPRR risk rating. Region boundaries are displayed in blue.
+<iframe src="chloropleth_DSPT_CCGp_Trusts_EPRR.html" height="600px" width="100%" style="border:none;"></iframe>
+-->
+<hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
+
+<br>
 Template for end-to-end open source analytics: [github.io](https://pages.github.com/), and [github actions](https://github.com/features/actions).
 
 Analytics leverages open source data and R libraries such as [leaflet](https://cran.r-project.org/web/packages/leaflet/index.html) for interactive maps, [plotly](https://plotly.com/r/) for other interactive visualisations and [summarytools](https://cran.r-project.org/web/packages/summarytools/vignettes/introduction.html) for descriptive statistics.
+
