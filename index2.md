@@ -84,6 +84,7 @@ Summary statistics from the DSPT 2020/21 toolkit are shown.
 <br>
 The compliance of individual CCGs and Trusts are mapped below, with ICS boundaries. Toggle the boxes on the top right-hand side to add layers.
 
+
 <iframe src="ccg_trust_map1_21_22.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
@@ -92,19 +93,21 @@ The compliance of individual CCGs and Trusts are mapped below, with ICS boundari
 ## CCGs and Proportions of Trusts Compliance - Colour Coded Population
 <br>
 The proportions of trust compliance within each ICS with boundaries (in black) are shown. The ICSs are colored to represent the patient population level. The darker the shade of blue the higher the patient population level. 
-
+<!---
 <iframe src="chloropleth_DSPT_PieCharts_population.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
-
+-->
 ## ICSs Composite Compliance - CCG and Trust Score Average Weighted For Population
 <br>
 The compliance of individual ICSs, made up of a composite score of 50% CCG scores which have been weighted for population and 50% of a simple average of Trust scores. Region boundaries are displayed in blue.
+
+<!---
 <iframe src="chloropleth_DSPT_CCGp_Trusts.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
-<!---
+
 ## ICSs Composite Compliance - CCG and Trust Score Average Weighted For Population and EPRR
 <br>
 The compliance of individual ICSs, made up of a composite score of 50% CCG scores which have been weighted for population and 50% of average Trusts scores weighted for EPRR risk rating. Region boundaries are displayed in blue.

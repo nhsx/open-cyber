@@ -27,7 +27,8 @@ library(lubridate)
 library(xtable)
 library(plotly)
 library(htmlwidgets)
-
+library(leaflet.minicharts)
+library(leaflet)
 #############################################
 # DSPT curated file
 #############################################
@@ -263,7 +264,7 @@ m03
 
 # save the widget in a html file if needed.
 #library(htmlwidgets)
-saveWidget(m04, file=paste0( getwd(), "choropleth_DSPT_CCG_",Sys.Date(),".html"))
+saveWidget(m03, file=paste0( getwd(), "ccg_trust_21_22",Sys.Date(),".html"))
 
 
 
@@ -271,7 +272,13 @@ saveWidget(m04, file=paste0( getwd(), "choropleth_DSPT_CCG_",Sys.Date(),".html")
 #############################################
 # Summary metric
 #############################################
+trusts_data2 = trusts_data
+trusts_data2$Sector = 'Trust'
 
+data_ccg = data_merged
+data_ccg$Sector = 'CCG'
+
+data_joint <- rbind(data_ccg, trusts_data)
 data_metric <- data %>% filter(Sector %in% c("Trust","CCG"))
 
 
@@ -322,8 +329,8 @@ pal_metric <- colorNumeric(
   domain = stp_spdf@data$metric_CCGTrust_simple)
 
 mytext_ics_score <- paste(
-  "<b>STP code (ODS): </b>", stp_spdf@data$stp20cd,"<br/>",
-  "<b>STP name (ODS): </b>", stp_spdf@data$stp20nm,"<br/>",
+  "<b>STP code (ODS): </b>", stp_spdf@data$STP21CD,"<br/>",
+  "<b>STP name (ODS): </b>", stp_spdf@data$STP21NM,"<br/>",
   "<b>ICS score (CCG+Trust simple), range [-3,3]: </b>",round(stp_spdf@data$metric_CCGTrust_simple,2),"<br/>",
   sep="") %>%
   lapply(htmltools::HTML)
@@ -353,9 +360,9 @@ stp_spdfdata = stp_spdf@data
 stp_spdfdata = merge(stp_spdfdata, data_regions, by = "stp20nm", all = TRUE)
 
 mytext_new <- paste(
-  "<b>STP code (ODS): </b>", stp_spdf@data$stp20cd,"<br/>",
-  "<b>STP name (ODS): </b>", stp_spdf@data$stp20nm,"<br/>",
-  "<b>Region: </b>", stp_spdf@data$NHSER20NM.x,"<br/>",
+  "<b>STP code (ODS): </b>", stp_spdf@data$STP21CD,"<br/>",
+  "<b>STP name (ODS): </b>", stp_spdf@data$STP21NM,"<br/>",
+  "<b>Region: </b>", stp_spdf@data$NHSER22NM.x,"<br/>",
   "<b>ICS score (CCG+Trust simple), range [-3,3]: </b>",round(stp_spdf@data$metric_CCGTrust_simple,2),"<br/>",
   sep="") %>%
   lapply(htmltools::HTML)
@@ -398,8 +405,8 @@ m04 = leaflet() %>%
 m04
 
 #filter data to work out proprotion of DSPT for trusts in each CCG
-data_trusts = data %>% filter(Sector=="Trust")
-data_trusts2 = data_trusts %>% count(STP20CD, STP20NM, Short.Status, sort = TRUE)
+data_trusts = trusts_data
+data_trusts2 = data_trusts %>% count(STP20CD, STP20NM, Status, sort = TRUE)
 data_trusts4 = unique(cbind.data.frame(c(data_trusts2$STP20CD)))
 data_trusts4 <- data_trusts4 %>% rename("STP20CD" = 1)
 
