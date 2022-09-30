@@ -75,6 +75,21 @@ ccg_spdf <- ccg_spdf %>% sp::spTransform(CRS("+init=epsg:4326")) # reproject to 
 # Write to shapefile
 #writeOGR(ccg_spdf, layer = 'myshp_simplified', 'C:/temp', driver="ESRI Shapefile")
 
+region_spdf = readOGR('/Users/muhammad-faaiz.shanawas/Documents/GitHub/open-cyber/Inputs/shapefile/NHS_England_Regions_(April_2020)_Boundaries_EN_BUC.shp')
+proj4string(region_spdf) <- CRS("+init=epsg:27700")  # BNG projection system
+
+region_spdf@proj4string # check system
+
+region_spdf <- region_spdf %>% sp::spTransform(CRS("+init=epsg:4326")) # reproject to latlong system
+
+region_full <- region_spdf
+
+region_s <- rgeos::gSimplify(region_full,tol=0.01, topologyPreserve=FALSE)
+
+# Create a spatial polygon data frame (includes shp attributes)
+regions_spdf = SpatialPolygonsDataFrame(region_s, data.frame(region_full))
+
+
 
 ##Load correspondence from ODS to ONS codes
 # https://geoportal.statistics.gov.uk/datasets/ons::clinical-commissioning-groups-april-2020-names-and-codes-in-england/explore
@@ -112,8 +127,18 @@ ccg_spdf@data <- left_join(ccg_spdf@data,data_merged,by=c("CCG21CD"="CCG21CD"))
 data_ccg_spdf <- ccg_spdf@data
 
 
+data_regions = unique(select(ccg_spdf@data, 'STP21CD' = 'STP21CD', 'NHSER22NM' = 'NHSER22NM'))
+
+#merge and assign to stp_spdf data
+stp_spdfdata = stp_spdf@data
+stp_spdfdata = merge(stp_spdfdata, data_regions, by = "STP21CD", all = TRUE)
+#stp_spdfdata = na.omit(stp_spdfdata)
+stp_spdf@data = stp_spdfdata
+
+
+
 # Make Status a categorical
-ccg_spdf@data$Short.Status = factor(ccg_spdf@data$Short.Status,dsptlevels)
+#ccg_spdf@data$Short.Status = factor(ccg_spdf@data$Short.Status,dsptlevels)
 
 
 
@@ -126,18 +151,18 @@ catpal <- colorFactor(my_palette, dsptlevels,reverse=F,ordered=T)
 ## Plotting
 # Prepare the text for tooltips:
 mytext <- paste(
-  "<b>ICB 2022 code (ODS): </b>", ccg_spdf@data$ICB22CD.x,"<br/>",
-  "<b>ICB 2022 name: </b>", ccg_spdf@data$LOC22NM.y,"<br/>",
-  "<b>2021 STP name: </b>", ccg_spdf@data$STP21NM.y,"<br/>",
-  "<b>Region name: </b>", ccg_spdf@data$NHSER22NM.y,"<br/>",
-  "<b>DSPT Status: </b>", ccg_spdf@data$Short.Status.y, "<br/>",
+  "<b>SUB-ICB 2022 code (ODS): </b>", ccg_spdf@data$ICB22CD,"<br/>",
+  "<b>SUB-ICB 2022 name: </b>", ccg_spdf@data$LOC22NM,"<br/>",
+  "<b>2021 STP name: </b>", ccg_spdf@data$STP21NM,"<br/>",
+  "<b>Region name: </b>", ccg_spdf@data$NHSER22NM,"<br/>",
+  "<b>DSPT Status: </b>", ccg_spdf@data$Short.Status, "<br/>",
   sep="") %>%
   lapply(htmltools::HTML)
 
 mytext_ics <- paste(
   "<b>ICS/STP 2021 code: </b>", stp_spdf@data$STP21CD,"<br/>",
   "<b>ICS/STP 2021 name: </b>", stp_spdf@data$STP21NM,"<br/>",
-  "<b>Region name: </b>", ccg_spdf@data$NHSER22NM.y,"<br/>",
+  "<b>Region name: </b>", stp_spdf@data$NHSER22NM,"<br/>",
   sep="") %>%
   lapply(htmltools::HTML)
 
@@ -151,7 +176,7 @@ m<-leaflet(ccg_spdf) %>%
   addTiles()  %>% 
   setView( lat=53, lng=-2 , zoom=6) %>%
   addPolygons( 
-    fillColor = ~catpal(Short.Status.y), 
+    fillColor = ~catpal(Status), 
     stroke=TRUE, 
     fillOpacity = 0.9, 
     color="black", 
@@ -163,7 +188,7 @@ m<-leaflet(ccg_spdf) %>%
       direction = "auto"
     )
   ) %>%
-  addLegend( pal=catpal, values=~Short.Status.y, opacity=0.9, title = "21/22 DSPT Status (CCG)", position = "bottomleft" )
+  addLegend( pal=catpal, values=~Status, opacity=0.9, title = "21/22 DSPT Status (CCG)", position = "bottomleft" )
 
 m
 
@@ -178,7 +203,7 @@ m02 <- leaflet() %>%
   addPolygons(
     data=ccg_spdf,
     group = "CCG",
-    fillColor = ~catpal(Short.Status.y), 
+    fillColor = ~catpal(Status), 
     stroke=TRUE, 
     fillOpacity = 0.7, 
     color="black", 
@@ -198,7 +223,7 @@ m02 <- leaflet() %>%
     weight=2,
     label=mytext_ics
   ) %>%
-  #addLegend( data=stp_spdf,pal=catpal, values=~Short.Status, opacity=0.9, title = "21/22 DSPT Status (CCG)", position = "bottomleft" ) %>%
+  #addLegend( data=ccg_spdf,pal=catpal, values=~Short.Status, opacity=0.9, title = "21/22 DSPT Status (CCG)", position = "bottomleft" ) %>%
   leaflet::addLayersControl(
     overlayGroups = c("CCG","ICS boundary"),  # add these layers
     options = layersControlOptions(collapsed = FALSE)  # expand on hover?
@@ -207,7 +232,7 @@ m02 <- leaflet() %>%
 
 
 
-m02_l <- m02 %>% addLegend( data=ccg_spdf,pal=catpal, values=~Short.Status.y, opacity=0.9, title = "21/22 DSPT Status (CCG)", position = "bottomleft" )
+m02_l <- m02 %>% addLegend( data=ccg_spdf,pal=catpal, values=~Short.Status, opacity=0.9, title = "21/22 DSPT Status (CCG)", position = "bottomleft" )
 
 
 
@@ -264,7 +289,7 @@ m03
 
 # save the widget in a html file if needed.
 #library(htmlwidgets)
-saveWidget(m03, file=paste0( getwd(), "ccg_trust_21_22",Sys.Date(),".html"))
+saveWidget(m04, "ICS_composite_map1_21_22.html")
 
 
 
@@ -272,38 +297,56 @@ saveWidget(m03, file=paste0( getwd(), "ccg_trust_21_22",Sys.Date(),".html"))
 #############################################
 # Summary metric
 #############################################
+#get the stp codes for trusts from etr
+etr = read.csv('/Users/muhammad-faaiz.shanawas/Documents/GitHub/open-cyber/data/etr.csv', header = FALSE)
+etr = etr[,c('V1', 'V4')]
+etr = select(etr, 'ODS.Code' = 'V1', 'STP21CDH' = 'V4')
+
+
 trusts_data2 = trusts_data
 trusts_data2$Sector = 'Trust'
 
-data_ccg = data_merged
-data_ccg$Sector = 'CCG'
+trusts_data_merged = left_join(trusts_data2, etr)
+trusts_data_merged = na.omit(trusts_data_merged)
+trusts_data_merged = select(trusts_data_merged, c('ODS.Code', 'ODS.Org.Name', 'Status', 'Sector', 'STP21CDH'))
 
-data_joint <- rbind(data_ccg, trusts_data)
-data_metric <- data %>% filter(Sector %in% c("Trust","CCG"))
+data_ccg = data_merged
+stp_codes = select(data_ccg, 'STP21CD' = 'STP21CD', 'STP21CDH' = 'STP21CDH', 'STP21NM' = 'STP21NM')
+stp_codes = unique(stp_codes)
+trusts_data_merged = left_join(trusts_data_merged, stp_codes)
+region_codes = unique(select(data_ccg, 'STP21CD' = 'STP21CD', 'NHSER22NM' = 'NHSER22NM'))
+trusts_data_merged = left_join(trusts_data_merged, region_codes)
+
+
+data_ccg$Sector = 'CCG'
+data_ccg = select(data_ccg, 'ODS.Code' = 'ODS.Code', 'ODS.Org.Name' = 'LOC22NM', 'Status' = 'Status', 'Sector' = 'Sector', 'STP21CD' = 'STP21CD', 'STP21CDH' = 'STP21CDH', 'STP21NM' = 'STP21NM', 'NHSER22NM' = 'NHSER22NM')
+
+data_joint <- rbind(data_ccg, trusts_data_merged)
+data_metric <- data_joint %>% filter(Sector %in% c("Trust","CCG"))
 
 
 # GP practice population
-# https://digital.nhs.uk/data-and-information/publications/statistical/patients-registered-at-a-gp-practice/march-2021
-gppopdata <- read_csv("https://files.digital.nhs.uk/59/D3AD40/gp-reg-pat-prac-sing-age-regions.csv")
+# https://digital.nhs.uk/data-and-information/publications/statistical/patients-registered-at-a-gp-practice/september-2022
+gppopdata <- read_csv("https://files.digital.nhs.uk/62/79B56F/gp-reg-pat-prac-sing-age-regions.csv")
 
-gppopdata_red <- gppopdata %>% filter(SEX=="ALL",AGE=="ALL",ORG_TYPE=="CCG") %>% select(c("ORG_CODE","NUMBER_OF_PATIENTS"))
+gppopdata_red <- gppopdata %>% filter(SEX=="ALL",AGE=="ALL",ORG_TYPE=="SUB_ICB_LOCATION") %>% select(c("ORG_CODE","NUMBER_OF_PATIENTS"))
 
 
 
 
 # score mapping
 
-data_metric <- data_metric %>% mutate(Status.Score=case_when(Short.Status=="Standards Exceeded"~3,
-                                                             Short.Status=="Standards Met"~1,
-                                                             Short.Status=="Approaching Standards"~-1,
-                                                             Short.Status=="Standards Not Met"~-3,
-                                                             Short.Status=="Not Published"~-3))
+data_metric <- data_metric %>% mutate(Status.Score=case_when(Status=="21/22 Standards Exceeded"~3,
+                                                             Status=="21/22 Standards Met"~1,
+                                                             Status=="21/22 Approaching Standards"~-1,
+                                                             Status=="21/22 Standards Not Met"~-3,
+                                                             Status=="21/22 Not Published"~-3))
 
 
 NUMBER_OF_PATIENTS = gppopdata['NUMBER_OF_PATIENTS']
-data_metric <- data_metric %>% left_join(gppopdata_red,by=c("Code"="ORG_CODE"))                                                             #TRUE~NA_integer_))
+data_metric <- data_metric %>% left_join(gppopdata_red,by=c("ODS.Code"="ORG_CODE"))                                                             #TRUE~NA_integer_))
 
-data_metric_ICS <- data_metric %>% group_by(STP20CD,STP20NM,Sector,NHSER20NM) %>% summarise(Simple.Score=mean(Status.Score,na.rm=T),
+data_metric_ICS <- data_metric %>% group_by(STP21CDH, STP21CD, Sector) %>% summarise(Simple.Score=mean(Status.Score,na.rm=T),
                                                                                   Simple.n=n(),
                                                                                   Pop.Score=sum(NUMBER_OF_PATIENTS*Status.Score)/sum(NUMBER_OF_PATIENTS))
 
@@ -319,56 +362,41 @@ data_metric_ICS <- data_metric_ICS %>% mutate(metric_CCG_simple = Simple.Score_C
 
 
 
-stp_spdf@data <- stp_spdf@data %>% left_join(data_metric_ICS,by=c("stp20nm"="STP20NM","stp20cd"="STP20CD"))
-
+stp_spdf@data <- stp_spdf@data %>% left_join(data_metric_ICS,by=c("STP21CD"="STP21CD"))
+stp_data = stp_spdf@data
 
 
 # Create a continuous palette function
+# Create a continuous palette function in our desired range (+3 - 3)
+
+# Create a continuous palette function in our desired range (+3 - 3)
 pal_metric <- colorNumeric(
   palette = "RdYlBu",
-  domain = stp_spdf@data$metric_CCGTrust_simple)
+  domain = range(-3:3))
 
+#create the label text for the first composite map
 mytext_ics_score <- paste(
   "<b>STP code (ODS): </b>", stp_spdf@data$STP21CD,"<br/>",
   "<b>STP name (ODS): </b>", stp_spdf@data$STP21NM,"<br/>",
-  "<b>ICS score (CCG+Trust simple), range [-3,3]: </b>",round(stp_spdf@data$metric_CCGTrust_simple,2),"<br/>",
+  "<b>ICS score (CCG+Trust simple), range [-3,3]: </b>",round(stp_spdf@data$metric_CCGp_Trusts,2),"<br/>",
   sep="") %>%
   lapply(htmltools::HTML)
 
 
 
-region_spdf = readOGR('./Inputs/shapefile/NHS_England_Regions_(April_2020)_Boundaries_EN_BUC.shp')
-proj4string(region_spdf) <- CRS("+init=epsg:27700")  # BNG projection system
-
-region_spdf@proj4string # check system
-
-region_spdf <- region_spdf %>% sp::spTransform(CRS("+init=epsg:4326")) # reproject to latlong system
-
-region_full <- region_spdf
-
-region_s <- rgeos::gSimplify(region_full,tol=0.01, topologyPreserve=FALSE)
-
-# Create a spatial polygon data frame (includes shp attributes)
-regions_spdf = SpatialPolygonsDataFrame(region_s, data.frame(region_full))
-
-
-data_regions = data[c("STP20NM", "NHSER20NM")]
-names(data_regions)[names(data_regions) == "STP20NM"] <- "stp20nm"
-
-#merge and assign to stp_spdf data
-stp_spdfdata = stp_spdf@data
-stp_spdfdata = merge(stp_spdfdata, data_regions, by = "stp20nm", all = TRUE)
-
+#create the label text to display the stp info for each polygon
 mytext_new <- paste(
   "<b>STP code (ODS): </b>", stp_spdf@data$STP21CD,"<br/>",
   "<b>STP name (ODS): </b>", stp_spdf@data$STP21NM,"<br/>",
-  "<b>Region: </b>", stp_spdf@data$NHSER22NM.x,"<br/>",
-  "<b>ICS score (CCG+Trust simple), range [-3,3]: </b>",round(stp_spdf@data$metric_CCGTrust_simple,2),"<br/>",
+  "<b>Region: </b>", stp_spdf@data$NHSER22NM,"<br/>",
+  "<b>ICS score (CCG population + Trust simple), range [-3,3]: </b>",round(stp_spdf@data$metric_CCGp_Trusts,2),"<br/>",
   sep="") %>%
   lapply(htmltools::HTML)
 
-
-
+#create the map using map panes
+#add a layer for the ICS colour coded polygons
+#add a layer for empty ICS polygons with just the labels (this has the highest zindex - will be the top layer)
+#add a layer for the region boundaries to be displayed in blue
 m04 = leaflet() %>%
   addMapPane(name = "regionBorder", zIndex = 425) %>%
   addMapPane(name = "ICS polygons", zIndex = 400) %>%
@@ -387,7 +415,7 @@ m04 = leaflet() %>%
     data=stp_spdf,
     group="ICS",
     fillOpacity=1,
-    fillColor=~pal_metric(metric_CCGTrust_simple),
+    fillColor=~pal_metric(metric_CCGp_Trusts),
     color="black",
     weight=1,
     options = leafletOptions(pane = "ICS polygons")) %>%
@@ -395,69 +423,179 @@ m04 = leaflet() %>%
     data=stp_spdf,
     group="ICS",
     fillOpacity=0,
-    fillColor=~pal_metric(metric_CCGTrust_simple),
+    fillColor=~pal_metric(metric_CCGp_Trusts),
     color="black",
     weight= 0,
     options = leafletOptions(pane = "ICS Labels"),
     label = mytext_new ) %>%
-  addLegend("bottomright",pal=pal_metric,values=stp_spdf@data$metric_CCGTrust_simple,title="ICS score - CCG/Trust simple")
+  addLegend("bottomright",pal=pal_metric,values=-3:3,title="ICS score - CCG population/Trust simple")
 
 m04
 
-#filter data to work out proprotion of DSPT for trusts in each CCG
-data_trusts = trusts_data
-data_trusts2 = data_trusts %>% count(STP20CD, STP20NM, Status, sort = TRUE)
-data_trusts4 = unique(cbind.data.frame(c(data_trusts2$STP20CD)))
-data_trusts4 <- data_trusts4 %>% rename("STP20CD" = 1)
+##############################################################################################
+# Mapping the composite ICS for CCG(population weighted) and Trusts (Weighted for EPRR risk)
+##############################################################################################
 
-data_trust_met = data_trusts2 %>% filter(Short.Status == "Standards Met")
-data_trust_met = data_trust_met[c("STP20CD", "n")]
-data_trust_met <- data_trust_met %>% rename("Standards Met" = "n")
+#create new map labels to contain the dspt metric and stp region info
+mytext_new <- paste(
+  "<b>STP code (ODS): </b>", stp_spdf@data$stp20cd,"<br/>",
+  "<b>STP name (ODS): </b>", stp_spdf@data$stp20nm,"<br/>",
+  "<b>Region: </b>", stp_spdf@data$NHSER20NM.y,"<br/>",
+  "<b>ICS score (CCG+Trust simple), range [-3,3]: </b>",round(stp_spdf@data$metric_CCGp_Trusts_EPRR,2),"<br/>",
+  sep="") %>%
+  lapply(htmltools::HTML)
 
-data_trust_exceeded = data_trusts2 %>% filter(Short.Status == "Standards Exceeded")
-data_trust_exceeded = data_trust_exceeded[c("STP20CD", "n")]
-data_trust_exceeded <- data_trust_exceeded %>% rename("Standards Exceeded" = 2)
 
-data_trust_approaching = data_trusts2 %>% filter(Short.Status == "Approaching Standards")
-data_trust_approaching = data_trust_approaching[c("STP20CD", "n")]
-data_trust_approaching <- data_trust_approaching %>% rename("Approaching Standards" = 2)
+m05 = leaflet() %>%
+  addMapPane(name = "regionBorder", zIndex = 425) %>%
+  addMapPane(name = "ICS polygons", zIndex = 400) %>%
+  addMapPane(name = "ICS Labels", zIndex = 450) %>%
+  addMapPane(name = "Minicharts", zIndex = 435) %>%
+  addPolygons(
+    data=regions_spdf,
+    group="Region boundary",
+    fillOpacity=0,
+    color='blue',
+    weight=5,
+    options = leafletOptions(pane = "regionBorder")
+  ) %>%
+  addTiles()  %>% 
+  setView( lat=53, lng=-2 , zoom=6) %>%
+  addPolygons(
+    data=stp_spdf,
+    group="ICS",
+    fillOpacity=1,
+    fillColor=~pal_metric(metric_CCGp_Trusts_EPRR),
+    color="black",
+    weight=1,
+    options = leafletOptions(pane = "ICS polygons")) %>%
+  addPolygons(
+    data=stp_spdf,
+    group="ICS",
+    fillOpacity=0,
+    fillColor=~pal_metric(metric_CCGp_Trusts_EPRR),
+    color="black",
+    weight= 0,
+    options = leafletOptions(pane = "ICS Labels"),
+    label = mytext_new ) %>%
+  addLegend("bottomright",pal=pal_metric,values=-3:3,title="ICS score - CCG Population/Trust EPRR")
 
-data_trust_notmet = data_trusts2 %>% filter(Short.Status == "Standards Not Met")
-data_trust_notmet = data_trust_notmet[c("STP20CD", "n")]
-data_trust_notmet <- data_trust_notmet %>% rename("Standards Not Met" = 2)
-
-data_trusts5 <- left_join(x = data_trusts4, y = data_trust_met)
-data_trusts6 <- left_join(x = data_trusts5, y = data_trust_exceeded)
-data_trusts7 <- left_join(x = data_trusts6, y = data_trust_approaching)
-data_trusts8 <- left_join(x = data_trusts7, y = data_trust_notmet)
-
-data_trusts8[is.na(data_trusts8)] <- 0
-data_trusts8 <- data_trusts8 %>% rename("stp20cd" = "STP20CD")
-trust_spdf_pie <- stp_spdf
-data_trust_spdf_pie <- left_join(x = data_trusts8, y = stp_spdf@data, by = "stp20cd")
-
-trust_spdf_pie@data = data_trust_spdf_pie
-stp_filter_numpatients <- gppopdata %>% filter(SEX=="ALL",AGE=="ALL",ORG_TYPE=="STP")
-library(leaflet.minicharts)
-m05 <- m02 %>%
-  addMinicharts(lng = data_trust_spdf_pie$long, 
-                lat = data_trust_spdf_pie$lat, 
-                type = "pie", 
-                chartdata = data_trust_spdf_pie[, c("Standards Met", "Standards Exceeded", "Approaching Standards", "Standards Not Met")], 
-                colorPalette = c("#104E8B", "#FF00FF", "#3093e5", "#fcba50"), 
-                width = 60 * sqrt(stp_filter_numpatients$NUMBER_OF_PATIENTS) / sqrt(max(stp_filter_numpatients$NUMBER_OF_PATIENTS)), 
-                transitionTime = 0)
-
-m05 <- m05 %>%
-  #addLegend( data=trust_spdf_points,pal=catpal, values=~Short.Status, opacity=0.9, title = "20/21 DSPT Status (trust)", position = "bottomright" ) %>%
-  leaflet::addLayersControl(
-    overlayGroups = c("ICS boundary","CCG"),  # add these layers
-    options = layersControlOptions(collapsed = FALSE)  # expand on hover?
-  ) %>% 
-  hideGroup(c("ICS boundary"))  # turn these off by default
 m05
 
 
 
+###############################################################################################################################################
+# Mapping the proportion of Trusts dspt scores using minicharts (piecharts) with the width of pie charts indicating patient population level
+###############################################################################################################################################
+#the statuses will be seperated out into individual columns and the values will be summed grouped by 
+#the STP code so we get the proportion of trusts that met each status for each STP
+
+#load in the data and filter for trusts changing the statuses to numerical values
+data_trusts =  data_joint %>% filter(Sector %in% c("Trust"))
+#data_trusts <- data_trusts[c("ODS.Code", "ODS.Org.Name", "STP21CD", "Status")]
+
+#change all the instances of each dspt score to 1 so this can be summed as a numerical tally to make the charts
+data_trusts<- data_trusts %>% mutate(Standards_Met = case_when(Status == "21/22 Standards Met"~1,
+                                                               TRUE ~ 0))
+data_trusts<- data_trusts %>% mutate(Standards_Exceeded = case_when(Status == "21/22 Standards Exceeded"~1,
+                                                                    TRUE ~ 0))
+data_trusts<- data_trusts %>% mutate(Standards_Not_Met = case_when(Status == "21/22 Standards Not Met"~1,
+                                                                   TRUE ~ 0))
+data_trusts<- data_trusts %>% mutate(Approaching_Standards = case_when(Status == "21/22 Approaching Standards"~1,
+                                                                       TRUE ~ 0))
+#select the relevant columns only
+data_trusts = data_trusts[,c("STP21CD", "Standards_Met", "Standards_Exceeded", "Standards_Not_Met", "Approaching_Standards")]
+
+#get the sum of each DSPT metric in separate columns grouped by each STP
+#data_trusts_aggregate = data_trusts %>% group_by(STP21CD) %>% summarise_each(funs(sum))
+data_trusts_aggregate = data_trusts %>% group_by(STP21CD) %>% summarise_at(vars(Standards_Met, Standards_Exceeded, Standards_Not_Met, Approaching_Standards), funs(sum))
+
+#data_trusts_aggregate = data_trusts_aggregate %>% rename("STP21CD" = 1)
+
+#wrangle teh GP population data to be used as the diameter for each of the mini piecharts
+stp_filter_numpatients <- gppopdata %>% filter(SEX=="ALL",AGE=="ALL",ORG_TYPE=="ICB")
+
+#stp_filter_numpatients <- stp_filter_numpatients %>% rename("STP21CD" = 5)
+stp_filter_numpatients <- stp_filter_numpatients[c("STP21CD", "NUMBER_OF_PATIENTS")]
+stp_filter_numpatients <- unique(stp_filter_numpatients)
+#merge together the separated dspt data with the gp population data and stp spatial data frame for mapping
+data_trust_spdf_pie = left_join(x = stp_spdfdata, y = data_trusts_aggregate, by = "STP21CD")
+data_trust_spdf_pie = merge(x = data_trust_spdf_pie, y = stp_filter_numpatients, by = "STP21CD")
+
+#create the map with the ICS boundaries displayed in black
+
+m06 <- leaflet() %>%
+  addTiles %>%
+  addPolygons(
+    data=stp_spdf,
+    group="ICS Tiles",
+    fillOpacity=0.8,
+    color='gray', #grey out the ICS tiles so there is less unnecessary detail
+    weight=0,
+    label=mytext_new) %>%
+  addPolygons(
+    data=stp_spdf,
+    group="ICS boundary",
+    fillOpacity=0,
+    color='black',
+    weight=5,
+    label=mytext_new) %>%
+  addMinicharts(lng = data_trust_spdf_pie$LONG, 
+                lat = data_trust_spdf_pie$LAT, 
+                type = "pie", 
+                chartdata = data_trust_spdf_pie[, c("Standards_Exceeded", "Standards_Met", "Approaching_Standards", "Standards_Not_Met")], 
+                colorPalette = c("#129F8C", '#9FD0BA', "#F5FFBF", "#FF4227"), 
+                #width = 0.00001 * data_trust_spdf_pie$NUMBER_OF_PATIENTS , 
+                transitionTime = 0)
+m06
+
+###############################################################################################################################################
+# Mapping the proportion of Trusts dspt scores using minicharts (piecharts) with patient population level color coded in ICS polygons
+###############################################################################################################################################
+
+gppopdata_blue <- gppopdata %>% filter(SEX=="ALL",AGE=="ALL",ORG_TYPE=="ICB") %>% select(c("ONS_CODE","NUMBER_OF_PATIENTS"))
+gppopdata_blue <- gppopdata_blue %>% rename("STP21CD" = 1)
+
+stp_spdfdata <- stp_spdf@data
+
+stp_spdfdata1 = merge(stp_spdfdata, gppopdata_blue, by = "STP21CD")
+
+#stp_spdf$data <- stp_spdfdata1
+
+num_patients_stp <- gppopdata_blue[c("NUMBER_OF_PATIENTS")]
+
+minpatients <- min(num_patients_stp)
+
+maxpatients <- max(num_patients_stp)
 
 
+patients_stps <- stp_spdfdata$data.NUMBER_OF_PATIENTS
+pal_metric2 <- colorNumeric(
+  palette = "Blues",
+  domain = range(minpatients:maxpatients))
+m07 <- leaflet() %>%
+  addTiles %>%
+  addPolygons(
+    data=stp_spdf,
+    group="ICS Tiles",
+    fillOpacity=1,
+    fillColor=~pal_metric2(stp_spdfdata1$NUMBER_OF_PATIENTS), #grey out the ICS tiles so there is less unnecessary detail
+    weight=0,
+    label=mytext_ics) %>%
+  addPolygons(
+    data=stp_spdf,
+    group="ICS boundary",
+    fillOpacity=0,
+    color='black',
+    weight=5,
+    label=mytext_ics) %>%
+  addMinicharts(lng = data_trust_spdf_pie$LONG, 
+                lat = data_trust_spdf_pie$LAT, 
+                type = "pie", 
+                chartdata = data_trust_spdf_pie[, c("21/22 Standards_Exceeded", "21/22 Standards_Met", "21/22 Approaching_Standards", "21/22 Standards_Not_Met")], 
+                colorPalette = c("#129F8C", '#9FD0BA', "#F5FFBF", "#FF4227"), 
+                width = 25, 
+                transitionTime = 0) %>%
+  addLegend("topright",pal=pal_metric2, minpatients:maxpatients, title="ICS Patient Population Level")
+
+m07
