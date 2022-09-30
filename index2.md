@@ -89,11 +89,11 @@ The compliance of individual CCGs and Trusts are mapped below, with ICS boundari
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
-
+<!---
 ## CCGs and Proportions of Trusts Compliance - Colour Coded Population
 <br>
 The proportions of trust compliance within each ICS with boundaries (in black) are shown. The ICSs are colored to represent the patient population level. The darker the shade of blue the higher the patient population level. 
-<!---
+
 <iframe src="chloropleth_DSPT_PieCharts_population.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
