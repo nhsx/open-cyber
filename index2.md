@@ -75,7 +75,7 @@ Summary statistics from the DSPT 2021/22 toolkit are shown.
 
 <iframe src="cross_table_summary_21_222022-10-03.html" height="600px" width="100%" style="border:none;"></iframe>
 
-<hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-3">
+<hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-0">
 
 <iframe src="dspt_summary_chart_21_22.html" height="600px" width="100%" style="border:none;"></iframe>
 
