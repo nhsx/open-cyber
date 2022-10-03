@@ -73,9 +73,7 @@ Organisations without a published DSPT status as a result of a merger, inherit t
 <br>
 Summary statistics from the DSPT 2021/22 toolkit are shown.
 
-<iframe src="cross_table_summary_21_222022-10-03.html" height="600px" width="100%" style="border:none;"></iframe>
-
-<hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
+{% include cross_table_summary_21_222022-10-03.html %}
 
 <iframe src="dspt_summary_chart_21_22.html" height="600px" width="100%" style="border:none;"></iframe>
 
@@ -108,12 +106,7 @@ The compliance of individual ICSs, made up of a composite score of 50% CCG score
 <iframe src="ICS_composite_map_03_10_22.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
-<!---
-## ICSs Composite Compliance - CCG and Trust Score Average Weighted For Population and EPRR
-<br>
-The compliance of individual ICSs, made up of a composite score of 50% CCG scores which have been weighted for population and 50% of average Trusts scores weighted for EPRR risk rating. Region boundaries are displayed in blue.
-<iframe src="chloropleth_DSPT_CCGp_Trusts_EPRR.html" height="600px" width="100%" style="border:none;"></iframe>
--->
+
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
 <br>
