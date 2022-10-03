@@ -73,9 +73,9 @@ Organisations without a published DSPT status as a result of a merger, inherit t
 <br>
 Summary statistics from the DSPT 2021/22 toolkit are shown.
 
-<iframe src="cross_table_summary_21_222022-10-03.html" height="600px" width="150%" style="border:none;"></iframe>
+<iframe src="cross_table_summary_21_222022-10-03.html" height="600px" width="100%" style="border:none;"></iframe>
 
-<hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
+<hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-3">
 
 <iframe src="dspt_summary_chart_21_22.html" height="600px" width="100%" style="border:none;"></iframe>
 
