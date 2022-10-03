@@ -68,18 +68,18 @@ Organisations are ranked in a 4 tier system, to measure their impact of risk. Th
 Organisations open 31st March 2021 are considered (the end of 20/21, the financial year of the last DSPT edition that closed).
 
 Organisations without a published DSPT status as a result of a merger, inherit their DSPT status from it's successor organisation if published. Otherwise, the DSPT status will be mapped as 'Not Published'.
-
-## Summary of DSPT Compliance (2020/2021 edition).
+-->
+## Summary of DSPT Compliance (2021/2022 edition).
 <br>
-Summary statistics from the DSPT 2020/21 toolkit are shown.
+Summary statistics from the DSPT 2021/22 toolkit are shown.
 
-{% include data_DSPTmetric2022-02-08.html %}
+{% include cross_table_summary_21_222022-10-03.html %}
 
-<iframe src="./outputs/barchart_summary_FY2021_2022-02-28.html" height="600px" width="100%" style="border:none;"></iframe>
+<iframe src="dspt_summary_chart_21_22.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
--->
+
 ## CCGs and Trusts - Individual Compliance
 <br>
 The compliance of individual CCGs and Trusts are mapped below, with ICS boundaries. Toggle the boxes on the top right-hand side to add layers.
