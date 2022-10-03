@@ -57,7 +57,7 @@ stp_spdf@proj4string # check system
 
 stp_spdf <- stp_spdf %>% sp::spTransform(CRS("+init=epsg:4326")) # reproject to latlong system
 
-
+stp_data = stp_spdf@data
 #############################################
 # CCG shapefile
 #############################################
@@ -122,16 +122,19 @@ lookupdata = read.csv('/Users/muhammad-faaiz.shanawas/Documents/Github/open-cybe
 data_merged = left_join(data, lookupdata, by = c("ODS.Code" = "CCG21CDH"))
 data_merged = data_merged[-107,]
 
+
+#load in ccg-stp-region lookup data
+regions_lookup = read.csv('/Users/muhammad-faaiz.shanawas/Documents/GitHub/open-cyber/data/Clinical_Commissioning_Group_to_STP_and_NHS_England_(Region)_(April_2021)_Lookup_in_England.csv')
+data_regions = unique(select(regions_lookup, 'STP21CD', 'STP21NM', 'NHSER21NM'))
+
 # Join the reduced DSPT info with the CCG shapefile
 ccg_spdf@data <- left_join(ccg_spdf@data,data_merged,by=c("CCG21CD"="CCG21CD"))
 data_ccg_spdf <- ccg_spdf@data
 
 
-data_regions = unique(select(ccg_spdf@data, 'STP21CD' = 'STP21CD', 'NHSER22NM' = 'NHSER22NM'))
-
 #merge and assign to stp_spdf data
 stp_spdfdata = stp_spdf@data
-stp_spdfdata = merge(stp_spdfdata, data_regions, by = "STP21CD", all = TRUE)
+stp_spdfdata = merge(stp_spdfdata, select(data_regions, 'STP21CD', 'NHSER21NM'), by = "STP21CD", all = TRUE)
 #stp_spdfdata = na.omit(stp_spdfdata)
 stp_spdf@data = stp_spdfdata
 
@@ -162,7 +165,7 @@ mytext <- paste(
 mytext_ics <- paste(
   "<b>ICS/STP 2021 code: </b>", stp_spdf@data$STP21CD,"<br/>",
   "<b>ICS/STP 2021 name: </b>", stp_spdf@data$STP21NM,"<br/>",
-  "<b>Region name: </b>", stp_spdf@data$NHSER22NM,"<br/>",
+  "<b>Region name: </b>", stp_spdf@data$NHSER21NM,"<br/>",
   sep="") %>%
   lapply(htmltools::HTML)
 
@@ -190,7 +193,7 @@ m<-leaflet(ccg_spdf) %>%
   ) %>%
   addLegend( pal=catpal, values=~Status, opacity=0.9, title = "21/22 DSPT Status (CCG)", position = "bottomleft" )
 
-m
+#m
 
 #############################################
 # Mapping - CCGS + ICS layer
@@ -267,7 +270,7 @@ m03 <- m02_l %>%
                    #clusterOptions = markerClusterOptions(),
                    radius= 6)
   
-m03
+#m03
 
 #adding the zoom toggle for trust level (trust layer appears between 9 and 20)
 #m03 <- m03 %>% 
@@ -388,7 +391,7 @@ mytext_ics_score <- paste(
 mytext_new <- paste(
   "<b>STP code (ODS): </b>", stp_spdf@data$STP21CD,"<br/>",
   "<b>STP name (ODS): </b>", stp_spdf@data$STP21NM,"<br/>",
-  "<b>Region: </b>", stp_spdf@data$NHSER22NM,"<br/>",
+  "<b>Region: </b>", stp_spdf@data$NHSER21NM,"<br/>",
   "<b>ICS score (CCG population + Trust simple), range [-3,3]: </b>",round(stp_spdf@data$metric_CCGp_Trusts,2),"<br/>",
   sep="") %>%
   lapply(htmltools::HTML)
@@ -519,7 +522,7 @@ stp_filter_numpatients <- gppopdata %>% filter(SEX=="ALL",AGE=="ALL",ORG_TYPE=="
 stp_filter_numpatients <- stp_filter_numpatients[c("STP21CD", "NUMBER_OF_PATIENTS")]
 stp_filter_numpatients <- unique(stp_filter_numpatients)
 #merge together the separated dspt data with the gp population data and stp spatial data frame for mapping
-data_trust_spdf_pie = left_join(x = stp_spdfdata, y = data_trusts_aggregate, by = "STP21CD")
+data_trust_spdf_pie = left_join(x = stp_spdf@data, y = data_trusts_aggregate, by = "STP21CD")
 data_trust_spdf_pie = merge(x = data_trust_spdf_pie, y = stp_filter_numpatients, by = "STP21CD")
 
 #create the map with the ICS boundaries displayed in black
