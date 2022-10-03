@@ -85,7 +85,7 @@ Summary statistics from the DSPT 2020/21 toolkit are shown.
 The compliance of individual CCGs and Trusts are mapped below, with ICS boundaries. Toggle the boxes on the top right-hand side to add layers.
 
 
-<iframe src="ccg_trusts_map_03_10_22.htmlrs" height="600px" width="100%" style="border:none;"></iframe>
+<iframe src="ccg_trusts_map_03_10_22.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
