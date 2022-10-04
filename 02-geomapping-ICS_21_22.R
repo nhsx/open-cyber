@@ -29,6 +29,7 @@ library(plotly)
 library(htmlwidgets)
 library(leaflet.minicharts)
 library(leaflet)
+
 #############################################
 # DSPT curated file
 #############################################
@@ -595,10 +596,39 @@ m07 <- leaflet() %>%
   addMinicharts(lng = data_trust_spdf_pie$LONG, 
                 lat = data_trust_spdf_pie$LAT, 
                 type = "pie", 
-                chartdata = data_trust_spdf_pie[, c("21/22 Standards_Exceeded", "21/22 Standards_Met", "21/22 Approaching_Standards", "21/22 Standards_Not_Met")], 
+                chartdata = data_trust_spdf_pie[, c("Standards_Exceeded", "Standards_Met", "Approaching_Standards", "Standards_Not_Met")], 
                 colorPalette = c("#129F8C", '#9FD0BA', "#F5FFBF", "#FF4227"), 
                 width = 25, 
                 transitionTime = 0) %>%
   addLegend("topright",pal=pal_metric2, minpatients:maxpatients, title="ICS Patient Population Level")
 
 m07
+
+###############################################################
+#load in the snapshot data to create summary tables and charts
+###############################################################
+data_snapshot = read.csv('/Users/muhammad-faaiz.shanawas/Documents/GitHub/open-cyber/data/DSPT search results 09_09_2022 12_44_07.csv')
+data_summary = data_snapshot %>% select('Organisation.Name', 'Status', 'Primary.Sector')
+data_summary = data_summary %>% filter(Primary.Sector %in% c("CCG / Integrated Care Board (ICB)", "Commissioning Support Unit (CSU)", "NHS Trust"))
+
+data_s = data_summary %>% mutate(Short.Status = case_when(Status %in% c("20/21 Standards Met", "18/19 Standards Met", "19/20 Standards Met", "19/20 Approaching Standards", "19/20 Standards Exceeded", "20/21 Standards Exceeded", "20/21 Standards Not Met") ~ '21/22 Status Not Met',
+                                                          Status %in% c("22/23 Standards Met") ~ '21/22 Standards Met', TRUE ~ Status))
+
+
+auxl <-data_s %>% group_by(Primary.Sector,Short.Status) %>% summarise(n=n())
+aux <- data_s %>% group_by(Primary.Sector,Short.Status) %>% summarise(n=n()) %>% pivot_wider(names_from='Short.Status',values_from='n')
+org_type <-aux$Primary.Sector
+
+
+
+fig_x <- auxl %>% plot_ly(x=~Primary.Sector,y= ~n,color=~Short.Status,type='bar')
+fig_x
+
+tbl_summary(select(data_s, 'Primary.Sector', 'Short.Status'), by = (c('Short.Status')))
+
+
+ct_final = ctable(data_s$Primary.Sector, data_s$Short.Status,
+                  prop = "r", chisq = FALSE, headings = FALSE
+)
+ct_final %>% print(method="browser")
+ct_final %>% print(file=paste0("/Users/muhammad-faaiz.shanawas/Documents/GitHub/open-cyber/cross_table_summary_21_22",Sys.Date(),".html"))
