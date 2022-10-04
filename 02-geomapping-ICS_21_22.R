@@ -607,27 +607,35 @@ m07
 ###############################################################
 #load in the snapshot data to create summary tables and charts
 ###############################################################
+#load in the snapshot data and filter for the 5 relevant CSUs
 data_snapshot = read.csv('/Users/muhammad-faaiz.shanawas/Documents/GitHub/open-cyber/data/DSPT search results 09_09_2022 12_44_07.csv')
 data_summary = data_snapshot %>% select('Organisation.Name', 'Status', 'Primary.Sector')
-data_summary = data_summary %>% filter(Primary.Sector %in% c("CCG / Integrated Care Board (ICB)", "Commissioning Support Unit (CSU)", "NHS Trust"))
+data_summary = data_summary %>% filter(Primary.Sector == "Commissioning Support Unit (CSU)")
+data_csu = data_summary %>% filter(str_detect(Organisation.Name, 'CSU'))
 
-data_s = data_summary %>% mutate(Short.Status = case_when(Status %in% c("20/21 Standards Met", "18/19 Standards Met", "19/20 Standards Met", "19/20 Approaching Standards", "19/20 Standards Exceeded", "20/21 Standards Exceeded", "20/21 Standards Not Met") ~ '21/22 Status Not Met',
-                                                          Status %in% c("22/23 Standards Met") ~ '21/22 Standards Met', TRUE ~ Status))
+#get the joint dataframe of CCGs and Trusts and merge with CSUs
+data_joint$Primary.Sector = data_joint$Sector
+data_joint$Organisation.Name = data_joint$ODS.Org.Name
+
+data_s = rbind(select(data_joint, 'Organisation.Name', 'Status', 'Primary.Sector'), data_csu)
+
+#data_s = data_summary %>% mutate(Short.Status = case_when(Status %in% c("20/21 Standards Met", "18/19 Standards Met", "19/20 Standards Met", "19/20 Approaching Standards", "19/20 Standards Exceeded", "20/21 Standards Exceeded", "20/21 Standards Not Met") ~ '21/22 Status Not Met',
+      #                                                    Status %in% c("22/23 Standards Met") ~ '21/22 Standards Met', TRUE ~ Status))
 
 
-auxl <-data_s %>% group_by(Primary.Sector,Short.Status) %>% summarise(n=n())
-aux <- data_s %>% group_by(Primary.Sector,Short.Status) %>% summarise(n=n()) %>% pivot_wider(names_from='Short.Status',values_from='n')
+auxl <-data_s %>% group_by(Primary.Sector,Status) %>% summarise(n=n())
+aux <- data_s %>% group_by(Primary.Sector,Status) %>% summarise(n=n()) %>% pivot_wider(names_from='Status',values_from='n')
 org_type <-aux$Primary.Sector
 
 
 
-fig_x <- auxl %>% plot_ly(x=~Primary.Sector,y= ~n,color=~Short.Status,type='bar')
+fig_x <- auxl %>% plot_ly(x=~Primary.Sector,y= ~n,color=~Status,type='bar')
 fig_x
 
-tbl_summary(select(data_s, 'Primary.Sector', 'Short.Status'), by = (c('Short.Status')))
+tbl_summary(select(data_s, 'Primary.Sector', 'Status'), by = (c('Status')))
 
 
-ct_final = ctable(data_s$Primary.Sector, data_s$Short.Status,
+ct_final = ctable(data_s$Primary.Sector, data_s$Status,
                   prop = "r", chisq = FALSE, headings = FALSE
 )
 ct_final %>% print(method="browser")
