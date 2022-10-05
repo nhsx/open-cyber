@@ -1,4 +1,4 @@
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+,<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
 # Open Statistics - Cyber Security
 <!---
@@ -20,7 +20,7 @@
   <h3 class="nhsuk-warning-callout__label">
     Important<span class="nhsuk-u-visually-hidden">:</span>
   </h3>
-  <p>This project is currently in development. An overview of methodology and caveats are given below. For more information please contact <a href="mailto:analytics-unit@nhsx.nhs.uk">analytics-unit@nhsx.nhs.uk</a>. <br>Opinions expressed in this page are not representative of the views of NHS England and any content here should not be regarded as official output in any form. For more information about the NHS England Transformation Directorate please visit our <a href="https://www.nhsx.nhs.uk/">official website</a>.
+  <p>This project is currently in development. An overview of methodology and caveats are given below. For more information please contact <a href="mailto:TDAUgroup@england.nhs.uk">TDAUgroup@england.nhs.uk</a>. <br>Opinions expressed in this page are not representative of the views of NHS England and any content here should not be regarded as official output in any form. For more information about the NHS England Transformation Directorate please visit our <a href="https://www.transform.england.nhs.uk/">official website</a>.
    </p>
 </div>
 
@@ -28,7 +28,9 @@ The <b>Data Security and Protection Toolkit</b> is an online self-assessment too
 
 All organisations that have access to NHS patient data and systems must use this toolkit to provide assurance that they are practising good data security and that personal information is handled correctly. This includes trusts, commissioners and CSUs.
 
-The following information displays data taken from a specific snapshot of the DSPT data. The latest status information was downloaded on the <b>8th February 2022</b>.
+The data displayed in this page will show all organisations open as of 9th of September 2022. Any organisations which have merged and do not have a DSPT status will inherit the DSPT status of the merged organisation.
+
+The following information displays data taken from a specific snapshot of the DSPT data. The latest status information was downloaded on the <b>9th Sepetember 2022</b>.
 
 For more information on the Data Security and Protection Toolkit, please visit the <a href="https://www.dsptoolkit.nhs.uk/">DSPT portal</a>.
 
@@ -47,7 +49,7 @@ The DSPT status for Clinical Commissioning Groups (CCGs) and Trusts are coded (s
 <br>
 CCG scores within an ICS are then weighted based on the resident population.
 
-Trust scores within an ICS are weighted either a) as simple average or b) based on their EPRR score.
+Trust scores within an ICS are weighted as a simple average.
 
 Finally, for each ICS, the CCG and Trust scores are weighted equally to arrive at the ICS composite score.
 
@@ -73,7 +75,7 @@ Organisations without a published DSPT status as a result of a merger, inherit t
 <br>
 Summary statistics from the DSPT 2021/22 toolkit are shown.
 
-<iframe src="cross_table_summary_21_222022-10-04.html" height="600px" width="100%" style="border:none;"></iframe>
+<iframe src="cross_table_summary_21_222022-10-05.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
