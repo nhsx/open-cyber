@@ -306,28 +306,39 @@ etr = read.csv('/Users/muhammad-faaiz.shanawas/Documents/GitHub/open-cyber/data/
 etr = etr[,c('V1', 'V4')]
 etr = select(etr, 'ODS.Code' = 'V1', 'STP21CDH' = 'V4')
 
+#get the final 4 stp codes of the 4 care trusts from ect (modified to change column names and select relevant columns)
+ect = read.csv('/Users/muhammad-faaiz.shanawas/Documents/GitHub/open-cyber/data/ect_modified_21_22.csv')
+ect = select(ect, 'ODS.Code', 'STP21CDH')
+
+etr_ect = rbind(etr, ect)
+
 
 trusts_data2 = trusts_data
 trusts_data2$Sector = 'Trust'
 
-trusts_data_merged = left_join(trusts_data2, etr)
-trusts_data_merged = na.omit(trusts_data_merged)
+trusts_data_merged = left_join(trusts_data2, etr_ect)
+#trusts_data_merged = na.omit(trusts_data_merged)
 trusts_data_merged = select(trusts_data_merged, c('ODS.Code', 'ODS.Org.Name', 'Status', 'Sector', 'STP21CDH'))
+
 
 data_ccg = data_merged
 stp_codes = select(data_ccg, 'STP21CD' = 'STP21CD', 'STP21CDH' = 'STP21CDH', 'STP21NM' = 'STP21NM')
 stp_codes = unique(stp_codes)
 trusts_data_merged = left_join(trusts_data_merged, stp_codes)
-region_codes = unique(select(data_ccg, 'STP21CD' = 'STP21CD', 'NHSER22NM' = 'NHSER22NM'))
-trusts_data_merged = left_join(trusts_data_merged, region_codes)
+
+
+#load in ccg-stp-region lookup data
+regions_lookup = read.csv('/Users/muhammad-faaiz.shanawas/Documents/GitHub/open-cyber/data/Clinical_Commissioning_Group_to_STP_and_NHS_England_(Region)_(April_2021)_Lookup_in_England.csv')
+data_regions = unique(select(regions_lookup, 'STP21CD', 'STP21NM', 'NHSER21NM'))
+
+trusts_data_merged = left_join(trusts_data_merged, data_regions)
 
 
 data_ccg$Sector = 'CCG'
-data_ccg = select(data_ccg, 'ODS.Code' = 'ODS.Code', 'ODS.Org.Name' = 'LOC22NM', 'Status' = 'Status', 'Sector' = 'Sector', 'STP21CD' = 'STP21CD', 'STP21CDH' = 'STP21CDH', 'STP21NM' = 'STP21NM', 'NHSER22NM' = 'NHSER22NM')
+data_ccg = select(data_ccg, 'ODS.Code' = 'ODS.Code', 'ODS.Org.Name' = 'LOC22NM', 'Status' = 'Status', 'Sector' = 'Sector', 'STP21CD' = 'STP21CD', 'STP21CDH' = 'STP21CDH', 'STP21NM' = 'STP21NM', 'NHSER21NM' = 'NHSER22NM')
 
 data_joint <- rbind(data_ccg, trusts_data_merged)
 data_metric <- data_joint %>% filter(Sector %in% c("Trust","CCG"))
-
 
 # GP practice population
 # https://digital.nhs.uk/data-and-information/publications/statistical/patients-registered-at-a-gp-practice/september-2022
@@ -520,11 +531,13 @@ data_trusts_aggregate = data_trusts %>% group_by(STP21CD) %>% summarise_at(vars(
 stp_filter_numpatients <- gppopdata %>% filter(SEX=="ALL",AGE=="ALL",ORG_TYPE=="ICB")
 
 #stp_filter_numpatients <- stp_filter_numpatients %>% rename("STP21CD" = 5)
-stp_filter_numpatients <- stp_filter_numpatients[c("STP21CD", "NUMBER_OF_PATIENTS")]
-stp_filter_numpatients <- unique(stp_filter_numpatients)
+#stp_filter_numpatients <- stp_filter_numpatients[c("STP21CD", "NUMBER_OF_PATIENTS")]
+#stp_filter_numpatients <- unique(stp_filter_numpatients)
 #merge together the separated dspt data with the gp population data and stp spatial data frame for mapping
 data_trust_spdf_pie = left_join(x = stp_spdf@data, y = data_trusts_aggregate, by = "STP21CD")
-data_trust_spdf_pie = merge(x = data_trust_spdf_pie, y = stp_filter_numpatients, by = "STP21CD")
+#data_trust_spdf_pie = merge(x = data_trust_spdf_pie, y = stp_filter_numpatients, by = "STP21CD")
+data_trust_spdf_pie[41, 7] = 51.0
+data_trust_spdf_pie[41, 6] = 0.0
 
 #create the map with the ICS boundaries displayed in black
 
@@ -625,11 +638,14 @@ data_s = rbind(select(data_joint, 'Organisation.Name', 'Status', 'Primary.Sector
 
 auxl <-data_s %>% group_by(Primary.Sector,Status) %>% summarise(n=n())
 aux <- data_s %>% group_by(Primary.Sector,Status) %>% summarise(n=n()) %>% pivot_wider(names_from='Status',values_from='n')
+aux <- select(aux, "21/22 Standards Exceeded", "21/22 Standards Met", "21/22 Approaching Standards", "21/22 Standards Not Met")
 org_type <-aux$Primary.Sector
 
+xform <- list(categoryorder = "array",
+              categoryarray = c("21/22 Standards Exceeded", "21/22 Standards Met", "21/22 Approaching Standards", "21/22 Standards Not Met"))
 
-
-fig_x <- auxl %>% plot_ly(x=~Primary.Sector,y= ~n,color=~Status,type='bar')
+fig_x <- auxl %>% plot_ly(x=~Primary.Sector,y= ~n,color=~Status,type='bar')%>% 
+  layout(xaxis = xform)
 fig_x
 
 tbl_summary(select(data_s, 'Primary.Sector', 'Status'), by = (c('Status')))
