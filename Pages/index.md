@@ -79,7 +79,7 @@ Summary statistics from the DSPT 2021/22 toolkit are shown.
 
 {% include cross_table_summary_21_222022-10-05.html %}
 
-<iframe src="dspt_summary_chart_21_22.html" height="600px" width="100%" style="border:none;"></iframe>
+<iframe src="./outputs/dspt_summary_chart_21_22.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
@@ -89,7 +89,7 @@ Summary statistics from the DSPT 2021/22 toolkit are shown.
 The compliance of individual CCGs and Trusts are mapped below, with ICS boundaries. Toggle the boxes on the top right-hand side to add layers.
 
 
-<iframe src="ccg_trusts_map_03_10_22.html" height="600px" width="100%" style="border:none;"></iframe>
+<iframe src="./outputs/ccg_trusts_map_03_10_22.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
@@ -98,7 +98,7 @@ The compliance of individual CCGs and Trusts are mapped below, with ICS boundari
 <br>
 The proportions of trust compliance within each ICS with boundaries (in black) are shown. The ICSs are colored to represent the patient population level. The darker the shade of blue the higher the patient population level. 
 
-<iframe src="ICS_pie_chart_03_10_22.html" height="600px" width="100%" style="border:none;"></iframe>
+<iframe src="./outputs/ICS_pie_chart_03_10_22.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
@@ -107,7 +107,7 @@ The proportions of trust compliance within each ICS with boundaries (in black) a
 The compliance of individual ICSs, made up of a composite score of 50% CCG scores which have been weighted for population and 50% of a simple average of Trust scores. Region boundaries are displayed in blue.
 
 
-<iframe src="ICS_composite_map_03_10_22.html" height="600px" width="100%" style="border:none;"></iframe>
+<iframe src="./outputs/ICS_composite_map_03_10_22.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
