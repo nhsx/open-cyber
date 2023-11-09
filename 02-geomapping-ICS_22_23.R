@@ -38,10 +38,9 @@ library(st)
 
 
 ## Load 'curated' DSPT file
-data <- read.csv("/Users/muhammad-faaiz.shanawas/Documents/GitHub/open-cyber/data/DSPT_CCG_21_22_snapshot09_09_22.csv")
-data <- data[-107,]
+data <- read.csv("./data/DSPT Snapshots/22_23/ICB_dspt_snapshot_17_10_23.csv")
 
-dsptlevels=c("21/22 Standards Exceeded","21/22 Standards Met","21/22 Approaching Standards","21/22 Standards Not Met","21/22 Not Published")
+dsptlevels=c("22/23 Standards Exceeded","22/23 Standards Met","22/23 Approaching Standards","22/23 Standards Not Met","22/23 Not Published")
 
 # Make Status a categorical
 data$Short.Status = factor(data$Status,dsptlevels)
@@ -52,7 +51,7 @@ data$Short.Status = factor(data$Status,dsptlevels)
 
 ## Load STP shapefile
 # Source: https://geoportal.statistics.gov.uk/datasets/clinical-commissioning-groups-april-2020-full-clipped-boundaries-en/explore?location=52.950000%2C-2.000000%2C7.02
-stp_spdf <- read_sf("/Users/muhammad-faaiz.shanawas/Documents/GitHub/open-cyber/Inputs/shapefile/STP_APR_2021_EN_BUC_V2.shp")
+stp_spdf <- read_sf("./Inputs/shapefiles/22_23/ICB_APR_2023_EN_BSC.shp")
 
 #proj4string(stp_spdf) <- CRS("+init=epsg:27700")  # BNG projection system
 
@@ -62,23 +61,27 @@ stp_spdf <- stp_spdf %>% st_transform(CRS("+init=epsg:4326")) # reproject to lat
 
 stp_data = stp_spdf
 #############################################
-# CCG shapefile
+# CCG shapefile #CCGs will not be submitting for 22/23 
 #############################################
 
 ## Load CCG shapefile
 
-ccg_spdf <- read_sf("/Users/muhammad-faaiz.shanawas/Documents/GitHub/open-cyber/Inputs/shapefile/CCG_APR_2021_EN_BFC.shp")
+#ccg_spdf <- read_sf("/Users/muhammad-faaiz.shanawas/Documents/GitHub/open-cyber/Inputs/shapefile/CCG_APR_2021_EN_BFC.shp")
 
 #proj4string(ccg_spdf) <- CRS("+init=epsg:27700")  # BNG projection system
 
 #ccg_spdf@proj4string # check system
 
-ccg_spdf <- ccg_spdf %>% st_transform(CRS("+init=epsg:4326")) # reproject to latlong system
+#ccg_spdf <- ccg_spdf %>% st_transform(CRS("+init=epsg:4326")) # reproject to latlong system
 
 # Write to shapefile
 #writeOGR(ccg_spdf, layer = 'myshp_simplified', 'C:/temp', driver="ESRI Shapefile")
 
-region_spdf = read_sf('/Users/muhammad-faaiz.shanawas/Documents/GitHub/open-cyber/Inputs/shapefile/NHS_England_Regions_(April_2020)_Boundaries_EN_BUC.shp')
+#############################################
+# Load in Region data
+#############################################
+
+region_spdf = read_sf('./Inputs/shapefiles/22_23/NHSER_JUL_2022_EN_BUC.shp')
 #proj4string(region_spdf) <- CRS("+init=epsg:27700")  # BNG projection system
 
 #region_spdf@proj4string # check system
@@ -104,13 +107,13 @@ region_full <- region_spdf
 # Create a points shapefile for Trusts
 ##########+
 ##########+###################################
-trusts_data = read.csv("/Users/muhammad-faaiz.shanawas/Documents/GitHub/open-cyber/data/DSPT_trusts_21_22_snapshot09_09_22.csv")
-trusts_data <- subset(trusts_data, !(ODS.Code %in% c('RBZ', 'RW6', 'RTV')))
+trusts_data = read.csv("./data/DSPT Snapshots/22_23/dspt_trusts_snapshot_17_10_23.csv") %>% select(-c(Organisation.Name.x))
+#trusts_data <- subset(trusts_data, !(ODS.Code %in% c('RBZ', 'RW6', 'RTV')))
 
 
 trust_spdf_points <- sp::SpatialPointsDataFrame(
-  coords = trusts_data %>% select(longitude,latitude),
-  data = trusts_data %>% select(-c(longitude,latitude)),
+  coords = trusts_data %>% select(long,lat),
+  data = trusts_data %>% select(-c(long,lat)),
   proj4string = CRS("+init=epsg:4326") # indicate it is is longitude latitude
 )
 
@@ -121,27 +124,14 @@ trust_spdf_points <- sp::SpatialPointsDataFrame(
 #Further prep
 #############################################
 # Join DSPT data and ONS code
-lookupdata = read.csv('/Users/muhammad-faaiz.shanawas/Documents/Github/open-cyber/data/Clinical_Commissioning_Group_to_STPs_(April_2021)_Lookup_in_England.csv')
-data_merged = left_join(data, lookupdata, by = c("ODS.Code" = "CCG21CDH"))
-data_merged = data_merged[-107,]
+lookupdata = read.csv('./data/aux/22_23/Sub_ICB_Locations_to_Integrated_Care_Boards_to_NHS_England_(Region)_(April_2023)_Lookup_in_England (1).csv')
 
+data_merged = left_join(data, lookupdata %>% select(-c(ICB23CD, ICB23NM)), by = c("ICB23CDH" = "ICB23CDH"))
+data_merged = data_merged %>% select(-c(X))
 
-#load in ccg-stp-region lookup data
-regions_lookup = read.csv('/Users/muhammad-faaiz.shanawas/Documents/GitHub/open-cyber/data/Clinical_Commissioning_Group_to_STP_and_NHS_England_(Region)_(April_2021)_Lookup_in_England.csv')
-data_regions = unique(select(regions_lookup, 'STP21CD', 'STP21NM', 'NHSER21NM'))
+#jon the shapefile data with dspt data for ICBs
 
-# Join the reduced DSPT info with the CCG shapefile
-ccg_spdf <- left_join(ccg_spdf,data_merged,by=c("CCG21CD"="CCG21CD"))
-data_ccg_spdf <- ccg_spdf
-
-
-#merge and assign to stp_spdf data
-stp_spdfdata = stp_spdf
-stp_spdfdata = merge(stp_spdfdata, select(data_regions, 'STP21CD', 'NHSER21NM'), by = "STP21CD", all = TRUE)
-#stp_spdfdata = na.omit(stp_spdfdata)
-stp_spdf = stp_spdfdata
-
-
+stp_spdf = left_join(stp_spdf, data_merged %>% select(-c(ICB23NM, Integrated.Care.Board..where.available..from.ODS.)), by = c('ICB23CD'))
 
 # Make Status a categorical
 #ccg_spdf@data$Short.Status = factor(ccg_spdf@data$Short.Status,dsptlevels)
@@ -157,18 +147,17 @@ catpal <- colorFactor(my_palette, dsptlevels,reverse=F,ordered=T)
 ## Plotting
 # Prepare the text for tooltips:
 mytext <- paste(
-  "<b>SUB-ICB 2022 code (ODS): </b>", ccg_spdf$ICB22CD, "<br/>",
-  "<b>SUB-ICB 2022 name: </b>", ccg_spdf$LOC22NM,"<br/>",
-  "<b>2021 STP name: </b>", ccg_spdf$STP21NM,"<br/>",
-  "<b>Region name: </b>", ccg_spdf$NHSER22NM,"<br/>",
-  "<b>DSPT Status: </b>", ccg_spdf$Short.Status, "<br/>",
+  "<b>ICB 2023 code (ODS): </b>", stp_spdf$ICB23CD, "<br/>",
+  "<b>ICB 2023 name: </b>", stp_spdf$ICB23NM,"<br/>",
+  "<b>Region name: </b>", stp_spdf$NHSER23NM,"<br/>",
+  "<b>DSPT Status: </b>", stp_spdf$Short.Status, "<br/>",
   sep="") %>%
   lapply(htmltools::HTML)
 
-mytext_ics <- paste(
-  "<b>ICS/STP 2021 code: </b>", stp_spdf$STP21CD,"<br/>",
-  "<b>ICS/STP 2021 name: </b>", stp_spdf$STP21NM,"<br/>",
-  "<b>Region name: </b>", stp_spdf$NHSER21NM,"<br/>",
+
+mytext_region <- paste(
+  "<b>Region 2023 code: </b>", region_spdf$NHSER22CD,"<br/>",
+  "<b>Region 2023 name: </b>", region_spdf$NHSER22NM,"<br/>",
   sep="") %>%
   lapply(htmltools::HTML)
 
@@ -178,7 +167,7 @@ mytext_ics <- paste(
 
 
 # Final Map
-m<-leaflet(ccg_spdf) %>% 
+m<-leaflet(stp_spdf) %>% 
   addTiles()  %>% 
   setView( lat=53, lng=-2 , zoom=6) %>%
   addPolygons( 
@@ -194,21 +183,22 @@ m<-leaflet(ccg_spdf) %>%
       direction = "auto"
     )
   ) %>%
-  addLegend( pal=catpal, values=~Status, opacity=0.9, title = "21/22 DSPT Status (CCG)", position = "bottomleft" )
+  addLegend( pal=catpal, values=~Status, opacity=0.9, title = "22/23 ICB Status", position = "bottomleft" )
 
 m
 
-#############################################
-# Mapping - CCGS + ICS layer
-#############################################
 
+
+#############################################
+# Mapping - CCGS + ICS + trust layer
+#############################################
 # https://gis.stackexchange.com/questions/283658/add-layers-with-leaflet-from-different-spatial-data-frames-in-r
 m02 <- leaflet() %>% 
   addTiles()  %>% 
   setView( lat=53, lng=-2 , zoom=6) %>%
   addPolygons(
-    data=ccg_spdf,
-    group = "CCG",
+    data=stp_spdf,
+    group = "ICB",
     fillColor = ~catpal(Status), 
     stroke=TRUE, 
     fillOpacity = 0.7, 
@@ -222,35 +212,29 @@ m02 <- leaflet() %>%
     )
   ) %>%
   addPolygons(
-    data=stp_spdf,
-    group="ICS boundary",
+    data=region_spdf,
+    group="Region boundary",
     fillOpacity=0.1,
     color='black',
     weight=2,
-    label=mytext_ics
+    label=mytext_region
   ) %>%
   #addLegend( data=ccg_spdf,pal=catpal, values=~Short.Status, opacity=0.9, title = "21/22 DSPT Status (CCG)", position = "bottomleft" ) %>%
   leaflet::addLayersControl(
-    overlayGroups = c("CCG","ICS boundary"),  # add these layers
+    overlayGroups = c("ICB","Region boundary"),  # add these layers
     options = layersControlOptions(collapsed = FALSE)  # expand on hover?
   ) %>% 
   hideGroup(c("ICS boundary"))  # turn these off by default
 
 
 
-m02_l <- m02 %>% addLegend( data=ccg_spdf,pal=catpal, values=~Short.Status, opacity=0.9, title = "21/22 DSPT Status (CCG)", position = "bottomleft" )
-
-
-
-#############################################
-# Mapping - CCGS + ICS + trust layer
-#############################################
+m02_l <- m02 %>% addLegend( data=stp_spdf,pal=catpal, values=~Short.Status, opacity=0.9, title = "22/23 ICB DSPT Status", position = "bottomleft" )
 
 
 get_popup_content <- function(my_spdf) {
   paste0(
     "<b>Provider </b>",
-    "<br><b>- Provider code</b>:", my_spdf$ODS.Code,
+    "<br><b>- Provider code</b>:", my_spdf$Code,
     "<br><b>- Provider name:</b> ", my_spdf$ODS.Org.Name,
     #"<br><b>- STP/ICS (HQ postcode-based):</b> ", my_spdf$STP20NM,
     #"<br><b>- Region:</b> ", my_spdf$`NHSER20NM`,
@@ -261,7 +245,7 @@ get_popup_content <- function(my_spdf) {
 
 
 
-m03 <- m02_l %>%
+m03 <- m %>%
   addCircleMarkers(data=trust_spdf_points,
                    group="Trusts",       
                    label = ~ lapply(get_popup_content(trust_spdf_points), htmltools::HTML),
@@ -273,7 +257,7 @@ m03 <- m02_l %>%
                    #clusterOptions = markerClusterOptions(),
                    radius= 6)
   
-#m03
+m03
 
 #adding the zoom toggle for trust level (trust layer appears between 9 and 20)
 #m03 <- m03 %>% 
@@ -281,9 +265,9 @@ m03 <- m02_l %>%
 
 #adding legend and layering CCG trusts and ICG boundary together
 m03 <- m03 %>% 
-  addLegend( data=trust_spdf_points,pal=catpal, values=~Status, opacity=0.9, title = "21/22 DSPT Status (trust)", position = "bottomright" ) %>%
+  addLegend( data=trust_spdf_points,pal=catpal, values=~Status, opacity=0.9, title = "22/23 Trusts DSPT Status", position = "bottomright" ) %>%
   leaflet::addLayersControl(
-  overlayGroups = c("ICS boundary","CCG","Trusts"),  # add these layers
+  overlayGroups = c("ICS boundary","Trusts"),  # add these layers
   options = layersControlOptions(collapsed = FALSE)  # expand on hover?
 ) %>% 
   hideGroup(c("ICS boundary","Trusts"))  # turn these off by default
