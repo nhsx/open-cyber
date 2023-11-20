@@ -1,4 +1,4 @@
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+,<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
 # Open Statistics - Cyber Security
 <!---
@@ -20,7 +20,7 @@
   <h3 class="nhsuk-warning-callout__label">
     Important<span class="nhsuk-u-visually-hidden">:</span>
   </h3>
-  <p>This project is currently in development. An overview of methodology and caveats are given below. For more information please contact <a href="mailto:analytics-unit@nhsx.nhs.uk">analytics-unit@nhsx.nhs.uk</a>. <br>Opinions expressed in this page are not representative of the views of NHS England and any content here should not be regarded as official output in any form. For more information about the NHS England Transformation Directorate please visit our <a href="https://www.nhsx.nhs.uk/">official website</a>.
+  <p>This project is currently in development. An overview of methodology and caveats are given below. For more information please contact <a href="mailto:TDAUgroup@england.nhs.uk">TDAUgroup@england.nhs.uk</a>. <br>Opinions expressed in this page are not representative of the views of NHS England and any content here should not be regarded as official output in any form. For more information about the NHS England Transformation Directorate please visit our <a href="https://transform.england.nhs.uk/">official website</a>.
    </p>
 </div>
 
@@ -28,7 +28,11 @@ The <b>Data Security and Protection Toolkit</b> is an online self-assessment too
 
 All organisations that have access to NHS patient data and systems must use this toolkit to provide assurance that they are practising good data security and that personal information is handled correctly. This includes trusts, commissioners and CSUs.
 
-The following information displays data taken from a specific snapshot of the DSPT data. The latest status information was downloaded on the <b>8th February 2022</b>.
+The data displayed in this page will show all organisations open as of 9th of September 2022. Any organisations which have merged and do not have a DSPT status will inherit the DSPT status of the merged organisation.
+
+The following information displays data taken from a specific snapshot of the DSPT data. The latest status information was downloaded on the <b>9th September 2022</b>.
+
+You can find the previous iteration of this page showing the 20/21 DSPT data at <a href="https://nhsx.github.io/open-cyber/index2">20/21 Open Cyber Page</a>
 
 For more information on the Data Security and Protection Toolkit, please visit the <a href="https://www.dsptoolkit.nhs.uk/">DSPT portal</a>.
 
@@ -47,7 +51,7 @@ The DSPT status for Clinical Commissioning Groups (CCGs) and Trusts are coded (s
 <br>
 CCG scores within an ICS are then weighted based on the resident population.
 
-Trust scores within an ICS are weighted either a) as simple average or b) based on their EPRR score.
+Trust scores within an ICS are weighted as a simple average.
 
 Finally, for each ICS, the CCG and Trust scores are weighted equally to arrive at the ICS composite score.
 
@@ -69,56 +73,35 @@ Organisations open 31st March 2021 are considered (the end of 20/21, the financi
 
 Organisations without a published DSPT status as a result of a merger, inherit their DSPT status from it's successor organisation if published. Otherwise, the DSPT status will be mapped as 'Not Published'.
 -->
-## Summary of DSPT Compliance (2020/2021 edition).
+## Summary of DSPT Compliance (2021/2022 edition).
 <br>
-Summary statistics from the DSPT 2020/21 toolkit are shown.
+Summary statistics from the DSPT 2021/22 toolkit are shown.
 
-{% include data_DSPTmetric2022-02-08.html %}
+{% include cross_table_summary_21_222022-10-05.html %}
 
-<iframe src="./outputs/barchart_summary_FY2021_2022-02-28.html" height="600px" width="100%" style="border:none;"></iframe>
+<iframe src="./outputs/dspt_summary_chart_21_22.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
 
-## CCGs and Trusts - Individual Compliance
+## ICBs and Trusts - Individual Compliance
 <br>
-The compliance of individual CCGs and Trusts are mapped below, with ICS boundaries. Toggle the boxes on the top right-hand side to add layers.
+The compliance of individual ICBs and Trusts are mapped below, with Region boundaries. Toggle the boxes on the top right-hand side to add layers.
 
-<iframe src="chloropleth_DSPT_CCG_Trusts.html" height="600px" width="100%" style="border:none;"></iframe>
 
-<hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
-
-<!---
-## CCGs and Proportions of Trusts Compliance - Pie Charts Diameter by Population
-<br>
-The proportions of trust compliance within each ICS with boundaries (in black) are shown. The diameter of each pie chart relates to the population level within each ICS.
-
-<iframe src="chloropleth_DSPT_PieCharts.html" height="600px" width="100%" style="border:none;"></iframe>
-
-<hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
--->
-
-## CCGs and Proportions of Trusts Compliance - Colour Coded Population
-<br>
-The proportions of trust compliance within each ICS with boundaries (in black) are shown. The ICSs are colored to represent the patient population level. The darker the shade of blue the higher the patient population level. 
-
-<iframe src="chloropleth_DSPT_PieCharts_population.html" height="600px" width="100%" style="border:none;"></iframe>
+<iframe src="./outputs/icb_trusts_map_03_10_22.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
 
-## ICSs Composite Compliance - CCG and Trust Score Average Weighted For Population
 <br>
-The compliance of individual ICSs, made up of a composite score of 50% CCG scores which have been weighted for population and 50% of a simple average of Trust scores. Region boundaries are displayed in blue.
-<iframe src="chloropleth_DSPT_CCGp_Trusts.html" height="600px" width="100%" style="border:none;"></iframe>
+The compliance of individual ICBs, made up of a composite score of 50% of the ICB score itself which and 50% of a simple average of Trust scores contained in the ICB. Region boundaries are displayed in blue.
+
+
+<iframe src="./outputs/ICS_composite_map_03_10_22.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
-<!---
-## ICSs Composite Compliance - CCG and Trust Score Average Weighted For Population and EPRR
-<br>
-The compliance of individual ICSs, made up of a composite score of 50% CCG scores which have been weighted for population and 50% of average Trusts scores weighted for EPRR risk rating. Region boundaries are displayed in blue.
-<iframe src="chloropleth_DSPT_CCGp_Trusts_EPRR.html" height="600px" width="100%" style="border:none;"></iframe>
--->
+
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
 <br>
