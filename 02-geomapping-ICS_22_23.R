@@ -1,3 +1,4 @@
+
 # MPBF
 # 16/11/2021
 # Adapted from au-cyberdeepdive repo
@@ -38,7 +39,7 @@ library(st)
 
 
 ## Load 'curated' DSPT file
-data <- read.csv("./data/DSPT Snapshots/22_23/ICB_dspt_snapshot_17_10_23.csv")
+data <- read.csv("./data/DSPT Snapshots/22_23/ICB_dspt_snapshot_16_11_23.csv")
 
 dsptlevels=c("22/23 Standards Exceeded","22/23 Standards Met","22/23 Approaching Standards","22/23 Standards Not Met","22/23 Not Published")
 
@@ -107,7 +108,7 @@ region_full <- region_spdf
 # Create a points shapefile for Trusts
 ##########+
 ##########+###################################
-trusts_data = read.csv("./data/DSPT Snapshots/22_23/dspt_trusts_snapshot_17_10_23.csv") %>% select(-c(Organisation.Name.x))
+trusts_data = read.csv("./data/DSPT Snapshots/22_23/dspt_trusts_snapshot_16_11_23.csv")
 #trusts_data <- subset(trusts_data, !(ODS.Code %in% c('RBZ', 'RW6', 'RTV')))
 
 
@@ -125,14 +126,15 @@ trust_spdf_points <- sp::SpatialPointsDataFrame(
 #############################################
 # Join DSPT data and ONS code
 lookupdata = read.csv('./data/aux/22_23/Sub_ICB_Locations_to_Integrated_Care_Boards_to_NHS_England_(Region)_(April_2023)_Lookup_in_England (1).csv')
-
-data_merged = left_join(data, lookupdata %>% select(-c(ICB23CD, ICB23NM)), by = c("ICB23CDH" = "ICB23CDH"))
-data_merged = data_merged %>% select(-c(X))
+lookup_icb = lookupdata[!duplicated(lookupdata$ICB23CD), ]
+#data_merged = left_join(data, lookupdata %>% select(-c(ICB23CD, ICB23NM)), by = c("ICB23CDH" = "ICB23CDH"))
+#data_merged = data_merged %>% select(-c(X))
 
 #jon the shapefile data with dspt data for ICBs
-
-stp_spdf = left_join(stp_spdf, data_merged %>% select(-c(ICB23NM, Integrated.Care.Board..where.available..from.ODS.)), by = c('ICB23CD'))
-
+icb_data = read.csv('./data/DSPT Snapshots/22_23/ICB_dspt_snapshot_16_11_23.csv')
+stp_spdf = left_join(stp_spdf, icb_data %>% select(-c(X, ICB23NM, ICB23CDH, Organisation.Name, Integrated.Care.Board..where.available..from.ODS.)))
+stp_spdf = left_join(stp_spdf, lookup_icb %>% select(-c(ICB23NM, ICB23CDH)), by = c('ICB23CD'))
+stp_spdf$Short.Status = factor(stp_spdf$Status,dsptlevels)
 # Make Status a categorical
 #ccg_spdf@data$Short.Status = factor(ccg_spdf@data$Short.Status,dsptlevels)
 
@@ -199,7 +201,7 @@ m02 <- leaflet() %>%
   addPolygons(
     data=stp_spdf,
     group = "ICB",
-    fillColor = ~catpal(Status), 
+    fillColor = ~catpal(Short.Status), 
     stroke=TRUE, 
     fillOpacity = 0.7, 
     color="black", 
@@ -224,7 +226,7 @@ m02 <- leaflet() %>%
     overlayGroups = c("ICB","Region boundary"),  # add these layers
     options = layersControlOptions(collapsed = FALSE)  # expand on hover?
   ) %>% 
-  hideGroup(c("ICS boundary"))  # turn these off by default
+  hideGroup(c("Region boundary"))  # turn these off by default
 
 
 
@@ -235,7 +237,7 @@ get_popup_content <- function(my_spdf) {
   paste0(
     "<b>Provider </b>",
     "<br><b>- Provider code</b>:", my_spdf$Code,
-    "<br><b>- Provider name:</b> ", my_spdf$ODS.Org.Name,
+    "<br><b>- Provider name:</b> ", my_spdf$Organisation.Name,
     #"<br><b>- STP/ICS (HQ postcode-based):</b> ", my_spdf$STP20NM,
     #"<br><b>- Region:</b> ", my_spdf$`NHSER20NM`,
     "<br><b>- DSPT status:</b> ", my_spdf$Status,
@@ -245,7 +247,7 @@ get_popup_content <- function(my_spdf) {
 
 
 
-m03 <- m %>%
+m03 <- m02_l %>%
   addCircleMarkers(data=trust_spdf_points,
                    group="Trusts",       
                    label = ~ lapply(get_popup_content(trust_spdf_points), htmltools::HTML),
@@ -256,8 +258,7 @@ m03 <- m %>%
                    stroke = T,
                    #clusterOptions = markerClusterOptions(),
                    radius= 6)
-  
-m03
+
 
 #adding the zoom toggle for trust level (trust layer appears between 9 and 20)
 #m03 <- m03 %>% 
@@ -267,11 +268,11 @@ m03
 m03 <- m03 %>% 
   addLegend( data=trust_spdf_points,pal=catpal, values=~Status, opacity=0.9, title = "22/23 Trusts DSPT Status", position = "bottomright" ) %>%
   leaflet::addLayersControl(
-  overlayGroups = c("ICS boundary","Trusts"),  # add these layers
-  options = layersControlOptions(collapsed = FALSE)  # expand on hover?
-) %>% 
-  hideGroup(c("ICS boundary","Trusts"))  # turn these off by default
-  
+    overlayGroups = c("ICB","Trusts", 'Region boundary'),  # add these layers
+    options = layersControlOptions(collapsed = FALSE)  # expand on hover?
+  ) %>% 
+  hideGroup(c("Region boundary"))  # turn these off by default
+
 
 m03
 
@@ -279,7 +280,7 @@ m03
 
 # save the widget in a html file if needed.
 #library(htmlwidgets)
-saveWidget(m04, "ICS_composite_map1_21_22.html")
+saveWidget(m04, "icb_composite_map_16_11_23.html")
 
 
 
@@ -288,83 +289,47 @@ saveWidget(m04, "ICS_composite_map1_21_22.html")
 # Summary metric
 #############################################
 #get the stp codes for trusts from etr
-etr = read.csv('/Users/muhammad-faaiz.shanawas/Documents/GitHub/open-cyber/data/etr.csv', header = FALSE)
-etr = etr[,c('V1', 'V4')]
-etr = select(etr, 'ODS.Code' = 'V1', 'STP21CDH' = 'V4')
-
-#get the final 4 stp codes of the 4 care trusts from ect (modified to change column names and select relevant columns)
-ect = read.csv('/Users/muhammad-faaiz.shanawas/Documents/GitHub/open-cyber/data/ect_modified_21_22.csv')
-ect = select(ect, 'ODS.Code', 'STP21CDH')
-
-etr_ect = rbind(etr, ect)
-
-
-trusts_data2 = trusts_data
-trusts_data2$Sector = 'Trust'
-
-trusts_data_merged = left_join(trusts_data2, etr_ect)
-#trusts_data_merged = na.omit(trusts_data_merged)
-trusts_data_merged = select(trusts_data_merged, c('ODS.Code', 'ODS.Org.Name', 'Status', 'Sector', 'STP21CDH'))
+# etr = read.csv('/Users/muhammad-faaiz.shanawas/Documents/GitHub/open-cyber/data/etr.csv', header = FALSE)
+# etr = etr[,c('V1', 'V4')]
+# etr = select(etr, 'ODS.Code' = 'V1', 'STP21CDH' = 'V4')
+# 
+# #get the final 4 stp codes of the 4 care trusts from ect (modified to change column names and select relevant columns)
+# ect = read.csv('/Users/muhammad-faaiz.shanawas/Documents/GitHub/open-cyber/data/ect_modified_21_22.csv')
+# ect = select(ect, 'ODS.Code', 'STP21CDH')
+# 
+# etr_ect = rbind(etr, ect)
 
 
-data_ccg = data_merged
-stp_codes = select(data_ccg, 'STP21CD' = 'STP21CD', 'STP21CDH' = 'STP21CDH', 'STP21NM' = 'STP21NM')
-stp_codes = unique(stp_codes)
-trusts_data_merged = left_join(trusts_data_merged, stp_codes)
+trusts_data = trusts_data %>% rename(ICB23CDH = High.Level.Health.Geography,
+                                     ICB23NM = Integrated.Care.Board..where.available..from.ODS.,
+                                     Sector = Primary.Sector)
+
+trusts_data2 = trusts_data %>% left_join(lookup_icb %>% select(-c(ICB23NM)))
 
 
-#load in ccg-stp-region lookup data
-regions_lookup = read.csv('/Users/muhammad-faaiz.shanawas/Documents/GitHub/open-cyber/data/Clinical_Commissioning_Group_to_STP_and_NHS_England_(Region)_(April_2021)_Lookup_in_England.csv')
-data_regions = unique(select(regions_lookup, 'STP21CD', 'STP21NM', 'NHSER21NM'))
+trusts_data2 <- trusts_data2 %>% mutate(Status.Score=case_when(Status=="22/23 Standards Exceeded"~3,
+                                                             Status=="22/23 Standards Met"~1,
+                                                             Status=="22/23 Approaching Standards"~-1,
+                                                             Status=="22/23 Standards Not Met"~-3,
+                                                             Status=="22/23 Not Published"~-3))
+data_metric_Trusts <- trusts_data2 %>% group_by(ICB23CD) %>% summarise(Simple.n=n(), Simple.Score.Trust = mean(Status.Score, na.rm=TRUE))
 
-trusts_data_merged = left_join(trusts_data_merged, data_regions)
+
+#add a mean score for ICB data too
+stp_spdf <- stp_spdf %>% mutate(Status.Score=case_when(Status=="22/23 Standards Exceeded"~3,
+                                                               Status=="22/23 Standards Met"~1,
+                                                               Status=="22/23 Approaching Standards"~-1,
+                                                               Status=="22/23 Standards Not Met"~-3,
+                                                               Status=="22/23 Not Published"~-3))
 
 
-data_ccg$Sector = 'CCG'
-data_ccg = select(data_ccg, 'ODS.Code' = 'ODS.Code', 'ODS.Org.Name' = 'LOC22NM', 'Status' = 'Status', 'Sector' = 'Sector', 'STP21CD' = 'STP21CD', 'STP21CDH' = 'STP21CDH', 'STP21NM' = 'STP21NM', 'NHSER21NM' = 'NHSER22NM')
+stp_spdf2 <- stp_spdf %>% left_join(data_metric_Trusts)
 
-data_joint <- rbind(data_ccg, trusts_data_merged)
-data_metric <- data_joint %>% filter(Sector %in% c("Trust","CCG"))
-
-# GP practice population
-# https://digital.nhs.uk/data-and-information/publications/statistical/patients-registered-at-a-gp-practice/september-2022
-gppopdata <- read_csv("https://files.digital.nhs.uk/62/79B56F/gp-reg-pat-prac-sing-age-regions.csv")
-
-gppopdata_red <- gppopdata %>% filter(SEX=="ALL",AGE=="ALL",ORG_TYPE=="SUB_ICB_LOCATION") %>% select(c("ORG_CODE","NUMBER_OF_PATIENTS"))
+stp_spdf2$metric_ICB_Trusts <- (0.5*stp_spdf2$Simple.Score.Trust) + (0.5*stp_spdf$Status.Score)
 
 
 
 
-# score mapping
-
-data_metric <- data_metric %>% mutate(Status.Score=case_when(Status=="21/22 Standards Exceeded"~3,
-                                                             Status=="21/22 Standards Met"~1,
-                                                             Status=="21/22 Approaching Standards"~-1,
-                                                             Status=="21/22 Standards Not Met"~-3,
-                                                             Status=="21/22 Not Published"~-3))
-
-
-NUMBER_OF_PATIENTS = gppopdata['NUMBER_OF_PATIENTS']
-data_metric <- data_metric %>% left_join(gppopdata_red,by=c("ODS.Code"="ORG_CODE"))                                                             #TRUE~NA_integer_))
-
-data_metric_ICS <- data_metric %>% group_by(STP21CDH, STP21CD, Sector) %>% summarise(Simple.Score=mean(Status.Score,na.rm=T),
-                                                                                  Simple.n=n(),
-                                                                                  Pop.Score=sum(NUMBER_OF_PATIENTS*Status.Score)/sum(NUMBER_OF_PATIENTS))
-
-data_metric_ICS <- data_metric_ICS %>% pivot_wider(names_from=Sector,values_from=c("Simple.Score","Simple.n","Pop.Score"))
-
-data_metric_ICS <- data_metric_ICS %>% mutate(metric_CCG_simple = Simple.Score_CCG,
-                                              metric_CCG_pop = Pop.Score_CCG,
-                                              metric_CCGTrust_simple = 0.5*Simple.Score_CCG+0.5*Simple.Score_Trust,
-                                              metric_CCGp_Trusts =0.5*Pop.Score_CCG+0.5*Simple.Score_Trust)
-
-
-
-
-
-
-stp_spdf <- stp_spdf %>% left_join(data_metric_ICS,by=c("STP21CD"="STP21CD"))
-stp_data = stp_spdf
 
 
 # Create a continuous palette function
@@ -377,22 +342,14 @@ pal_metric <- colorNumeric(
 
 #create the label text for the first composite map
 mytext_ics_score <- paste(
-  "<b>STP code (ODS): </b>", stp_spdf$STP21CD,"<br/>",
-  "<b>STP name (ODS): </b>", stp_spdf$STP21NM,"<br/>",
-  "<b>ICS score (CCG+Trust simple), range [-3,3]: </b>",round(stp_spdf$metric_CCGp_Trusts.x,2),"<br/>",
+  "<b>STP code (ODS): </b>", stp_spdf2$ICB23CD,"<br/>",
+  "<b>STP name (ODS): </b>", stp_spdf2$ICB23NM,"<br/>",
+  "<b>ICB score (ICB + Trust Simple), range [-3,3]: </b>",round(stp_spdf2$metric_ICB_Trusts,2),"<br/>",
   sep="") %>%
   lapply(htmltools::HTML)
 
 
 
-#create the label text to display the stp info for each polygon
-mytext_new <- paste(
-  "<b>STP code (ODS): </b>", stp_spdf$STP21CD,"<br/>",
-  "<b>STP name (ODS): </b>", stp_spdf$STP21NM,"<br/>",
-  "<b>Region: </b>", stp_spdf$NHSER21NM,"<br/>",
-  "<b>ICS score (CCG population + Trust simple), range [-3,3]: </b>",round(stp_spdf$metric_CCGp_Trusts,2),"<br/>",
-  sep="") %>%
-  lapply(htmltools::HTML)
 
 #create the map using map panes
 #add a layer for the ICS colour coded polygons
@@ -400,8 +357,8 @@ mytext_new <- paste(
 #add a layer for the region boundaries to be displayed in blue
 m04 = leaflet() %>%
   addMapPane(name = "regionBorder", zIndex = 425) %>%
-  addMapPane(name = "ICS polygons", zIndex = 400) %>%
-  addMapPane(name = "ICS Labels", zIndex = 450) %>%
+  addMapPane(name = "ICB polygons", zIndex = 400) %>%
+  addMapPane(name = "ICB Labels", zIndex = 450) %>%
   addPolygons(
     data=region_spdf,
     group="Region boundary",
@@ -413,23 +370,23 @@ m04 = leaflet() %>%
   addTiles()  %>% 
   setView( lat=53, lng=-2 , zoom=6) %>%
   addPolygons(
-    data=stp_spdf,
+    data=stp_spdf2,
     group="ICS",
     fillOpacity=1,
-    fillColor=~pal_metric(metric_CCGp_Trusts),
+    fillColor=~pal_metric(metric_ICB_Trusts),
     color="black",
     weight=1,
-    options = leafletOptions(pane = "ICS polygons")) %>%
+    options = leafletOptions(pane = "ICB polygons")) %>%
   addPolygons(
-    data=stp_spdf,
+    data=stp_spdf2,
     group="ICS",
     fillOpacity=0,
-    fillColor=~pal_metric(metric_CCGp_Trusts),
+    fillColor=~pal_metric(metric_ICB_Trusts),
     color="black",
     weight= 0,
-    options = leafletOptions(pane = "ICS Labels"),
-    label = mytext_new ) %>%
-  addLegend("bottomright",pal=pal_metric,values=-3:3,title="ICS score - CCG population/Trust simple")
+    options = leafletOptions(pane = "ICB Labels"),
+    label = mytext_ics_score) %>%
+  addLegend("bottomright",pal=pal_metric,values=-3:3,title="ICB score (ICB + Trust Simple)")
 
 m04
 
@@ -621,7 +578,7 @@ data_joint$Organisation.Name = data_joint$ODS.Org.Name
 data_s = rbind(select(data_joint, 'Organisation.Name', 'Status', 'Primary.Sector'), data_csu)
 
 #data_s = data_summary %>% mutate(Short.Status = case_when(Status %in% c("20/21 Standards Met", "18/19 Standards Met", "19/20 Standards Met", "19/20 Approaching Standards", "19/20 Standards Exceeded", "20/21 Standards Exceeded", "20/21 Standards Not Met") ~ '21/22 Status Not Met',
-      #                                                    Status %in% c("22/23 Standards Met") ~ '21/22 Standards Met', TRUE ~ Status))
+#                                                    Status %in% c("22/23 Standards Met") ~ '21/22 Standards Met', TRUE ~ Status))
 
 
 auxl <-data_s %>% group_by(Primary.Sector,Status) %>% summarise(n=n())

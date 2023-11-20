@@ -1,0 +1,107 @@
+﻿SICBL23CD,SICBL23CDH,SICBL23NM,ICB23CD,ICB23CDH,ICB23NM,NHSER23CD,NHSER23CDH,NHSER23NM,ObjectId
+E38000256,W2U3Z,NHS North West London ICB - W2U3Z,E54000027,QRV,NHS North West London Integrated Care Board,E40000003,Y56,London,1
+E38000240,93C,NHS North Central London ICB - 93C,E54000028,QMJ,NHS North Central London Integrated Care Board,E40000003,Y56,London,2
+E38000255,A3A8R,NHS North East London ICB - A3A8R,E54000029,QMF,NHS North East London Integrated Care Board,E40000003,Y56,London,3
+E38000244,72Q,NHS South East London ICB - 72Q,E54000030,QKK,NHS South East London Integrated Care Board,E40000003,Y56,London,4
+E38000245,36L,NHS South West London ICB - 36L,E54000031,QWE,NHS South West London Integrated Care Board,E40000003,Y56,London,5
+E38000237,91Q,NHS Kent and Medway ICB - 91Q,E54000032,QKS,NHS Kent and Medway Integrated Care Board,E40000005,Y59,South East,6
+E38000252,D4U1Y,NHS Frimley ICB - D4U1Y,E54000034,QNQ,NHS Frimley Integrated Care Board,E40000005,Y59,South East,7
+E38000137,10R,NHS Hampshire and Isle of Wight ICB - 10R,E54000042,QRL,NHS Hampshire and Isle of Wight Integrated Care Board,E40000005,Y59,South East,8
+E38000253,D9Y0V,NHS Hampshire and Isle of Wight ICB - D9Y0V,E54000042,QRL,NHS Hampshire and Isle of Wight Integrated Care Board,E40000005,Y59,South East,9
+E38000136,10Q,"NHS Buckinghamshire, Oxfordshire and Berkshire West ICB - 10Q",E54000044,QU9,"NHS Buckinghamshire, Oxfordshire and Berkshire West Integrated Care Board",E40000005,Y59,South East,10
+E38000221,15A,"NHS Buckinghamshire, Oxfordshire and Berkshire West ICB - 15A",E54000044,QU9,"NHS Buckinghamshire, Oxfordshire and Berkshire West Integrated Care Board",E40000005,Y59,South East,11
+E38000223,14Y,"NHS Buckinghamshire, Oxfordshire and Berkshire West ICB - 14Y",E54000044,QU9,"NHS Buckinghamshire, Oxfordshire and Berkshire West Integrated Care Board",E40000005,Y59,South East,12
+E38000264,92A,NHS Surrey Heartlands ICB - 92A,E54000063,QXU,NHS Surrey Heartlands Integrated Care Board,E40000005,Y59,South East,13
+E38000021,09D,NHS Sussex ICB - 09D,E54000064,QNX,NHS Sussex Integrated Care Board,E40000005,Y59,South East,14
+E38000235,97R,NHS Sussex ICB - 97R,E54000064,QNX,NHS Sussex Integrated Care Board,E40000005,Y59,South East,15
+E38000265,70F,NHS Sussex ICB - 70F,E54000064,QNX,NHS Sussex Integrated Care Board,E40000005,Y59,South East,16
+E38000089,11N,NHS Cornwall and the Isles of Scilly ICB - 11N,E54000036,QT6,NHS Cornwall and the Isles of Scilly Integrated Care Board,E40000006,Y58,South West,17
+E38000230,15N,NHS Devon ICB - 15N,E54000037,QJK,NHS Devon Integrated Care Board,E40000006,Y58,South West,18
+E38000150,11X,NHS Somerset ICB - 11X,E54000038,QSL,NHS Somerset Integrated Care Board,E40000006,Y58,South West,19
+E38000222,15C,"NHS Bristol, North Somerset and South Gloucestershire ICB - 15C",E54000039,QUY,"NHS Bristol, North Somerset and South Gloucestershire Integrated Care Board",E40000006,Y58,South West,20
+E38000231,92G,"NHS Bath and North East Somerset, Swindon and Wiltshire ICB - 92G",E54000040,QOX,"NHS Bath and North East Somerset, Swindon and Wiltshire Integrated Care Board",E40000006,Y58,South West,21
+E38000045,11J,NHS Dorset ICB - 11J,E54000041,QVV,NHS Dorset Integrated Care Board,E40000006,Y58,South West,22
+E38000062,11M,NHS Gloucestershire ICB - 11M,E54000043,QR1,NHS Gloucestershire Integrated Care Board,E40000006,Y58,South West,23
+E38000239,26A,NHS Norfolk and Waveney ICB - 26A,E54000022,QMM,NHS Norfolk and Waveney Integrated Care Board,E40000007,Y61,East of England,24
+E38000086,06L,NHS Suffolk and North East Essex ICB - 06L,E54000023,QJG,NHS Suffolk and North East Essex Integrated Care Board,E40000007,Y61,East of England,25
+E38000117,06T,NHS Suffolk and North East Essex ICB - 06T,E54000023,QJG,NHS Suffolk and North East Essex Integrated Care Board,E40000007,Y61,East of England,26
+E38000204,07K,NHS Suffolk and North East Essex ICB - 07K,E54000023,QJG,NHS Suffolk and North East Essex Integrated Care Board,E40000007,Y61,East of England,27
+E38000249,M1J4Y,"NHS Bedfordshire, Luton and Milton Keynes ICB - M1J4Y",E54000024,QHG,"NHS Bedfordshire, Luton and Milton Keynes Integrated Care Board",E40000007,Y61,East of England,28
+E38000049,06K,NHS Hertfordshire and West Essex ICB - 06K,E54000025,QM7,NHS Hertfordshire and West Essex Integrated Care Board,E40000007,Y61,East of England,29
+E38000079,06N,NHS Hertfordshire and West Essex ICB - 06N,E54000025,QM7,NHS Hertfordshire and West Essex Integrated Care Board,E40000007,Y61,East of England,30
+E38000197,07H,NHS Hertfordshire and West Essex ICB - 07H,E54000025,QM7,NHS Hertfordshire and West Essex Integrated Care Board,E40000007,Y61,East of England,31
+E38000007,99E,NHS Mid and South Essex ICB - 99E,E54000026,QH8,NHS Mid and South Essex Integrated Care Board,E40000007,Y61,East of England,32
+E38000030,99F,NHS Mid and South Essex ICB - 99F,E54000026,QH8,NHS Mid and South Essex Integrated Care Board,E40000007,Y61,East of England,33
+E38000106,06Q,NHS Mid and South Essex ICB - 06Q,E54000026,QH8,NHS Mid and South Essex Integrated Care Board,E40000007,Y61,East of England,34
+E38000168,99G,NHS Mid and South Essex ICB - 99G,E54000026,QH8,NHS Mid and South Essex Integrated Care Board,E40000007,Y61,East of England,35
+E38000185,07G,NHS Mid and South Essex ICB - 07G,E54000026,QH8,NHS Mid and South Essex Integrated Care Board,E40000007,Y61,East of England,36
+E38000260,06H,NHS Cambridgeshire and Peterborough ICB - 06H,E54000056,QUE,NHS Cambridgeshire and Peterborough Integrated Care Board,E40000007,Y61,East of England,37
+E38000068,01F,NHS Cheshire and Merseyside ICB - 01F,E54000008,QYG,NHS Cheshire and Merseyside Integrated Care Board,E40000010,Y62,North West,38
+E38000091,01J,NHS Cheshire and Merseyside ICB - 01J,E54000008,QYG,NHS Cheshire and Merseyside Integrated Care Board,E40000010,Y62,North West,39
+E38000101,99A,NHS Cheshire and Merseyside ICB - 99A,E54000008,QYG,NHS Cheshire and Merseyside Integrated Care Board,E40000010,Y62,North West,40
+E38000161,01T,NHS Cheshire and Merseyside ICB - 01T,E54000008,QYG,NHS Cheshire and Merseyside Integrated Care Board,E40000010,Y62,North West,41
+E38000170,01V,NHS Cheshire and Merseyside ICB - 01V,E54000008,QYG,NHS Cheshire and Merseyside Integrated Care Board,E40000010,Y62,North West,42
+E38000172,01X,NHS Cheshire and Merseyside ICB - 01X,E54000008,QYG,NHS Cheshire and Merseyside Integrated Care Board,E40000010,Y62,North West,43
+E38000194,02E,NHS Cheshire and Merseyside ICB - 02E,E54000008,QYG,NHS Cheshire and Merseyside Integrated Care Board,E40000010,Y62,North West,44
+E38000208,12F,NHS Cheshire and Merseyside ICB - 12F,E54000008,QYG,NHS Cheshire and Merseyside Integrated Care Board,E40000010,Y62,North West,45
+E38000233,27D,NHS Cheshire and Merseyside ICB - 27D,E54000008,QYG,NHS Cheshire and Merseyside Integrated Care Board,E40000010,Y62,North West,46
+E38000014,00Q,NHS Lancashire and South Cumbria ICB - 00Q,E54000048,QE1,NHS Lancashire and South Cumbria Integrated Care Board,E40000010,Y62,North West,47
+E38000015,00R,NHS Lancashire and South Cumbria ICB - 00R,E54000048,QE1,NHS Lancashire and South Cumbria Integrated Care Board,E40000010,Y62,North West,48
+E38000034,00X,NHS Lancashire and South Cumbria ICB - 00X,E54000048,QE1,NHS Lancashire and South Cumbria Integrated Care Board,E40000010,Y62,North West,49
+E38000050,01A,NHS Lancashire and South Cumbria ICB - 01A,E54000048,QE1,NHS Lancashire and South Cumbria Integrated Care Board,E40000010,Y62,North West,50
+E38000200,02G,NHS Lancashire and South Cumbria ICB - 02G,E54000048,QE1,NHS Lancashire and South Cumbria Integrated Care Board,E40000010,Y62,North West,51
+E38000226,02M,NHS Lancashire and South Cumbria ICB - 02M,E54000048,QE1,NHS Lancashire and South Cumbria Integrated Care Board,E40000010,Y62,North West,52
+E38000227,01E,NHS Lancashire and South Cumbria ICB - 01E,E54000048,QE1,NHS Lancashire and South Cumbria Integrated Care Board,E40000010,Y62,North West,53
+E38000228,01K,NHS Lancashire and South Cumbria ICB - 01K,E54000048,QE1,NHS Lancashire and South Cumbria Integrated Care Board,E40000010,Y62,North West,54
+E38000016,00T,NHS Greater Manchester ICB - 00T,E54000057,QOP,NHS Greater Manchester Integrated Care Board,E40000010,Y62,North West,55
+E38000024,00V,NHS Greater Manchester ICB - 00V,E54000057,QOP,NHS Greater Manchester Integrated Care Board,E40000010,Y62,North West,56
+E38000080,01D,NHS Greater Manchester ICB - 01D,E54000057,QOP,NHS Greater Manchester Integrated Care Board,E40000010,Y62,North West,57
+E38000135,00Y,NHS Greater Manchester ICB - 00Y,E54000057,QOP,NHS Greater Manchester Integrated Care Board,E40000010,Y62,North West,58
+E38000143,01G,NHS Greater Manchester ICB - 01G,E54000057,QOP,NHS Greater Manchester Integrated Care Board,E40000010,Y62,North West,59
+E38000174,01W,NHS Greater Manchester ICB - 01W,E54000057,QOP,NHS Greater Manchester Integrated Care Board,E40000010,Y62,North West,60
+E38000187,02A,NHS Greater Manchester ICB - 02A,E54000057,QOP,NHS Greater Manchester Integrated Care Board,E40000010,Y62,North West,61
+E38000205,02H,NHS Greater Manchester ICB - 02H,E54000057,QOP,NHS Greater Manchester Integrated Care Board,E40000010,Y62,North West,62
+E38000217,14L,NHS Greater Manchester ICB - 14L,E54000057,QOP,NHS Greater Manchester Integrated Care Board,E40000010,Y62,North West,63
+E38000263,01Y,NHS Greater Manchester ICB - 01Y,E54000057,QOP,NHS Greater Manchester Integrated Care Board,E40000010,Y62,North West,64
+E38000028,04Y,NHS Staffordshire and Stoke-on-Trent ICB - 04Y,E54000010,QNC,NHS Staffordshire and Stoke-on-Trent Integrated Care Board,E40000011,Y60,Midlands,65
+E38000053,05D,NHS Staffordshire and Stoke-on-Trent ICB - 05D,E54000010,QNC,NHS Staffordshire and Stoke-on-Trent Integrated Care Board,E40000011,Y60,Midlands,66
+E38000126,05G,NHS Staffordshire and Stoke-on-Trent ICB - 05G,E54000010,QNC,NHS Staffordshire and Stoke-on-Trent Integrated Care Board,E40000011,Y60,Midlands,67
+E38000153,05Q,NHS Staffordshire and Stoke-on-Trent ICB - 05Q,E54000010,QNC,NHS Staffordshire and Stoke-on-Trent Integrated Care Board,E40000011,Y60,Midlands,68
+E38000173,05V,NHS Staffordshire and Stoke-on-Trent ICB - 05V,E54000010,QNC,NHS Staffordshire and Stoke-on-Trent Integrated Care Board,E40000011,Y60,Midlands,69
+E38000175,05W,NHS Staffordshire and Stoke-on-Trent ICB - 05W,E54000010,QNC,NHS Staffordshire and Stoke-on-Trent Integrated Care Board,E40000011,Y60,Midlands,70
+E38000257,M2L0M,"NHS Shropshire, Telford and Wrekin ICB - M2L0M",E54000011,QOC,"NHS Shropshire, Telford and Wrekin Integrated Care Board",E40000011,Y60,Midlands,71
+E38000238,71E,NHS Lincolnshire ICB - 71E,E54000013,QJM,NHS Lincolnshire Integrated Care Board,E40000011,Y60,Midlands,72
+E38000051,03W,"NHS Leicester, Leicestershire and Rutland ICB - 03W",E54000015,QK1,"NHS Leicester, Leicestershire and Rutland Integrated Care Board",E40000011,Y60,Midlands,73
+E38000097,04C,"NHS Leicester, Leicestershire and Rutland ICB - 04C",E54000015,QK1,"NHS Leicester, Leicestershire and Rutland Integrated Care Board",E40000011,Y60,Midlands,74
+E38000201,04V,"NHS Leicester, Leicestershire and Rutland ICB - 04V",E54000015,QK1,"NHS Leicester, Leicestershire and Rutland Integrated Care Board",E40000011,Y60,Midlands,75
+E38000251,B2M3M,NHS Coventry and Warwickshire ICB - B2M3M,E54000018,QWU,NHS Coventry and Warwickshire Integrated Care Board,E40000011,Y60,Midlands,76
+E38000236,18C,NHS Herefordshire and Worcestershire ICB - 18C,E54000019,QGH,NHS Herefordshire and Worcestershire Integrated Care Board,E40000011,Y60,Midlands,77
+E38000258,15E,NHS Birmingham and Solihull ICB - 15E,E54000055,QHL,NHS Birmingham and Solihull Integrated Care Board,E40000011,Y60,Midlands,78
+E38000261,15M,NHS Derby and Derbyshire ICB - 15M,E54000058,QJ2,NHS Derby and Derbyshire Integrated Care Board,E40000011,Y60,Midlands,79
+E38000262,78H,NHS Northamptonshire ICB - 78H,E54000059,QPM,NHS Northamptonshire Integrated Care Board,E40000011,Y60,Midlands,80
+E38000008,02Q,NHS Nottingham and Nottinghamshire ICB - 02Q,E54000060,QT1,NHS Nottingham and Nottinghamshire Integrated Care Board,E40000011,Y60,Midlands,81
+E38000243,52R,NHS Nottingham and Nottinghamshire ICB - 52R,E54000060,QT1,NHS Nottingham and Nottinghamshire Integrated Care Board,E40000011,Y60,Midlands,82
+E38000259,D2P2L,NHS Black Country ICB - D2P2L,E54000062,QUA,NHS Black Country Integrated Care Board,E40000011,Y60,Midlands,83
+E38000127,99C,NHS North East and North Cumbria ICB - 99C,E54000050,QHM,NHS North East and North Cumbria Integrated Care Board,E40000012,Y63,North East and Yorkshire,84
+E38000130,00L,NHS North East and North Cumbria ICB - 00L,E54000050,QHM,NHS North East and North Cumbria Integrated Care Board,E40000012,Y63,North East and Yorkshire,85
+E38000163,00N,NHS North East and North Cumbria ICB - 00N,E54000050,QHM,NHS North East and North Cumbria Integrated Care Board,E40000012,Y63,North East and Yorkshire,86
+E38000176,00P,NHS North East and North Cumbria ICB - 00P,E54000050,QHM,NHS North East and North Cumbria Integrated Care Board,E40000012,Y63,North East and Yorkshire,87
+E38000212,13T,NHS North East and North Cumbria ICB - 13T,E54000050,QHM,NHS North East and North Cumbria Integrated Care Board,E40000012,Y63,North East and Yorkshire,88
+E38000215,01H,NHS North East and North Cumbria ICB - 01H,E54000050,QHM,NHS North East and North Cumbria Integrated Care Board,E40000012,Y63,North East and Yorkshire,89
+E38000234,84H,NHS North East and North Cumbria ICB - 84H,E54000050,QHM,NHS North East and North Cumbria Integrated Care Board,E40000012,Y63,North East and Yorkshire,90
+E38000247,16C,NHS North East and North Cumbria ICB - 16C,E54000050,QHM,NHS North East and North Cumbria Integrated Care Board,E40000012,Y63,North East and Yorkshire,91
+E38000052,02Y,NHS Humber and North Yorkshire ICB - 02Y,E54000051,QOQ,NHS Humber and North Yorkshire Integrated Care Board,E40000012,Y63,North East and Yorkshire,92
+E38000085,03F,NHS Humber and North Yorkshire ICB - 03F,E54000051,QOQ,NHS Humber and North Yorkshire Integrated Care Board,E40000012,Y63,North East and Yorkshire,93
+E38000119,03H,NHS Humber and North Yorkshire ICB - 03H,E54000051,QOQ,NHS Humber and North Yorkshire Integrated Care Board,E40000012,Y63,North East and Yorkshire,94
+E38000122,03K,NHS Humber and North Yorkshire ICB - 03K,E54000051,QOQ,NHS Humber and North Yorkshire Integrated Care Board,E40000012,Y63,North East and Yorkshire,95
+E38000188,03Q,NHS Humber and North Yorkshire ICB - 03Q,E54000051,QOQ,NHS Humber and North Yorkshire Integrated Care Board,E40000012,Y63,North East and Yorkshire,96
+E38000241,42D,NHS Humber and North Yorkshire ICB - 42D,E54000051,QOQ,NHS Humber and North Yorkshire Integrated Care Board,E40000012,Y63,North East and Yorkshire,97
+E38000025,02T,NHS West Yorkshire ICB - 02T,E54000054,QWO,NHS West Yorkshire Integrated Care Board,E40000012,Y63,North East and Yorkshire,98
+E38000190,03R,NHS West Yorkshire ICB - 03R,E54000054,QWO,NHS West Yorkshire Integrated Care Board,E40000012,Y63,North East and Yorkshire,99
+E38000225,15F,NHS West Yorkshire ICB - 15F,E54000054,QWO,NHS West Yorkshire Integrated Care Board,E40000012,Y63,North East and Yorkshire,100
+E38000232,36J,NHS West Yorkshire ICB - 36J,E54000054,QWO,NHS West Yorkshire Integrated Care Board,E40000012,Y63,North East and Yorkshire,101
+E38000254,X2C4Y,NHS West Yorkshire ICB - X2C4Y,E54000054,QWO,NHS West Yorkshire Integrated Care Board,E40000012,Y63,North East and Yorkshire,102
+E38000006,02P,NHS South Yorkshire ICB - 02P,E54000061,QF7,NHS South Yorkshire Integrated Care Board,E40000012,Y63,North East and Yorkshire,103
+E38000044,02X,NHS South Yorkshire ICB - 02X,E54000061,QF7,NHS South Yorkshire Integrated Care Board,E40000012,Y63,North East and Yorkshire,104
+E38000141,03L,NHS South Yorkshire ICB - 03L,E54000061,QF7,NHS South Yorkshire Integrated Care Board,E40000012,Y63,North East and Yorkshire,105
+E38000146,03N,NHS South Yorkshire ICB - 03N,E54000061,QF7,NHS South Yorkshire Integrated Care Board,E40000012,Y63,North East and Yorkshire,106
