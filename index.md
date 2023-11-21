@@ -32,7 +32,7 @@ The data displayed in this page will show all organisations open as of 16th of N
 
 The following information displays data taken from a specific snapshot of the DSPT data. The latest status information was downloaded on <b>16th November 2023</b>.
 
-You can find the previous iteration of this page showing the 21/22 DSPT data at <a href="https://nhsx.github.io/open-cyber/index2">21/22 Open Cyber Page</a>
+You can find the previous iteration of this page showing the 21/22 DSPT data at <a href="https://nhsx.github.io/open-cyber/21_22">21/22 Open Cyber Page</a>
 
 For more information on the Data Security and Protection Toolkit, please visit the <a href="https://www.dsptoolkit.nhs.uk/">DSPT portal</a>.
 
