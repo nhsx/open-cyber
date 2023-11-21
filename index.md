@@ -20,7 +20,7 @@
   <h3 class="nhsuk-warning-callout__label">
     Important<span class="nhsuk-u-visually-hidden">:</span>
   </h3>
-  <p>This project is currently in development. An overview of methodology and caveats are given below. For more information please contact <a href="mailto:TDAUgroup@england.nhs.uk">TDAUgroup@england.nhs.uk</a>. <br>Opinions expressed in this page are not representative of the views of NHS England and any content here should not be regarded as official output in any form. For more information about the NHS England Transformation Directorate please visit our <a href="https://transform.england.nhs.uk/">official website</a>.
+  <p>This project is currently in development. An overview of methodology and caveats are given below. For more information please contact <a href="mailto:datascience@nhs.net">datascience@nhs.net</a>. <br>Opinions expressed in this page are not representative of the views of NHS England and any content here should not be regarded as official output in any form. For more information about the NHS England Transformation Directorate please visit our <a href="https://transform.england.nhs.uk/">official website</a>.
    </p>
 </div>
 
@@ -56,7 +56,7 @@ The final scaling for each of the summary metrics displayed will have an upper b
 
 ## Summary of DSPT Compliance (2022/2023 edition).
 <br>
-Summary statistics from the DSPT 2021/22 toolkit are shown.
+Summary statistics from the DSPT 2022/23 toolkit are shown.
 
 <iframe src="./outputs/data_DSPTmetric2023-11-20.html" height="600px" width="100%" style="border:none;"></iframe>
 
