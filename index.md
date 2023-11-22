@@ -58,11 +58,11 @@ The final scaling for each of the summary metrics displayed will have an upper b
 <br>
 Summary statistics from the DSPT 2022/23 toolkit are shown.
 
-<iframe src="./outputs/data_DSPTmetric2023-11-20.html" height="600px" width="100%" style="border:none;"></iframe>
+<iframe src="./outputs/data_DSPTmetric2023-11-22.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
-<iframe src="./outputs/barchart_summary_FY2023_2023-11-20.html" height="600px" width="100%" style="border:none;"></iframe>
+<iframe src="./outputs/barchart_summary_FY2023-ii_2023-11-22.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
@@ -71,7 +71,7 @@ Summary statistics from the DSPT 2022/23 toolkit are shown.
 The compliance of individual ICBs and Trusts are mapped below, with Region boundaries. Toggle the boxes on the top right-hand side to add layers.
 
 
-<iframe src="icb_trusts_map_16_11_23.html" height="600px" width="100%" style="border:none;"></iframe>
+<iframe src="./outputs/icb_trusts_map_16_11_23.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
@@ -82,7 +82,7 @@ The compliance of individual ICBs and Trusts are mapped below, with Region bound
 The compliance of individual ICBs, made up of a composite score of 50% of the ICB score itself which and 50% of a simple average of Trust scores contained in the ICB. Region boundaries are displayed in blue.
 
 
-<iframe src="icb_composite_map_16_11_23.html" height="600px" width="100%" style="border:none;"></iframe>
+<iframe src="./outputs/icb_composite_map_16_11_23.html" height="600px" width="100%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
