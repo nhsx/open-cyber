@@ -58,7 +58,7 @@ The final scaling for each of the summary metrics displayed will have an upper b
 <br>
 Summary statistics from the DSPT 2022/23 toolkit are shown.
 
-<iframe src="./outputs/data_DSPTmetric2023-11-22.html" height="600px" width="100%" style="border:none;"></iframe>
+<iframe src="./outputs/data_DSPTmetric2023-11-22.html" height="600px" width="120%" style="border:none;"></iframe>
 
 <hr class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6">
 
