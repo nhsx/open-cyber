@@ -46,7 +46,7 @@ order_levels = c("Not Published","Standards Not Met","Approaching Standards","St
 data_metric$Short.Status <- factor(data_metric$Short.Status,levels=order_levels)
 
 
-#### Cross table - successors
+#### Summary Cross Table
 ct_final = ctable(data_metric$Primary.Sector, data_metric$Short.Status,
                   prop = "r", chisq = FALSE, headings = FALSE
 )
@@ -54,15 +54,6 @@ ct_final = ctable(data_metric$Primary.Sector, data_metric$Short.Status,
 ct_final %>% print(method="browser")
 ct_final %>% print(file=paste0("./outputs/data_DSPTmetric",Sys.Date(),".html"))
 
-
-
-#### Cross table - successors
-ct_final = ctable(data_metric$Primary.Sector, data_metric$Status,
-                  prop = "r", chisq = FALSE, headings = FALSE
-)
-
-ct_final %>% print(method="browser")
-ct_final %>% print(file=paste0("./outputs/data_DSPTmetric",Sys.Date(),".html"))
 
 
 #### Plotly barchart
@@ -74,17 +65,16 @@ auxl <-data_metric %>% group_by(Primary.Sector,Status) %>% summarise(n=n())
 aux <- data_metric %>% group_by(Primary.Sector,Status) %>% summarise(n=n()) %>% pivot_wider(names_from='Status',values_from='n')
 org_type <-aux$Primary.Sector
 
-
-
 fig_x <- auxl %>% plot_ly(x=~Primary.Sector,y= ~n,color=~Status,type='bar')
 fig_x
 
-htmlwidgets::saveWidget(fig_x, paste0("./_includes/barchart_summary_FY2023_",Sys.Date(),".html"), selfcontained = T, libdir = "lib")
 
-htmlwidgets::saveWidget(as_widget(fig_x), paste0("./_includes/barchart_summary_FY2023_w_",Sys.Date(),".html"), selfcontained = T, libdir = "lib")
+htmlwidgets::saveWidget(fig_x, paste0("./outputs/barchart_summary_FY2023_",Sys.Date(),".html"), selfcontained = T, libdir = "lib")
 
-htmltools::save_html(fig_x, paste0("./_includes/barchart_summary_FY2023-ii_",Sys.Date(),".html"))
+htmlwidgets::saveWidget(as_widget(fig_x), paste0("./outputs/barchart_summary_FY2023_w_",Sys.Date(),".html"), selfcontained = T, libdir = "lib")
+
+htmltools::save_html(fig_x, paste0("./outputs/barchart_summary_FY2023-ii_",Sys.Date(),".html"))
 
 
-htmlwidgets::saveWidget(as_widget(fig_x , paste0("./_includes/barchart_summary_FY2023_fw_",Sys.Date(),".html")), selfcontained = T, libdir = "lib")
+htmlwidgets::saveWidget(as_widget(fig_x , paste0("./outputs/barchart_summary_FY2023_fw_",Sys.Date(),".html")), selfcontained = T, libdir = "lib")
 
