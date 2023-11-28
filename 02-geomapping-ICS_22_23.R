@@ -249,7 +249,7 @@ m03
 
 # save the widget in a html file if needed.
 #library(htmlwidgets)
-saveWidget(m03, "icb_trusts_map_16_11_23.html")
+saveWidget(m03, "./outputs/icb_trusts_map_16_11_23.html")
 
 
 
@@ -363,4 +363,4 @@ m04
 
 # save the widget in a html file if needed.
 #library(htmlwidgets)
-saveWidget(m04, "icb_composite_map_16_11_23.html")
+saveWidget(m04, "./outputs/icb_composite_map_16_11_23.html")
