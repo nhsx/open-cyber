@@ -39,7 +39,8 @@ Data Sources:
 
 Python Version and Packages:
  - To run the python scripts please use Python version 3.9.18
- - Install the relevant packages defined in requirements.txt using pip by running 'pip install -r requirements.txt' 
+ - Install the relevant packages defined in requirements.txt using pip by running 'pip install -r requirements.txt'
+ - Please note you may be required to install XQuartz when running the R scripts on macOS
 
  Data Pre-processing:
  - Run the 'dspt_data_cuts_curation_22_23.ipynb' notebook to join with auxilary data and create separate cuts of the DSPT data for each organisation
