@@ -37,6 +37,10 @@ Data Sources:
  - The lookup data and mapping from ONS codes to ODS codes can be found on the Open Geography Portal here [Sub ICB - ICB - Region Mapping Table]()https://geoportal.statistics.gov.uk/search?collection=Dataset&sort=-created&tags=all(LUP_SICBL_ICB_NHSER)
  - The shapefiles used for plotting the leaflet maps can also be found on the Open Geography Portal here [Open Geography Portal Health Boundaries](https://geoportal.statistics.gov.uk/search?collection=Dataset&sort=-created&tags=all(LUP_SICBL_ICB_NHSER))
 
+Python Version and Packages:
+ - To run the python scripts please use Python v3.9.18
+ - Install the relevant packages defined in requirements.txt using pip by running 'pip install -r requirements.txt' 
+
  Data Pre-processing:
  - Run the 'dspt_data_cuts_curation_22_23.ipynb' notebook to join with auxilary data and create separate cuts of the DSPT data for each organisation
  - Run 'main_jan23.R' to create the summary table and bar charts for CSUs, Trusts and ICBs
