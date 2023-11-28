@@ -76,5 +76,5 @@ htmlwidgets::saveWidget(as_widget(fig_x), paste0("./outputs/barchart_summary_FY2
 htmltools::save_html(fig_x, paste0("./outputs/barchart_summary_FY2023-ii_",Sys.Date(),".html"))
 
 
-htmlwidgets::saveWidget(as_widget(fig_x , paste0("./outputs/barchart_summary_FY2023_fw_",Sys.Date(),".html")), selfcontained = T, libdir = "lib")
+htmlwidgets::saveWidget(as_widget(fig_x), paste0("./outputs/barchart_summary_FY2023_fw_",Sys.Date(),".html"), selfcontained = T, libdir = "lib")
 
