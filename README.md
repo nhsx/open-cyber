@@ -38,7 +38,7 @@ Data Sources:
  - The shapefiles used for plotting the leaflet maps can also be found on the Open Geography Portal here [Open Geography Portal Health Boundaries](https://geoportal.statistics.gov.uk/search?collection=Dataset&sort=-created&tags=all(LUP_SICBL_ICB_NHSER))
 
 Python Version and Packages:
- - To run the python scripts please use Python v3.9.18
+ - To run the python scripts please use Python version 3.9.18
  - Install the relevant packages defined in requirements.txt using pip by running 'pip install -r requirements.txt' 
 
  Data Pre-processing:

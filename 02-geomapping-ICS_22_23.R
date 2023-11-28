@@ -257,6 +257,18 @@ saveWidget(m03, "./outputs/icb_trusts_map_16_11_23.html")
 #############################################
 # Summary metric
 #############################################
+#get the stp codes for trusts from etr
+# etr = read.csv('/Users/muhammad-faaiz.shanawas/Documents/GitHub/open-cyber/data/etr.csv', header = FALSE)
+# etr = etr[,c('V1', 'V4')]
+# etr = select(etr, 'ODS.Code' = 'V1', 'STP21CDH' = 'V4')
+# 
+# #get the final 4 stp codes of the 4 care trusts from ect (modified to change column names and select relevant columns)
+# ect = read.csv('/Users/muhammad-faaiz.shanawas/Documents/GitHub/open-cyber/data/ect_modified_21_22.csv')
+# ect = select(ect, 'ODS.Code', 'STP21CDH')
+# 
+# etr_ect = rbind(etr, ect)
+
+
 trusts_data = trusts_data %>% rename(ICB23CDH = High.Level.Health.Geography,
                                      ICB23NM = Integrated.Care.Board..where.available..from.ODS.,
                                      Sector = Primary.Sector)
