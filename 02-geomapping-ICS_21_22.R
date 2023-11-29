@@ -36,7 +36,7 @@ library(leaflet)
 
 
 ## Load 'curated' DSPT file
-data <- read.csv("/Users/muhammad-faaiz.shanawas/Documents/GitHub/open-cyber/data/DSPT_CCG_21_22_snapshot09_09_22.csv")
+data <- read.csv("./data/DSPT Snapshots/21_22/DSPT_CCG_21_22_snapshot09_09_22.csv")
 data <- data[-107,]
 
 dsptlevels=c("21/22 Standards Exceeded","21/22 Standards Met","21/22 Approaching Standards","21/22 Standards Not Met","21/22 Not Published")
@@ -50,7 +50,7 @@ data$Short.Status = factor(data$Status,dsptlevels)
 
 ## Load STP shapefile
 # Source: https://geoportal.statistics.gov.uk/datasets/clinical-commissioning-groups-april-2020-full-clipped-boundaries-en/explore?location=52.950000%2C-2.000000%2C7.02
-stp_spdf <- readOGR("/Users/muhammad-faaiz.shanawas/Documents/GitHub/open-cyber/Inputs/shapefile/STP_APR_2021_EN_BUC_V2.shp")
+stp_spdf <- readOGR("./Inputs/shapefiles/21_22/STP_APR_2021_EN_BUC_V2.shp")
 
 proj4string(stp_spdf) <- CRS("+init=epsg:27700")  # BNG projection system
 
@@ -65,7 +65,7 @@ stp_data = stp_spdf@data
 
 ## Load CCG shapefile
 
-ccg_spdf <- readOGR("/Users/muhammad-faaiz.shanawas/Documents/GitHub/open-cyber/Inputs/shapefile/CCG_APR_2021_EN_BFC.shp")
+ccg_spdf <- readOGR("./Inputs/shapefiles/21_22/CCG_APR_2021_EN_BUC.shp")
 
 proj4string(ccg_spdf) <- CRS("+init=epsg:27700")  # BNG projection system
 
@@ -76,7 +76,7 @@ ccg_spdf <- ccg_spdf %>% sp::spTransform(CRS("+init=epsg:4326")) # reproject to 
 # Write to shapefile
 #writeOGR(ccg_spdf, layer = 'myshp_simplified', 'C:/temp', driver="ESRI Shapefile")
 
-region_spdf = readOGR('/Users/muhammad-faaiz.shanawas/Documents/GitHub/open-cyber/Inputs/shapefile/NHS_England_Regions_(April_2020)_Boundaries_EN_BUC.shp')
+region_spdf = readOGR('./Inputs/shapefiles/20_21/NHS_England_Regions_(April_2020)_Boundaries_EN_BUC.shp')
 proj4string(region_spdf) <- CRS("+init=epsg:27700")  # BNG projection system
 
 region_spdf@proj4string # check system
@@ -85,11 +85,11 @@ region_spdf <- region_spdf %>% sp::spTransform(CRS("+init=epsg:4326")) # reproje
 
 region_full <- region_spdf
 
-region_s <- rgeos::gSimplify(region_full,tol=0.01, topologyPreserve=FALSE)
+###region_s <- rgeos::gSimplify(region_full,tol=0.01, topologyPreserve=FALSE)
 
 # Create a spatial polygon data frame (includes shp attributes)
-regions_spdf = SpatialPolygonsDataFrame(region_s, data.frame(region_full))
-
+###regions_spdf = SpatialPolygonsDataFrame(region_s, data.frame(region_full))
+regions_spdf = region_spdf
 
 
 ##Load correspondence from ODS to ONS codes
@@ -102,7 +102,7 @@ regions_spdf = SpatialPolygonsDataFrame(region_s, data.frame(region_full))
 # Create a points shapefile for Trusts
 ##########+
 ##########+###################################
-trusts_data = read.csv("/Users/muhammad-faaiz.shanawas/Documents/GitHub/open-cyber/data/DSPT_trusts_21_22_snapshot09_09_22.csv")
+trusts_data = read.csv("./data/DSPT Snapshots/21_22/DSPT_trusts_21_22_snapshot09_09_22.csv")
 trusts_data <- subset(trusts_data, !(ODS.Code %in% c('RBZ', 'RW6', 'RTV')))
 
 
@@ -119,19 +119,18 @@ trust_spdf_points <- sp::SpatialPointsDataFrame(
 #Further prep
 #############################################
 # Join DSPT data and ONS code
-lookupdata = read.csv('/Users/muhammad-faaiz.shanawas/Documents/Github/open-cyber/data/Clinical_Commissioning_Group_to_STPs_(April_2021)_Lookup_in_England.csv')
+lookupdata = read.csv('./data/auxiliary/21_22/Clinical_Commissioning_Group_to_STPs_(April_2021)_Lookup_in_England.csv')
 data_merged = left_join(data, lookupdata, by = c("ODS.Code" = "CCG21CDH"))
 data_merged = data_merged[-107,]
 
 
 #load in ccg-stp-region lookup data
-regions_lookup = read.csv('/Users/muhammad-faaiz.shanawas/Documents/GitHub/open-cyber/data/Clinical_Commissioning_Group_to_STP_and_NHS_England_(Region)_(April_2021)_Lookup_in_England.csv')
+regions_lookup = read.csv('./data/auxiliary/21_22/Clinical_Commissioning_Group_to_STP_and_NHS_England_(Region)_(April_2021)_Lookup_in_England.csv')
 data_regions = unique(select(regions_lookup, 'STP21CD', 'STP21NM', 'NHSER21NM'))
 
 # Join the reduced DSPT info with the CCG shapefile
 ccg_spdf@data <- left_join(ccg_spdf@data,data_merged,by=c("CCG21CD"="CCG21CD"))
 data_ccg_spdf <- ccg_spdf@data
-
 
 #merge and assign to stp_spdf data
 stp_spdfdata = stp_spdf@data
@@ -293,7 +292,7 @@ m03
 
 # save the widget in a html file if needed.
 #library(htmlwidgets)
-saveWidget(m04, "ICS_composite_map1_21_22.html")
+saveWidget(m03, "outputs/ICS_composite_map1_21_22_vrun20231129.html")
 
 
 
