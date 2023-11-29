@@ -98,7 +98,7 @@ trust_spdf_points <- sp::SpatialPointsDataFrame(
 #Further prep
 #############################################
 # Join DSPT data and ONS code
-lookupdata = read.csv('./data/aux/22_23/Sub_ICB_Locations_to_Integrated_Care_Boards_to_NHS_England_(Region)_(April_2023)_Lookup_in_England (1).csv')
+lookupdata = read.csv('./data/auxiliary/22_23/Sub_ICB_Locations_to_Integrated_Care_Boards_to_NHS_England_(Region)_(April_2023)_Lookup_in_England (1).csv')
 lookup_icb = lookupdata[!duplicated(lookupdata$ICB23CD), ]
 
 

@@ -70,7 +70,7 @@ regions_spdf = SpatialPolygonsDataFrame(region_s, data.frame(region_full))
 
 ## Load STP shapefile
 # Source: https://geoportal.statistics.gov.uk/datasets/clinical-commissioning-groups-april-2020-full-clipped-boundaries-en/explore?location=52.950000%2C-2.000000%2C7.02
-stp_spdf <- readOGR("/Users/muhammad-faaiz.shanawas/Documents/Live Projects/Cyber Map/Shapefiles/Sustainability_and_Transformation_Partnerships_(April_2020)_Boundaries_EN_BUC/Sustainability_and_Transformation_Partnerships_(April_2020)_Boundaries_EN_BUC.shp")
+stp_spdf <- readOGR("./Inputs/shapefiles/20_21/Sustainability_and_Transformation_Partnerships_(April_2020)_Boundaries_EN_BUC/Sustainability_and_Transformation_Partnerships_(April_2020)_Boundaries_EN_BUC.shp")
 
 proj4string(stp_spdf) <- CRS("+init=epsg:27700")  # BNG projection system
 
@@ -85,7 +85,7 @@ stp_spdf <- stp_spdf %>% sp::spTransform(CRS("+init=epsg:4326")) # reproject to 
 
 ## Load CCG shapefile
 # Source: https://geoportal.statistics.gov.uk/datasets/clinical-commissioning-groups-april-2020-full-clipped-boundaries-en/explore?location=52.950000%2C-2.000000%2C7.02
-ccg_spdf <- readOGR("./Inputs/shapefile/Clinical_Commissioning_Groups_(April_2020)_EN_BFC_V2.shp")
+ccg_spdf <- readOGR("./Inputs/shapefiles/20_21/Clinical_Commissioning_Groups_(April_2020)_EN_BFC_V2.shp")
 
 proj4string(ccg_spdf) <- CRS("+init=epsg:27700")  # BNG projection system
 
