@@ -1,10 +1,11 @@
 ## Open Cyber Page
 
+[![status: experimental](https://github.com/GIScience/badges/raw/master/status/experimental.svg)](https://github.com/GIScience/badges#experimental)
 <div class="nhsuk-warning-callout">
   <h3 class="nhsuk-warning-callout__label">
     Important<span class="nhsuk-u-visually-hidden">:</span>
   </h3>
-  <p>This project is currently in development. An overview of methodology and caveats are given below. For more information please contact <a href="mailto:datascience@nhs.net">datascience@nhs.net</a>. <br>Opinions expressed in this page are not representative of the views of NHS England and any content here should not be regarded as official output in any form. For more information about the NHS England Transformation Directorate please visit our <a href="https://transform.england.nhs.uk/">official website</a>.
+  <p>This project is experimental rather than official statistics. An overview of methodology and caveats are given below. For more information please contact <a href="mailto:datascience@nhs.net">datascience@nhs.net</a>. <br>Opinions expressed in this page are not representative of the views of NHS England and any content here should not be regarded as official output in any form. For more information about the NHS England Transformation Directorate please visit our <a href="https://transform.england.nhs.uk/">official website</a>.
    </p>
 </div>
 
@@ -38,11 +39,11 @@ Data Sources:
  - The shapefiles used for plotting the leaflet maps can also be found on the Open Geography Portal here [Open Geography Portal Health Boundaries](https://geoportal.statistics.gov.uk/search?collection=Dataset&sort=-created&tags=all(LUP_SICBL_ICB_NHSER))
 
 Python Version and Packages:
- - To run the python scripts please use Python version 3.9.18
- - Install the relevant packages defined in requirements.txt using pip by running 'pip install -r requirements.txt'
+ - To run the python scripts please use Python version `3.9.18`
+ - Install the relevant packages defined in `requirements.txt` using pip by running `pip install -r requirements.txt`
  - Please note you may be required to install XQuartz when running the R scripts on macOS
 
  Data Pre-processing:
- - Run the 'dspt_data_cuts_curation_22_23.ipynb' notebook to join with auxilary data and create separate cuts of the DSPT data for each organisation
- - Run 'main_jan23.R' to create the summary table and bar charts for CSUs, Trusts and ICBs
- - Run '02-geomapping-ICS_22_23.R' to generate the leaflet maps using the curated data
+ - Run the `dspt_data_cuts_curation_22_23.ipynb` notebook to join with auxilary data and create separate cuts of the DSPT data for each organisation
+ - Run `main_jan23.R` to create the summary table and bar charts for CSUs, Trusts and ICBs
+ - Run `02-geomapping-ICS_22_23.R` to generate the leaflet maps using the curated data
